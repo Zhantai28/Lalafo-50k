@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product
+from .models import Category, Product, FeedBack 
 
 # class AdminProduct(admin.ModelAdmin):
 
@@ -16,3 +16,5 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ['category', 'status']
     list_editable = ['price', 'status']
     prepopulated_fields = {'slug':('name',)}
+
+admin.site.register(FeedBack) 
