@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.enums import TextChoices
 from django.db.models.fields import SlugField
+from django.contrib.auth.models import  User 
 
 class Category(models.Model):
     name = models.CharField(max_length=250,
@@ -47,3 +48,31 @@ class Product(models.Model):
     def __str__(self):
         return self.name 
 
+
+
+class FeedBack(models.Model):
+    user = models.ForeignKey(
+        to=User,
+        related_name='comments',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        verbose_name='Пользователь'
+    )
+
+    products = models.ForeignKey(
+        to=Product,
+        on_delete=models.CASCADE,
+        verbose_name='Товары'
+    )
+
+    text = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии' 
