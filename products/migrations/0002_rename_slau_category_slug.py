@@ -9,10 +9,10 @@ class Migration(migrations.Migration):
         ('products', '0001_initial'),
     ]
 
-    operations = [
-        migrations.RenameField(
-            model_name='category',
-            old_name='slau',
-            new_name='slug',
-        ),
-    ]
+    # operations = [
+    #     migrations.RenameField(
+    #         model_name='category',
+    #         old_name='slau',
+    #         new_name='slug',
+    #     ),
+    # ]

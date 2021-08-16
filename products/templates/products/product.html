@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Товары на нашем сайте</h1>
+    <div >
+        <table style="width: 60%; background-color: lightblue; color: black; border-spacing: 1px;">
+            {% for product in product %}
+            <tr style="padding: 5px;">
+                <th>Name</th>
+                <th>Описание</th>
+                <th>Photo</th>
+                <th>Price</th>
+            </tr>
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.image }}</td>
+                <td>{{ product.price }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+
+    </div>
+</body>
+</html>

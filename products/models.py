@@ -3,7 +3,7 @@ from django.db.models.enums import TextChoices
 from django.db.models.fields import SlugField
 
 class Category(models.Model):
-    name = models.CharField(max_length=250,
+    name = models.CharField(max_length=250, db_index=True,
     choices=(
         ("Одеж", "Oдежда"),
         ("Трант", "Транспорт"),
@@ -13,11 +13,10 @@ class Category(models.Model):
         ("Элект", "Электроника"),
 
     ))
-    slug = models.SlugField(max_length=250, unique=True, blank=True)
-
-
+    slug = models.SlugField(max_length=250, db_index=True, unique=True, blank=True)
 
     class Meta:
+        ordering = ('name',)
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
