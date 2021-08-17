@@ -69,6 +69,7 @@ class FeedBack(models.Model):
     text = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    status = models.BooleanField(verbose_name="Видимость комментария", default=False)
 
     def __str__(self):
         return self.text

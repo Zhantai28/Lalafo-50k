@@ -1,4 +1,2 @@
-from django.shortcuts import render
-from .models import Category, Product
-
-
+from django.shortcuts import redirect, render
+from .models import Category, Product 
