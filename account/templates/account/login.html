@@ -7,7 +7,12 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Logged out</h1>
-    <p>You have been successfully logged out. You can <a href="{% url 'account:login' %}">log-in again</a>.</p>
+    <h1>Log-in</h1>
+    <p>Please, use the following form to log-in:</p>
+    <form action="." method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Log-in"></p>
+    </form>
 </body>
 </html>
