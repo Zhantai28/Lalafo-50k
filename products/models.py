@@ -74,10 +74,9 @@ class FeedBack(models.Model):
         return self.text
 
 
-    class Meta:
-        ordering = ('created',)
 
 
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии' 
+        ordering = ('created',)
