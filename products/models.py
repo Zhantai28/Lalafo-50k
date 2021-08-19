@@ -1,19 +1,13 @@
 from django.db import models
 from django.db.models.enums import TextChoices
 from django.db.models.fields import SlugField
+from django.urls import reverse
+
 
 class Category(models.Model):
-    name = models.CharField(max_length=250, db_index=True,
-    choices=(
-        ("Одеж", "Oдежда"),
-        ("Трант", "Транспорт"),
-        ("Усл", "Услуги"),
-        ("Игруш", "Игрушки"),
-        ("Меб", "Мебель"),
-        ("Элект", "Электроника"),
 
-    ))
-    slug = models.SlugField(max_length=250, db_index=True, unique=True, blank=True)
+    name = models.CharField(max_length=250, db_index=True)
+    slug = models.SlugField(max_length=250, db_index=True, unique=True, verbose_name="URL")
 
     class Meta:
         ordering = ('name',)
@@ -23,12 +17,14 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('product:product_list', args=[self.slug])
+
+
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
     name = models.CharField(max_length=250, db_index=True)
-    slug = models.SlugField(max_length=250, db_index=True, blank=True)
-
-
+    slug = models.SlugField(max_length=250, db_index=True, verbose_name="URL")
     description = models.TextField()
     price = models.DecimalField(blank=True, decimal_places=2, max_digits=12)
     image = models.ImageField(blank=True, null=True, upload_to='products_photo')
@@ -45,4 +41,7 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name 
+        
+    def get_absolute_url(self):
+        return reverse('product:product_detail', args=[self.id, self.slug])
 
