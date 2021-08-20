@@ -60,21 +60,29 @@ class FeedBack(models.Model):
         verbose_name='Пользователь'
     )
 
-    products = models.ForeignKey(
+    product = models.ForeignKey(
         to=Product,
         on_delete=models.CASCADE,
-        verbose_name='Товары'
+        verbose_name='Товары',
+        related_name='product_comments'
     )
 
-    text = models.TextField()
+    text = models.TextField('Текст комментария')
+    parent = models.ForeignKey(
+        'self',
+        verbose_name='Родительский комментарий',
+        blank=True,
+        null=True,
+        related_name="comment_child",
+        on_delete=models.CASCADE
+    )
+    
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    status = models.BooleanField(verbose_name="Видимость комментария", default=False)
+    image = models.ImageField(upload_to='products', null=True, blank=True)
 
-    def __str__(self):
-        return self.text
-
-
+    def __str__(self): 
+        return self.text, str(self.id)
 
 
     class Meta:

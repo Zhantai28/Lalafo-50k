@@ -17,4 +17,12 @@ class ProductAdmin(admin.ModelAdmin):
     list_editable = ['price', 'status']
     prepopulated_fields = {'slug':('name',)}
 
-admin.site.register(FeedBack) 
+
+
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ['text', 'product', 'user']
+    search_fields = ['text', 'product__name', 'product__description']
+    fields = ['user', 'product', 'text']
+    readonly_fields = ['product', 'text']
+
+admin.site.register(FeedBack, FeedbackAdmin) 
