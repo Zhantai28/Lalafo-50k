@@ -1,13 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Logged out</h1>
-    <p>You have been successfully logged out. You can <a href="{% url "login" %}">log-in again</a>.</p>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block main %}
+
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Выход</h4>
+        <p>Вы успешно вышли из системы. Вы можете <a href="{% url 'account:login' %}">войти снова</a>.</p>
+        {{ form|crispy }}
+    </div>
+</div>
+{% endblock %}

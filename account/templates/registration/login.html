@@ -1,31 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Log-in</h1>
-    {% if form.errors %}
-        <p>
-            Your username and password didn't match.
-            Please try again.
-        </p>
-    {% else %}
-        
-        <p>Please, use the following form to log-in. If you don't have an account <a href="{% url "register" %}">register here</a></p>
+{% extends 'base.html' %}
 
-    {% endif %}
-    <div class="login-form">
-        <form action="{% url 'login' %}" method="post">
-            {{ form.as_p }}
-            {% csrf_token %}
-            <input type="hidden" name="next" value="{{ next }}"/>
-            <p><input type="submit" value="Log-in"></p>
-        </form>
-        <p><a href="{% url "password_reset" %}">Forgotten your password?</a></p>
+{% load crispy_forms_tags %}
+
+{% block main %}
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Войти</h4>
+
+        {% if form.errors %}        
+        <p>
+            Ваше имя пользователя и пароль не совпадают.  
+            Пожалуйста, попробуйте еще раз.
+        </p>
+        {% else %}        
+        <p>Пожалуйста, используйте следующую форму для входа в систему. Если у вас нет учетной записи <a href="{% url 'account:register' %}">зарегистрируйтесь здесь</a></p>
+        {% endif %}
+
+        <div class="login-form">
+            <form action="{% url 'account:login' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">                
+                {{ form|crispy }}
+                <p><input type="submit" value="Войти"></p>
+            </form>
+            <p><a href="{% url 'account:password_reset' %}">Вы забыли пароль?</a></p>
+        </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

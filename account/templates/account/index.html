@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block main %}
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Добро пожаловать, {{request.user.username}}!</h4>
+        <p>Вы можете <a href="{% url 'account:edit' %}">отредактировать профиль</a> или <a href="{% url 'account:password_change' %}">сменить пароль</a>.</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,15 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import UserRegistrationForm, LoginForm,UserEditForm, ProfileEditForm
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import AuthenticationForm 
 from django.contrib.auth.decorators import login_required
 from .models import Profile
 from django.contrib import messages
 
 
 @login_required
-def dashboard(request):
-    return render(request, 'account/dashboard.html', {'section': 'dashboard'})
+def profile(request):
+    return render(request, 'account/index.html', {'section': 'profile'})
 
 def register(request):
     if request.method == 'POST':
@@ -24,23 +25,7 @@ def register(request):
         user_form = UserRegistrationForm()
     return render(request, 'account/register.html', {'user_form': user_form})
 
-def user_login(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            user = authenticate(username=cd['username'], password=cd['password'])
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    return HttpResponse('Authenticated successfully')
-                else:
-                    return HttpResponse('Disabled account')
-            else:
-                return HttpResponse('Invalid login')
-    else:
-        form = LoginForm()
-    return render(request, 'account/login.html', {'form': form})
+
 
 @login_required 
 
@@ -61,4 +46,7 @@ def edit(request):
                       'account/edit.html',
                       {'user_form': user_form,
                        'profile_form': profile_form})
+
+
+
 
