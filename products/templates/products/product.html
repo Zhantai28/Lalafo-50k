@@ -15,10 +15,11 @@
                 {{ product.description }}
                 {{ product.image }}
                 {{ product.price }}
-                <a href="{% url 'products:product_detail' product.id %}" class="btn btn-primary">Read More</a><br>
+                <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">Read More</a><br>
             </tr>
             {% endfor %}
         </table>
+        <a href="{% url 'create_product' %}">Создать продукт</a>
         
 
     </div>
