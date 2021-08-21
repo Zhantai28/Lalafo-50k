@@ -20,7 +20,6 @@ class CategoryAdmin(admin.ModelAdmin):
         )
     ]
     prepopulated_fields = {'slug':('name',)}
-        
     inlines = (SubcategoryInline,)
 
 @admin.register(Subcategory)
@@ -28,23 +27,21 @@ class SubategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug']
     prepopulated_fields = {'slug':('name',)}
 
-class ProductInline(admin.TabularInline):
-    model = Product
-    extra = 3
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['category', 'name', 'description', 'status', 'price', 'created', 'updated']
+    list_display = ['category', 'sub_category', 'name', 'description', 'status', 'price', 'created', 'updated']
     list_filter = ['category', 'status']
     list_editable = ['price', 'status']
     fieldsets = [
         (
             None, {
-                'fields':('name', 'slug')
-            }
+                'fields':('category', 'sub_category', 'name', 'slug','description', 'status', 'price'),
+            
+            },
         )
     ]
-    inlines = (ProductInline,)
+
     prepopulated_fields = {'slug':('name',)}
 
     def product_count(self, obj):

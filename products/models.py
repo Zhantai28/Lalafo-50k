@@ -3,12 +3,14 @@ from django.db.models.deletion import CASCADE
 from django.db.models.enums import TextChoices
 from django.db.models.fields import SlugField
 from django.urls import reverse
+from .managers import CategoryManager, SubategoryManager
 
 
 class Category(models.Model):
+    # objects = CategoryManager()
     name = models.CharField(max_length=250, db_index=True)
     slug = models.SlugField(max_length=250, db_index=True, unique=True, verbose_name="URL")
-    parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=CASCADE)
+    # parent_category = models.ForeignKey('self', null=True, blank=True, on_delete=CASCADE)
 
     class Meta:
         ordering = ('name',)
@@ -22,9 +24,10 @@ class Category(models.Model):
     #     return reverse('product:product_list', args=[self.slug])
 
 class Subcategory(models.Model):
+    # objects = SubategoryManager()
     name = models.CharField('Название подкатегории', max_length=250)
     slug = models.SlugField(max_length=50, unique=True, verbose_name='URL')
-    categories = models.ForeignKey(Category, verbose_name='Категория', on_delete=models.SET_NULL, null=True)
+    categories = models.ForeignKey(Category, verbose_name='Категория', on_delete=models.CASCADE, null=True)
 
     class Meta:
         ordering = ('name',)
@@ -40,7 +43,7 @@ class Product(models.Model):
     name = models.CharField(max_length=250, db_index=True)
     slug = models.SlugField(max_length=250, db_index=True, verbose_name="URL")
     description = models.TextField()
-    price = models.DecimalField(blank=True, decimal_places=2, max_digits=12, default="Договорная")
+    price = models.CharField(max_length=255, default="Договорная")
     image = models.ImageField(blank=True, null=True, upload_to='products_photo')
     status = models.CharField(max_length=1, choices=(
         ("П", "Продать"),
