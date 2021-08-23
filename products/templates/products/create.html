@@ -8,8 +8,8 @@
 </head>
 <body>
     <form method="POST">
+        {{ form.as_p }}
         {% csrf_token %}
-        {{ product_form.as_p }}
         <button>Соханить</button>
     </form>
 </body>
