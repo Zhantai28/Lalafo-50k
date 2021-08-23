@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Товары на нашем сайте</h1>
+    <div >
+        <table style="width: 60%; background-color: lightblue; color: black; border-spacing: 1px;">
+            {% for product in product %}
+                {{ product.name }}
+                {{ product.description }}
+                {{ product.image }}
+                {{ product.price }}
+                <a href="{% url 'product_detail' product.id %}" class="btn btn-primary">Read More</a><br>
+            </tr>
+            {% endfor %}
+        </table>
+        <a href="{% url 'create_product' %}">Создать продукт</a>
+        
+
+    </div>
+</body>
+</html>
