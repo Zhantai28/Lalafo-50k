@@ -1,7 +1,8 @@
 from django.db import models
 from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 
-#from django.contrib.auth.models import User
+
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
@@ -22,6 +23,27 @@ class Profile(models.Model):
     city =models.CharField(max_length=255)
 
 
-
     def __str__(self):
         return 'Profile for user {}'.format(self.user.username)
+
+
+#User Rating
+
+RATE_CHOICES=(
+    (1,'1'),
+    (2,'2'),
+    (3,'3'),
+    (4,'4'),
+    (5,'5'),
+)
+
+class UserRating(models.Model):
+    user_rated=models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='given_ratings', on_delete=models.CASCADE)
+    user_received=models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='received_ratings', on_delete=models.CASCADE)
+    rating = models.PositiveSmallIntegerField(choices=RATE_CHOICES)
+   
+    class Meta:
+        verbose_name_plural='Ratings'
+
+    def __str__(self):
+        return self.user_rated.username

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, UserRating, RATE_CHOICES
 
 class UserEditForm(forms.ModelForm):
     class Meta:
@@ -31,4 +31,11 @@ class UserRegistrationForm(forms.ModelForm):
 class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
+
+#Rating Add Form
+class RatingAdd(forms.ModelForm):
+    rating = forms.ChoiceField(choices=RATE_CHOICES, widget=forms.Select(), required=True)
+    class Meta:
+      model = UserRating
+      fields = ('rating',)
 
