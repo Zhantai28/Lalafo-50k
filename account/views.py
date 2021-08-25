@@ -58,19 +58,7 @@ def edit(request):
 #function for UserRating 
 
 
-# def UserRating(UpdateModelMixin, GenericViewSet):
-#     permission_classes = [IsAuthenticated]
-#     queryset = UserRating.objects.all()
-#     serializer_class = UserRatingSerializer
-#     lookup_field = 'user_received'
-
-#     def get_object(self):
-#         obj, _ = UserRating.objects.get_or_create(user_rated=self.request.user_rated,
-#                                                     user_received_id=self.kwargs['user_received'])
-#         return obj
-
-
-   
+ 
 def UserRating(request, id):
     user_received = User.objects.get(id=id)
     user_rated = request.user
@@ -96,20 +84,6 @@ def UserRating(request, id):
             
             
             
-        #  user_received = form.cleaned_data['user_received']
-    #         user_rated = form.cleaned_data['user_rated']
-    #         rating = form.cleaned_data['rating']
-
-    #         user_received = request.POST.get('user_received', ''),
-    #         user_rated = request.POST.get('user_rated', ''),
-    #         rating = request.POST.get('rating', ''),
-
-    #         obj = UserRating(user_received=user_received, user_rated=user_rated, rating=rating)
-    #         obj.save()
-    #         context = {'obj': obj}
-    #         return render(request, 'account/rating.html',context)
-    #     else:
-    #        form=RatingAdd()
-    #     return HttpResponse('Please rate the product')
+       
 
 
