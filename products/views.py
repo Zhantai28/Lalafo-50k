@@ -1,13 +1,12 @@
 from django import forms
 from django.http.response import HttpResponse, Http404
-from django.shortcuts import redirect, render, get_object_or_404, render_to_response
+from django.shortcuts import redirect, render, get_object_or_404
 from .models import Category, Product, FeedBack
 import django.http as http
 from .forms import FeedBackForm
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin
-from django.contrib.auth.decorators import login_required
-from django.template import RequestContext
+
 
 
 
