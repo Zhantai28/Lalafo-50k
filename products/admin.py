@@ -2,8 +2,6 @@ from django.contrib import admin
 from django.db import models
 from .models import Category, Product, Subcategory
 
-# class AdminProduct(admin.ModelAdmin):
-
 class SubcategoryInline(admin.TabularInline):
     model = Subcategory
     extra = 3

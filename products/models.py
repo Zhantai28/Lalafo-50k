@@ -1,8 +1,6 @@
 from django.db import models
-from django.db.models.deletion import CASCADE
-from django.db.models.enums import TextChoices
-from django.db.models.fields import SlugField
-from django.urls import reverse
+from django.contrib.auth.models import User
+# from ..account.models import Profile
 
 
 class Category(models.Model):
@@ -50,6 +48,11 @@ class Product(models.Model):
     ))
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(
+        to=User, 
+        on_delete=models.SET_NULL, 
+        null=True
+    )
 
     class Meta:
         ordering = ('name',)

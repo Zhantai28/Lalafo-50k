@@ -4,9 +4,10 @@ from .views import dashboard, register, user_login, edit
 from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, \
         PasswordChangeView, PasswordChangeDoneView, PasswordResetView, \
         PasswordResetDoneView ,PasswordResetConfirmView, PasswordResetCompleteView
+from products.urls import *
 
 
-app_name = 'account'
+# app_name = 'account'
 
 urlpatterns = [
     path('register/', register, name='register'),
@@ -21,7 +22,7 @@ urlpatterns = [
     path('password-reset/confirm/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('password-reset/complete/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('edit/', edit, name='edit'),
-    
+    path('create_product/', create_product, name='create_product'),
     
 
 ]
