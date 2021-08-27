@@ -38,9 +38,9 @@ RATE_CHOICES=(
 )
 
 class UserRating(models.Model):
-    user_rated=models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='given_ratings', on_delete=models.CASCADE)
-    user_received=models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='received_ratings', on_delete=models.CASCADE)
-    rating = models.PositiveSmallIntegerField(choices=RATE_CHOICES)
+    user_rated=models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='given_ratings', on_delete=models.SET_NULL)
+    user_received=models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='received_ratings', on_delete=models.SET_NULL, verbose_name='Пользователь')
+    rating = models.PositiveSmallIntegerField(choices=RATE_CHOICES, verbose_name='Оценки')
    
     class Meta:
         verbose_name_plural='Ratings'

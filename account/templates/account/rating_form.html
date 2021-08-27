@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block main %}
+            <form method="POST">
+                {% csrf_token %}     
+                {{ form.as_p }}       
+                           
+              <button type="submit" name="action" class="waves-effect waves-light btn"><i class="material-icons left">Оценить</button>
+            </form>
+         
+{% endblock %}
