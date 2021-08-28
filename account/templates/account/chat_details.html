@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>
+        Чат {{ chat.id }}
+    </h1>
+        {% if chat is None %}
+            Нет сообщений
+        {% else %}
+            <ul>
+            {% for message in chat.messages.all %}
+                <li>{{message.author.username}} ({{ message.pub_date }}): {{ message.message }}</li>
+            {% endfor %}
+            </ul>
+
+
+        {% endif %}
+
+    </h1>
+</body>
+</html>

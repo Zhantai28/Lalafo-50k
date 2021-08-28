@@ -2,9 +2,11 @@
 
 {% block main %}
 
-    <h2>{{ user_object.user }}</h2>
+    <h2>ID: {{ user_object.id }} First name: {{ user_object.first_name }}</h2>
     <hr>
     <div>Рейтинг: {{ user_object.rating }}</div>
+
+    <div>Написать сообщение <a href="{% url 'account:messages' user_object.id %}">GO</a></div>
     <br>
     
 
