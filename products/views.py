@@ -12,14 +12,14 @@ from account.templates import *
 
 def product_list(request):
     product_object = Product.objects.all()
-    return render(request, 'products/product.html', {"product": product_object})
+    return render(request, 'account/index.html', {"product": product_object})
                                        
 def product_detail(request, id):
     product = Product.objects.get(id=id)
     return render(request, 'products/product_detail.html', {'product':product})    
 
 
-# @login_required 
+@login_required 
 def create_product(request):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -32,22 +32,13 @@ def create_product(request):
         product_form = ProductCreateForm()
         return render(request, 'products/create.html', {'product_form': product_form})
     else:
-        return redirect(user_login)
+        return redirect(register)
 
 
 
-# def product_list(request, cartegory_slug=None):
-#     category = None
-#     categories_object = Category.objects.all()
-#     product_object = Product.objects.all()
-#     if cartegory_slug:
-#         category = get_object_or_404(Category, slug=cartegory_slug)
-#         product_object = product_object.filter(category=category)
-#     return render(request, 
-#                 'products/product.html', {"category": category,
-#                                         "product": product_object,
-#                                         "category": categories_object,
-#                                         })
+def user_products(request):
+    product = Product.objects.filter(user__gte=1, user__user=request.user)
+    return render(request, 'products/user_products.html', {"product": product})
 
 
 

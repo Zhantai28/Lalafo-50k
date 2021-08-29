@@ -5,7 +5,10 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .models import Profile
 from django.contrib import messages
+from django.views.generic import TemplateView
 
+class HomeView(TemplateView):
+    template_name = 'account/index.html'
 
 @login_required
 def dashboard(request):
