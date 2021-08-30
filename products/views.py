@@ -1,18 +1,13 @@
 from django.shortcuts import render, redirect
-from .models import Category, Product
+from .models import Product
 from .forms import ProductCreateForm
 from account.views import *
 from account.forms import *
 from django.contrib.auth.decorators import login_required
 from account.templates import *
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import DeleteView, UpdateView
 
-
-# from django.views.generic import FormView, DetailView, CreateView
-
-
-def product_list(request):
-    product_object = Product.objects.all()
-    return render(request, 'account/index.html', {"product": product_object})
                                        
 def product_detail(request, id):
     product = Product.objects.get(id=id)
@@ -28,18 +23,31 @@ def create_product(request):
                 new_product = product_form.save(commit=False)                       
                 new_product.user = request.user      
                 product_form.save()
-                return redirect(product_list)
+                return redirect(user_products)
         product_form = ProductCreateForm()
         return render(request, 'products/create.html', {'product_form': product_form})
     else:
         return redirect(register)
 
 
-
 def user_products(request):
-    product = Product.objects.filter(user__gte=1, user__user=request.user)
-    return render(request, 'products/user_products.html', {"product": product})
+    data = Product.objects.filter(user_profile=request.user)
+    return render(request, 'products/user_products.html', {'user_products': data})
 
 
+def edit_my_product(request, id):
+    if request.method == "POST":
+        product_object = Product.objects.filter(user_profile=request.user).get(id=id)
+        product_form = ProductCreateForm(data=request.POST, instance=product_object)
+        if product_form.is_valid():
+            product_form.save()
+            return redirect(user_products, id=id)
 
-                                
+    product_form = ProductCreateForm(instance=product_form)
+    return render(request, 'products/editproduct_form.html', {'place_form': product_form})
+
+
+def delete_product(request, id):
+    product_object = Product.objects.get(id=id)
+    product_object.delete()
+    return redirect(user_products)

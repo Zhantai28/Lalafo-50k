@@ -19,9 +19,9 @@
             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
               <button type="button" class="btn btn-secondary "><a href="{% url 'dashboard' %}">Войти-Регистрация</a></button>
               <button type="button" class="btn btn-danger">
-                {% if request.user.is_authenticated %}
+                
                   <a href="{% url 'create_product' %}">Подать обьявление</a>
-                {% endif %}
+               
               </button>
             </div>
           </form>

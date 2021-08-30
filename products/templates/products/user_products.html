@@ -7,23 +7,17 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="container-fluid" style="justify-content: space-around;">
-        <div class="col-6" style="justify-content: space-around; ">
-            <div class="row">
-                <img class="card-img-top" style=" margin-top: 100px; width: 600px; height: 500px;" src="{{ products.image.url }}">
-                <ul class="list-group" style="margin-top: 60px;">
-                    <li class="list-group-item">{{ product_object.name }}</li>
-                    <li class="list-group-item">Цена: {{ product.price }}</li>
-                    <li class="list-group-item">Описание: {{ product.description|linebreaks }}</li>
-                    <li class="list-group-item">{{ product.category }}</li>
-                    <li class="list-group-item">{{ product.sub_category }}</li>
-                    <li class="list-group-item">{{ product.status }}</li>
-                    <li class="list-group-item">{{ product.created }}</li>
-                    <li class="list-group-item">{{ product.updated }}</li>
-                </ul>
-            </div>
-        </div>
-
+    <div>
+        {% for product in Product %}
+            Название: {{ product.name }}
+            Цена: {{ product.price }}
+            Описание: {{ product.description|linebreaks }}
+            Категория: {{ product.category }}
+            Подкатогрия: {{ product.sub_category }}
+            Статус: {{ product.status }}
+            Дата создания: {{ product.created }}
+            Дата обновления: {{ product.updated }}
+        {% endfor %}
     </div>
 </body>
 </html>
