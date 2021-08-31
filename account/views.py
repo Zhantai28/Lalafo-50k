@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from .forms import UserRegistrationForm, LoginForm,UserEditForm, ProfileEditForm
 from django.contrib.auth import authenticate, login
@@ -12,7 +12,11 @@ class HomeView(TemplateView):
 
 @login_required
 def dashboard(request):
-    return render(request, 'account/dashboard.html', {'section': 'dashboard'})
+    if request.user.is_authenticated:
+        return render(request, 'account/dashboard.html', {'section': 'dashboard'})
+    else:
+        return redirect(user_login)
+
 
 def register(request):
     if request.method == 'POST':
@@ -61,7 +65,8 @@ def edit(request):
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance=request.user.profile)
         return render(request,
-                      'account/edit.html',
-                      {'user_form': user_form,
-                       'profile_form': profile_form})
+                    'account/edit.html',
+                    {'user_form': user_form,
+                    'profile_form': profile_form})
+    
 

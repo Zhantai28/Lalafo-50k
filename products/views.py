@@ -5,8 +5,6 @@ from account.views import *
 from account.forms import *
 from django.contrib.auth.decorators import login_required
 from account.templates import *
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import DeleteView, UpdateView
 
                                        
 def product_detail(request, id):
