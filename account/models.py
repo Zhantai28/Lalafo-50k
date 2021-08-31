@@ -13,7 +13,7 @@ class Profile(models.Model):
       
     userbirth = models.DateField(db_column='userBirth', blank=True, null=True)
     phone_number = models.CharField(max_length=255, blank=True, null=True)
-    photo = models.ImageField(blank=True, null=True, upload_to='profile_photo')
+    photo = models.ImageField(default='default.jpg', blank=True, null=True, upload_to='profile_photo')
     region = models.CharField(max_length=1, choices=(
         ('B', 'Bishkek'),
         ('C', 'Chuy'),
@@ -44,7 +44,7 @@ RATE_CHOICES=(
 class UserRating(models.Model):
     user_rated=models.ForeignKey(settings.AUTH_USER_MODEL,  related_name='given_ratings', on_delete=models.CASCADE)
     user_received=models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_ratings', on_delete=models.CASCADE, verbose_name='Пользователь')
-    rating = models.PositiveSmallIntegerField(choices=RATE_CHOICES, verbose_name='Оценки')
+    star = models.PositiveSmallIntegerField(choices=RATE_CHOICES, verbose_name='Оценки')
    
     class Meta:
         verbose_name_plural='Ratings'
