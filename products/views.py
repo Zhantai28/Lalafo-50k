@@ -8,11 +8,10 @@ from django.contrib.auth.decorators import login_required
 from account.templates import *
 from account.models import *
 
-class HomeView(TemplateView):
-    QuerySet = Product.objects.all()
-    template_name = 'account/index.html'
+def product_list(request):
+    product_object = Product.objects.all()
+    return render(request, 'account/index.html', {'product_list':product_object})
 
-                                       
 def product_detail(request, id):
     product = Product.objects.get(id=id)
     return render(request, 'products/product_detail.html', {'product':product})    
@@ -39,7 +38,6 @@ def user_products(request):
         data = Product.objects.filter(user_profile=request.user)
         return render(request, 'products/user_products.html', {'user_products': data})
     
-
 
 def edit_my_product(request, id):
     product = get_object_or_404(Product, id=id)

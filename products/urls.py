@@ -1,10 +1,11 @@
 from django import views
 from django.urls import path
-from .views import product_detail, create_product, user_products, edit_my_product, delete_product
+from .views import product_detail, create_product, user_products, edit_my_product, delete_product, product_list
 
 app_name = 'products'
 
 urlpatterns = [
+    path('', product_list, name='homepage'),
     path('<int:id>/', product_detail, name="product_detail"),
     path('create_product/', create_product, name='create_product'),
     path('user_product', user_products, name='user_products'),
