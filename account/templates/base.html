@@ -17,10 +17,10 @@
           <a class="navbar-brand" style="margin: 0 8%; color: rgb(4, 80, 4); font-size: 26px;" href="#">5s-Sell-Buy</a>
           <form class="d-flex" style="margin-right: 3%;">
             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-              <button type="button" class="btn btn-secondary "><a href="{% url 'dashboard' %}">Войти-Регистрация</a></button>
+              <button type="button" class="btn btn-secondary "><a href="{% url 'account:dashboard' %}">Войти-Регистрация</a></button>
               <button type="button" class="btn btn-danger">
                 
-                  <a href="{% url 'create_product' %}">Подать обьявление</a>
+                  <a href="{% url 'products:create_product' %}">Подать обьявление</a>
                
               </button>
             </div>

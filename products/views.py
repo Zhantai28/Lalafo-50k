@@ -1,10 +1,16 @@
-from django.shortcuts import render, redirect
+from django.db.models.query import QuerySet
+from django.shortcuts import get_object_or_404, render, redirect
 from .models import Product
 from .forms import ProductCreateForm
-from account.views import *
+from account.views import * 
 from account.forms import *
 from django.contrib.auth.decorators import login_required
 from account.templates import *
+from account.models import *
+
+class HomeView(TemplateView):
+    QuerySet = Product.objects.all()
+    template_name = 'account/index.html'
 
                                        
 def product_detail(request, id):
@@ -21,28 +27,32 @@ def create_product(request):
                 new_product = product_form.save(commit=False)                       
                 new_product.user = request.user      
                 product_form.save()
-                return redirect(user_products)
+                return render(request, 'products/user_products.html', {'product':new_product})
         product_form = ProductCreateForm()
         return render(request, 'products/create.html', {'product_form': product_form})
     else:
         return redirect(register)
 
-
+@login_required
 def user_products(request):
-    data = Product.objects.filter(user_profile=request.user)
-    return render(request, 'products/user_products.html', {'user_products': data})
+    if request.method == "GET":
+        data = Product.objects.filter(user_profile=request.user)
+        return render(request, 'products/user_products.html', {'user_products': data})
+    
 
 
 def edit_my_product(request, id):
+    product = get_object_or_404(Product, id=id)
+    if product.user_profile != request.user:
+        return redirect(user_login)
     if request.method == "POST":
-        product_object = Product.objects.filter(user_profile=request.user).get(id=id)
-        product_form = ProductCreateForm(data=request.POST, instance=product_object)
+        product_form = ProductCreateForm(data=request.POST, instance=product)
         if product_form.is_valid():
             product_form.save()
-            return redirect(user_products, id=id)
-
-    product_form = ProductCreateForm(instance=product_form)
-    return render(request, 'products/editproduct_form.html', {'place_form': product_form})
+            return redirect(user_products)
+    else:
+        form = ProductCreateForm(instance=product)
+    return render(request, 'products/editproduct_form.html', {'place_form': form, 'product':product})
 
 
 def delete_product(request, id):

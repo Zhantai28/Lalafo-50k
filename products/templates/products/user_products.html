@@ -8,7 +8,7 @@
 </head>
 <body>
     <div>
-        {% for product in product %}
+        {% for product in data %}
             Название: {{ product.name }}
             Цена: {{ product.price }}
             Описание: {{ product.description|linebreaks }}
@@ -19,6 +19,5 @@
             Дата обновления: {{ product.updated }}
         {% endfor %}
     </div>
-    
 </body>
 </html>

@@ -7,7 +7,7 @@ from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, 
 
 
 
-# app_name = 'account'
+app_name = 'account'
 
 urlpatterns = [
     path('', HomeView.as_view(), name='homepage'),

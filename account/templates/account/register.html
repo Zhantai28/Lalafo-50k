@@ -9,7 +9,7 @@
 <body>
     <h1>Создать аккаунт</h1>
     <p>Пожалуйста, зарегистрируйтесь, используя следующую форму:</p>
-    <p>Или войдите в аккаунт <a href="{% url 'login' %}">log in</a>.</p>
+    <p>Или войдите в аккаунт <a href="{% url 'account:login' %}">log in</a>.</p>
     <form action="." method="post">
         {{ user_form.as_p }}
         {% csrf_token %}
