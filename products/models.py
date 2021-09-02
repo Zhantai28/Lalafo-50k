@@ -1,6 +1,10 @@
 from django.db import models
+from django.db.models.enums import TextChoices
+from django.db.models.fields import SlugField
+from django.contrib.auth.models import  User 
 from account.models import Profile
 from django.urls import reverse
+
 
 class Node(models.Model):
     name = models.CharField(max_length=250, db_index=True)
@@ -69,4 +73,45 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('product', args=[str (self.id)])
 
- 
+
+
+class FeedBack(models.Model):
+    user = models.ForeignKey(
+        to=User,
+        related_name='comments',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        verbose_name='Пользователь'
+    )
+
+    product = models.ForeignKey(
+        to=Product,
+        on_delete=models.CASCADE,
+        verbose_name='Товары',
+        related_name='product_comments'
+    )
+
+    text = models.TextField('Текст комментария')
+    parent = models.ForeignKey(
+        'self',
+        verbose_name='Родительский комментарий',
+        blank=True,
+        null=True,
+        related_name="comment_child",
+        on_delete=models.CASCADE
+    )
+    
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    image = models.ImageField(upload_to='products', null=True, blank=True)
+
+    def __str__(self): 
+        return self.text, str(self.id)
+
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии' 
+        ordering = ('created',)
+

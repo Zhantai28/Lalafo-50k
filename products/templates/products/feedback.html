@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>Комментарии ({{ get_product.product_comments.all.count }})</p>
+
+    <hr>
+
+    <p>Добавить комментарий</p>
+
+    <ul>
+    {% for item in get_product.product_comments.all  %}
+
+    <li>
+    Дата создания:{{ item.created }}<br>
+    Пользователь: {{ item.user }}
+    {{ item.text }}
+    </li>
+
+    {% endfor %}
+    </ul>
+
+    {% if request.user.is_authenticated %}
+        <div class="col-4">
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+            </form>
+            <button form="add form" type="submit" class="btn btn-primary">Отправить</button>
+        </div>
+    {% else %}
+        <p class="text center">Комментарии могут оставлять только авторизованные пользователи</p>
+    {% endif %}
+
+    <a class='btn btn-lg btn-warning' href="{% url 'edit-comment' comment.id %}">Изменить</a>
+    <a class='btn btn-lg btn-danger' href="{% url 'delete-comment' comment.id %}">Удалить</a>
+</body>
+</html> 

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.db import models
-from .models import Category, Product, Subcategory
+from .models import Category, Product, Subcategory, FeedBack 
+
 
 class SubcategoryInline(admin.TabularInline):
     model = Subcategory
@@ -27,6 +28,16 @@ class SubategoryAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['category', 'sub_category', 'name', 'description', 'status', 'price', 'created', 'updated']
     list_filter = ['category', 'status']
+
+
+
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ['text', 'product', 'user']
+    search_fields = ['text', 'product__name', 'product__description']
+    fields = ['user', 'product', 'text']
+    readonly_fields = ['product', 'text']
+
+admin.site.register(FeedBack, FeedbackAdmin) 
     fieldsets = [
         (
             None, {
