@@ -1,22 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% if category %}
-        {{ category.name }}
-            {% else %}
-            Products  
-    {% endif %}
-    <div>
-        <h2>{{ product_object.name }}</h2>
-        <h2>{{ product_object.category }}</a></h2>
-        <p class="price">${{ product.price }}</p>
-        {{ product.description|linebreaks }}
+{% extends 'base.html' %}
+
+{% block page %}
+    <div class="container-fluid" style="justify-content: space-around;">
+        <div class="col-6" style="justify-content: space-around; ">
+            <div class="row">
+                <img class="card-img-top" style=" margin-top: 100px; width: 600px; height: 500px;" src="{{ products.image.url }}">
+                <ul class="list-group" style="margin-top: 60px;">
+                    <li class="list-group-item">{{ product_object.name }}</li>
+                    <li class="list-group-item">Цена: {{ product.price }}</li>
+                    <li class="list-group-item">Описание: {{ product.description|linebreaks }}</li>
+                </ul>
+            </div>
+        </div>
+
     </div>
-</body>
-</html>
+
+{% endblock %}

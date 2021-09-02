@@ -1,13 +1,35 @@
 {% extends 'base.html' %}
 
-{% load crispy_forms_tags %}
+{% block page %}
+  <nav class="navbar navbar-light bg-success" style="background-color: green; margin-top: 5%; width: 100%;">
+      <div class="container-fluid" > 
+          <input class="form-control me-md-2" style="width: 80%;" type="search" placeholder="Поиск" aria-label="Search">
+          <div class="d-grid gap-4 col-2 mx-auto">
+            <button class="btn btn-danger " type="submit">Поиск</button>
+          </div>
+          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;">Транспорт</button>
+          <button type="button" class="btn btn-danger col-6 col-md-2" style="margin-top: 20px;">Одежда</button>
+          <button type="button" class="btn btn-dark col-6 col-md-2" style="margin-top: 20px;">Услуги</button>
+          <button type="button" class="btn btn-dark col-6 col-md-2" style="margin-top: 20px;">Игрушки</button>
+          <button type="button" class="btn btn-danger col-6 col-md-2" style="margin-top: 20px;">Мебель</button>
+          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;">Электроника</button>
+      </div>
+  </nav>
 
-{% block main %}
-
-<div class="card">
-    <div class="card-body">
-        <h4 class="card-title">Добро пожаловать, {{request.user.username}}!</h4>
-        <p>Вы можете <a href="{% url 'account:edit' %}">отредактировать профиль</a> или <a href="{% url 'account:password_change' %}">сменить пароль</a>.</p>
+  <div class="container-fluid">
+    <div class="row" style="justify-content: space-around; margin: 60px 60px; ">
+        {% for product in product_object %}
+        <div class="col-6 col-md-3">
+          <img class="card-img-top " >{{ product.photo }}
+          <div class="card-body">
+            {{ product.name }}</p>
+            {{ product.photo }}
+            {{ product.description }}
+            <p class="card-text">Цена: {{ product.price }}</p>
+            <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
+          </div>
+        </div>
+      {% endfor %}
     </div>
-</div>
+  </div>
 {% endblock %}

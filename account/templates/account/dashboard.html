@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <p>Добро пожаловать в личный кабинет. Вы можете <a href="{% url 'account:edit' %}">отредактировать профиль</a> or <a href="{% url 'account:password_change' %}">изменить пароль</a>.</p>
+    <p><a href="{% url 'products:create_product' %}">Создать объявление</a></p>
+    <p><a href="{% url 'products:user_products' %}">Мои объявления</a></p>
+    <p><a href="{% url 'account:logout' %}">Выход</a></p>
+</body>
+</html>

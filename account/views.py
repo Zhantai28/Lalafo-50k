@@ -1,16 +1,19 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render
 from .forms import UserRegistrationForm, LoginForm,UserEditForm, ProfileEditForm
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import AuthenticationForm 
 from django.contrib.auth.decorators import login_required
 from .models import Profile
 from django.contrib import messages
+from products.models import Product
+from django.views.generic import TemplateView
 
+class HomeView(TemplateView):
+    QuerySet = Product.objects.all()
+    template_name = 'account/index.html'
 
 @login_required
 def profile(request):
-    return render(request, 'account/index.html', {'section': 'profile'})
+    return render(request, 'account/dashboard.html', {'section': 'profile'})
+
 
 def register(request):
     if request.method == 'POST':
@@ -24,7 +27,6 @@ def register(request):
     else:
         user_form = UserRegistrationForm()
     return render(request, 'account/register.html', {'user_form': user_form})
-
 
 
 @login_required 
@@ -46,7 +48,4 @@ def edit(request):
                       'account/edit.html',
                       {'user_form': user_form,
                        'profile_form': profile_form})
-
-
-
 
