@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib import admin
-from .views import dashboard, register, user_login, edit, HomeView
+from .views import dashboard, register, user_login, edit
 from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, \
         PasswordChangeView, PasswordChangeDoneView, PasswordResetView, \
         PasswordResetDoneView ,PasswordResetConfirmView, PasswordResetCompleteView
@@ -10,7 +10,6 @@ from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, 
 app_name = 'account'
 
 urlpatterns = [
-    path('', HomeView.as_view(), name='homepage'),
     path('register/', register, name='register'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),

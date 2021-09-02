@@ -7,10 +7,6 @@ from .models import Profile
 from django.contrib import messages
 from django.views.generic import TemplateView
 
-class HomeView(TemplateView):
-    QuerySet = Product.objects.all()
-    template_name = 'account/index.html'
-
 @login_required
 def dashboard(request):
     if request.user.is_authenticated:
