@@ -30,23 +30,12 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ['category', 'status']
 
 
-
+@admin.register(FeedBack)
 class FeedbackAdmin(admin.ModelAdmin):
     list_display = ['text', 'product', 'user']
     search_fields = ['text', 'product__name', 'product__description']
     fields = ['user', 'product', 'text']
     readonly_fields = ['product', 'text']
 
-admin.site.register(FeedBack, FeedbackAdmin) 
-    fieldsets = [
-        (
-            None, {
-                'fields':('category', 'sub_category', 'name', 'slug','description', 'status', 'price'),
-            
-            },
-        )
-    ]
 
-    def product_count(self, obj):
-        return obj.product_set.count()
     

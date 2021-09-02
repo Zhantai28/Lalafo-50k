@@ -15,12 +15,6 @@ from account.templates import *
 from account.models import *
 
 
-def product_list(request):
-    product_object = Product.objects.all()
-    return render(request, 'account/index.html', {'product_list':product_object})
-
-
-
 class FeedbackDetailView(FormMixin, DetailView):
     template_name = 'products/feedback.html'
     form_class = FeedBackForm
