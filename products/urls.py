@@ -5,7 +5,6 @@ from .views import product_detail, create_product, user_products, edit_my_produc
 app_name = 'products'
 
 urlpatterns = [
-    path('', product_list, name='homepage'),
     path('<int:id>/', product_detail, name="product_detail"),
     path('create_product/', create_product, name='create_product'),
     path('user_product', user_products, name='user_products'),

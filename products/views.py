@@ -42,7 +42,7 @@ def user_products(request):
 def edit_my_product(request, id):
     product = get_object_or_404(Product, id=id)
     if product.user_profile != request.user:
-        return redirect(user_login)
+        return redirect(register)
     if request.method == "POST":
         product_form = ProductCreateForm(data=request.POST, instance=product)
         if product_form.is_valid():
