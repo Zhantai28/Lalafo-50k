@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Category, Product, FeedBack 
+from .models import Category, Product, FeedBack
+
 
 # class AdminProduct(admin.ModelAdmin):
 
@@ -18,11 +19,13 @@ class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug':('name',)}
 
 
-
+@admin.register(FeedBack)
 class FeedbackAdmin(admin.ModelAdmin):
     list_display = ['text', 'product', 'user']
-    search_fields = ['text', 'product__name', 'product__description']
+    search_fields = ['text', 'product']
     fields = ['user', 'product', 'text']
-    readonly_fields = ['product', 'text']
+    readonly_fields = ['product', 'text'] 
+    
+    
 
-admin.site.register(FeedBack, FeedbackAdmin) 
+
