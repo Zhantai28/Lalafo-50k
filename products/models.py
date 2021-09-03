@@ -79,7 +79,7 @@ class FeedBack(models.Model):
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    image = models.ImageField(upload_to='products', null=True, blank=True)
+    active = models.BooleanField(default=True)
 
     def __str__(self): 
         return self.text, str(self.id)
