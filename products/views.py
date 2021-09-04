@@ -1,7 +1,6 @@
 from django import forms
 from django.http.response import HttpResponse, Http404
 from .models import Category, Product, FeedBack
-import django.http as http
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin
 from django.db.models.query import QuerySet
@@ -13,7 +12,9 @@ from account.forms import *
 from django.contrib.auth.decorators import login_required
 from account.templates import *
 from account.models import *
+from django.views.generic import TemplateView, ListView
 
+#views of comments of products
 
 class FeedbackDetailView(FormMixin, DetailView):
     template_name = 'products/feedback.html'
@@ -49,11 +50,19 @@ def edit_comment(request, id):
     return render(request, 'products/feedback.html', {'comment_form': comment_form})
     
 
-
 def delete_own_comment(request, id):
     comment = FeedBack.objects.get(id=id)
     comment.delete()
     return redirect('products/feedback.html') 
+
+
+# vews of products
+
+
+class HomeView(ListView):
+    template_name = 'account/index.html'
+    model = Product
+    
 
 
 def product_detail(request, id):

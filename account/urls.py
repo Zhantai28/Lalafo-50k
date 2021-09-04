@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib import admin
-from .views import HomeView, register, edit, profile
+from .views import register, edit, profile, HomeView
 from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, \
         PasswordChangeView, PasswordChangeDoneView, PasswordResetView, \
         PasswordResetDoneView ,PasswordResetConfirmView, PasswordResetCompleteView
