@@ -4,13 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Личный кабинет</title>
 </head>
 <body>
-    <h1>Dashboard</h1>
-    <p>Добро пожаловать в личный кабинет. Вы можете <a href="{% url 'account:edit' %}">отредактировать профиль</a> or <a href="{% url 'account:password_change' %}">изменить пароль</a>.</p>
-    <p><a href="{% url 'products:create_product' %}">Создать объявление</a></p>
-    <p><a href="{% url 'products:user_products' %}">Мои объявления</a></p>
-    <p><a href="{% url 'account:logout' %}">Выход</a></p>
+    <div class="card">
+        <div class="card-body">
+            <div class="media">
+                <img class="rounded-circle account-img" src="{{ request.user.profile.photo.url }}">
+                <h4 class="card-title">{{request.user.username}}, Добро пожаловать в личный кабинет!</h4>
+                <p>Вы можете <a href="{% url 'account:edit' %}">отредактировать профиль</a> или <a href="{% url 'account:password_change' %}">сменить пароль</a>.</p>
+                <p>Мой Рейтинг</p>
+                <p><a href="{% url 'account:dialogs' %}">Мои сообщения </a></p>
+                <p><a href="{% url 'products:create_product' %}">Создать объявление</a></p>
+                <p><a href="{% url 'products:user_products' %}">Мои объявления</a></p>
+                <p><a href="{% url 'account:logout' %}">Выход</a></p>
+                <p><a href="{% url 'account:logout' %}">Выход</a></p>
+            </div>
+        </div>
+    </div>
+    
 </body>
 </html>
+
