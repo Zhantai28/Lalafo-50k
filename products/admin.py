@@ -38,15 +38,15 @@ class FeedbackAdmin(admin.ModelAdmin):
     readonly_fields = ['product', 'text']
 
 admin.site.register(FeedBack, FeedbackAdmin) 
-    fieldsets = [
+fieldsets = [
         (
             None, {
                 'fields':('category', 'sub_category', 'name', 'slug','description', 'status', 'price'),
             
             },
         )
-    ]
+]
 
-    def product_count(self, obj):
-        return obj.product_set.count()
+def product_count(self, obj):
+    return obj.product_set.count()
     

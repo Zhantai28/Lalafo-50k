@@ -25,10 +25,6 @@ class HomeView(TemplateView):
     QuerySet = Product.objects.all()
     template_name = 'account/index.html'
 
-class HomeView(TemplateView):
-    QuerySet = Product.objects.all()
-    template_name = 'account/index.html'
-
 @login_required
 def profile(request):
     return render(request, 'account/dashboard.html')
