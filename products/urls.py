@@ -1,6 +1,6 @@
 from django import views
 from django.urls import path
-from .views import product_detail, create_product, user_products, edit_my_product, delete_product, product_list, \
+from .views import product_detail, create_product, user_products, edit_my_product, delete_product, \
 FeedbackDetailView, edit_comment, delete_own_comment
 
 
