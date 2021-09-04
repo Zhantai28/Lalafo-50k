@@ -1,18 +1,52 @@
 from django.contrib import admin
-from .models import Category, Product
+from django.db import models
+from .models import Category, Product, Subcategory, FeedBack 
 
-# class AdminProduct(admin.ModelAdmin):
 
+class SubcategoryInline(admin.TabularInline):
+    model = Subcategory
+    extra = 3
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug']
-    prepopulated_fields = {'slug':('name',)}
+    list_display = ['name']
+    fieldsets = [
+        (
+            None, {
+                'fields':('name',)
+            }
+        )
+    ]
+    inlines = (SubcategoryInline,)
+
+@admin.register(Subcategory)
+class SubategoryAdmin(admin.ModelAdmin):
+    list_display = ['name']
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['category', 'name', 'description', 'status', 'price', 'created', 'updated']
+    list_display = ['category', 'sub_category', 'name', 'description', 'status', 'price', 'created', 'updated']
     list_filter = ['category', 'status']
-    list_editable = ['price', 'status']
-    prepopulated_fields = {'slug':('name',)}
+
+
+
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ['text', 'product', 'user']
+    search_fields = ['text', 'product__name', 'product__description']
+    fields = ['user', 'product', 'text']
+    readonly_fields = ['product', 'text']
+
+admin.site.register(FeedBack, FeedbackAdmin) 
+    fieldsets = [
+        (
+            None, {
+                'fields':('category', 'sub_category', 'name', 'slug','description', 'status', 'price'),
+            
+            },
+        )
+    ]
+
+    def product_count(self, obj):
+        return obj.product_set.count()
+    

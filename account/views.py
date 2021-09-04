@@ -1,3 +1,4 @@
+
 from django.forms.forms import Form
 from django.http.response import HttpResponseRedirect
 from django.template import loader
@@ -18,6 +19,12 @@ from django.db.models import Count
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
+
+
+class HomeView(TemplateView):
+    QuerySet = Product.objects.all()
+    template_name = 'account/index.html'
+
 class HomeView(TemplateView):
     QuerySet = Product.objects.all()
     template_name = 'account/index.html'
@@ -25,6 +32,7 @@ class HomeView(TemplateView):
 @login_required
 def profile(request):
     return render(request, 'account/dashboard.html')
+
 
 def register(request):
     if request.method == 'POST':
@@ -38,7 +46,6 @@ def register(request):
     else:
         user_form = UserRegistrationForm()
     return render(request, 'account/register.html', {'user_form': user_form})
-
 
 
 @login_required 
@@ -144,14 +151,6 @@ class CreateDialogView(FormView):
             chat.members.add(user_id)
         else:
             chat = chats.first()
-        return redirect(reverse('account:messages', kwargs={'chat_id': chat.id}))
-
-
-
-
+        return redirect(reverse('account:messages', kwargs={'chat_id': chat.id})) 
             
-            
-            
-       
-
-
+   

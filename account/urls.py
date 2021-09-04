@@ -2,9 +2,12 @@ from django.urls import path
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from .views import HomeView, account, register, profile, edit, UserRating, UserRatingView, ChatDetailView, ChatListView, MessagesDetailView, CreateDialogView
+
+
 from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, \
         PasswordChangeView, PasswordChangeDoneView, PasswordResetView, \
         PasswordResetDoneView ,PasswordResetConfirmView, PasswordResetCompleteView
+
 
 
 app_name = 'account'
@@ -30,7 +33,6 @@ urlpatterns = [
     path('dialogs/create/<int:user_id>/', login_required(CreateDialogView.as_view()), name='create_dialog'),
     path('dialogs/<user_id>/', login_required(MessagesDetailView.as_view()), name='messages'),
   
-    
     
 
 ]
