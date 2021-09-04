@@ -2,7 +2,7 @@
 
 {% load crispy_forms_tags %}
 
-{% block main %}
+{% block page %}
 
 
 
@@ -11,7 +11,7 @@
         <h4 class="card-title">Отредактируйте профиль</h4>
         <form action="." method="post" enctype="multipart/form-data">
         {{ user_form.as_p }}
-        {{ profile_form.as_p }}
+        {{ profile_form.as_p }} 
         {% csrf_token %}
         {{ form|crispy }}
         <button  type="submit"  class="btn btn-primary btn-block">Сохранить изменения</button>
