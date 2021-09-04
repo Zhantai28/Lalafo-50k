@@ -9,18 +9,22 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm 
 from django.contrib.auth.decorators import login_required
 from .models import Profile, UserRating, Chat, Message
+from products.models import Product
 from django.contrib import messages
 from django.urls import reverse
-from django.views.generic import FormView, DetailView, ListView
+from django.views.generic import FormView, DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView
 from django.db.models import Count
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
+class HomeView(TemplateView):
+    QuerySet = Product.objects.all()
+    template_name = 'account/index.html'
 
 @login_required
 def profile(request):
-    return render(request, 'account/profile.html')
+    return render(request, 'account/dashboard.html')
 
 def register(request):
     if request.method == 'POST':
@@ -47,7 +51,7 @@ def edit(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            return render(request, 'account/profile.html', {'messages': ["Profile updated successfully"]})
+            return render(request, 'account/dashboard.html', {'messages': ["Profile updated successfully"]})
         else:
             return HttpResponse("Error updating your profile")
     else:
@@ -73,7 +77,7 @@ def account(request, id):
 class UserRatingView(LoginRequiredMixin, CreateView):
     template_name = 'account/rating_form.html'
     form_class = UserRatingForm
-    success_url = '/account/profile/'
+    success_url = '/account/dashboard/'
         
     def form_valid(self, form):
         form.instance.user_rated = self.request.user

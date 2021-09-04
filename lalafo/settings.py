@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    
+    'products',
     'crispy_forms',
     
     
@@ -157,7 +157,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-LOGIN_REDIRECT_URL = reverse_lazy('account:profile')
+LOGIN_REDIRECT_URL = reverse_lazy('account:dashboard')
 LOGIN_URL = reverse_lazy('account:login')
 LOGOUT_URL = reverse_lazy('account:logout')
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
