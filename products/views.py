@@ -12,7 +12,6 @@ from account.forms import *
 from django.contrib.auth.decorators import login_required
 from account.templates import *
 from account.models import *
-from django.views.generic import TemplateView, ListView
 
 #views of comments of products
 
@@ -59,12 +58,6 @@ def delete_own_comment(request, id):
 # vews of products
 
 
-class HomeView(ListView):
-    template_name = 'account/index.html'
-    model = Product
-    
-
-
 def product_detail(request, id):
     product = Product.objects.get(id=id)
     return render(request, 'products/product_detail.html', {'product':product})    
@@ -85,12 +78,13 @@ def create_product(request):
     else:
         return redirect(register)
 
+
 @login_required
 def user_products(request):
     if request.method == "GET":
-        data = Product.objects.filter(user_profile=request.user)
+        data = Product.objects.filter(user_profile__user_id=request.user)
         return render(request, 'products/user_products.html', {'user_products': data})
-    
+
 
 def edit_my_product(request, id):
     product = get_object_or_404(Product, id=id)
@@ -110,4 +104,3 @@ def delete_product(request, id):
     product_object = Product.objects.get(id=id)
     product_object.delete()
     return redirect(user_products)
-

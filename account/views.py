@@ -6,12 +6,14 @@ from django.contrib import messages
 from products.models import Product
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
-from django.views.generic import TemplateView, ListView
+from django.views.generic import ListView
 
 
 class HomeView(ListView):
     template_name = 'account/index.html'
     model = Product
+    context_object_name = 'products'
+    paginate_by = 9
 
 @login_required
 def profile(request):

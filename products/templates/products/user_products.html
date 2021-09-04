@@ -7,17 +7,23 @@
     <title>Document</title>
 </head>
 <body>
-    <div>
-        {% for product in data %}
-            Название: {{ product.name }}
-            Цена: {{ product.price }}
-            Описание: {{ product.description|linebreaks }}
-            Категория: {{ product.category }}
-            Подкатогрия: {{ product.sub_category }}
-            Статус: {{ product.status }}
-            Дата создания: {{ product.created }}
-            Дата обновления: {{ product.updated }}
-        {% endfor %}
-    </div>
+    <div class="container-fluid">
+        <div class="row" style="justify-content: space-around; margin: 60px 60px; ">
+            {% for product in products %}
+            <div class="col-6 col-md-3">
+              <img class="card-img-top " >{{ product.photo }}
+              <div class="card-body">
+                {{ product.name }}</p>
+                {{ product.photo }}
+                {{ product.description }}
+                <p class="card-text">Цена: {{ product.price }}</p>
+                
+                <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
+              </div>
+            </div>
+          {% endfor %}
+          
+        </div>
+      </div>
 </body>
 </html>
