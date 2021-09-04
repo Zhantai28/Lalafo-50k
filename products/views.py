@@ -85,7 +85,7 @@ def create_product(request):
 @login_required
 def user_products(request):
     if request.method == "GET":
-        data = Product.objects.filter(user_profile=request.user)
+        data = Product.objects.filter(user_profile__user_id=request.user)
         return render(request, 'products/user_products.html', {'user_products': data})
     
 

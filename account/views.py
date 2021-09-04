@@ -17,13 +17,18 @@ from django.views.generic import FormView, DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView
 from django.db.models import Count
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
 
 
-
-
-class HomeView(TemplateView):
-    QuerySet = Product.objects.all()
+class HomeView(ListView):
     template_name = 'account/index.html'
+    model = Product
+    context_object_name = 'products'
+    paginate_by = 9
+
+def About(request):
+    if request.method == 'GET':
+        return render(request, 'account/aboutus.html')
 
 @login_required
 def profile(request):

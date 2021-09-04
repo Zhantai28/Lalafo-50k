@@ -18,13 +18,14 @@
 
   <div class="container-fluid">
     <div class="row" style="justify-content: space-around; margin: 60px 60px; ">
-        {% for product in product_object %}
+        {% for product in products %}
         <div class="col-6 col-md-3">
           <img class="card-img-top " >{{ product.photo }}
           <div class="card-body">
             {{ product.name }}</p>
             {{ product.photo }}
-            {{ product.description }}
+            {{ product.status }}
+            {{ user.username }}
             <p class="card-text">Цена: {{ product.price }}</p>
             <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
           </div>
