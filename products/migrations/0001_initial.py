@@ -39,7 +39,6 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='products', to='products.category')),
-                ('sub_category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subcategory', to='products.subcategory')),
                 ('user_profile', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='account.profile')),
             ],
             options={
