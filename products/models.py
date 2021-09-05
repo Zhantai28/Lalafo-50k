@@ -117,9 +117,7 @@ class FeedBack(models.Model):
   
 class Cart(models.Model):
     ref_code = models.CharField(max_length=15)
-    owner = models.ForeignKey('account.Profile', null=True, verbose_name='Владелец', on_delete=models.CASCADE)
- 
-    
+    owner = models.ForeignKey(User, verbose_name='Владелец', on_delete=models.CASCADE, related_name='carts')
            
     def get_cart_items(self):
         return self.items.all()

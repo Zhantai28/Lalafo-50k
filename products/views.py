@@ -110,60 +110,6 @@ def delete_product(request, id):
     product_object.delete()
     return redirect(user_products)
 
-
-
-# Cart
-
-def get_user_pending_order(request):
-    # get order for the correct user
-    user_profile = get_object_or_404(Profile, user=request.user)
-    order = Cart.objects.filter(owner=user_profile, is_ordered=False)
-    if order.exists():
-        # get the only order in the list of filtered orders
-        return order[0]
-    return 0
-
-@login_required()
-def add_to_cart(request, **kwargs):
-    # get the user profile
-    user_profile = get_object_or_404(Profile, user=request.user)
-    # filter products by id
-    product = Product.objects.filter(id=kwargs.get('item_id', "")).first()
-    # check if the user already owns this product
-    if product in request.user.profile.mycartproducts.all():
-        messages.info(request, 'You already own this product')
-        return redirect(reverse('products:product-list')) 
-    # create orderItem of the selected product
-    order_item, status = CartItem.objects.get_or_create(product=product)
-    # create order associated with the user
-    user_order, status = Cart.objects.get_or_create(owner=user_profile, is_ordered=False)
-    user_order.items.add(order_item)
-    if status:
-        # generate a reference code
-        user_order.ref_code = generate_order_id()
-        user_order.save()
-
-    # show confirmation message and redirect back to the same page
-    messages.info(request, "item added to cart")
-    return redirect(reverse('products:product-list'))
-
-
-@login_required()
-def delete_from_cart(request, item_id):
-    item_to_delete = CartItem.objects.filter(pk=item_id)
-    if item_to_delete.exists():
-        item_to_delete[0].delete()
-        messages.info(request, "Item has been deleted")
-    return redirect(reverse('products:order_summary'))
-
-
-@login_required()
-def order_details(request, **kwargs):
-    existing_order = get_user_pending_order(request)
-    context = {
-        'order': existing_order
-    }
-    return render(request, 'products/order_summary.html', context)
 def product_by_category(request):
 
     products = Product.objects.filter()
@@ -190,6 +136,57 @@ def product_by_category(request):
 
     # }
 
+# Cart
+
+def get_user_pending_order(request):
+    # get order for the correct user
+    user_profile = get_object_or_404(Profile, user=request.user)
+    order = Cart.objects.filter(owner=request.user)
+    if order.exists():
+        # get the only order in the list of filtered orders
+        return order[0]
+    return 0
+
+@login_required()
+def add_to_cart(request, **kwargs):
     
+    # filter products by id
+    product = Product.objects.filter(id=kwargs.get('item_id', "")).first()
+    # check if the user already owns this product
+    # if product in request.user.carts.items.products.all():
+    #     messages.info(request, 'You already own this product')
+    #     return redirect(reverse('products:product-list')) 
+    # create orderItem of the selected product
+    user_cart, is_new_cart = Cart.objects.get_or_create(owner=request.user)
+    cart_item, created = CartItem.objects.get_or_create(product=product, cart=user_cart)
+    if not created:
+        print("This product уже в корзине")
+        messages.info(request, 'This product уже в корзине')
+        return redirect(reverse('products:order_summary'))
+
+        
+    if is_new_cart:
+        # generate a reference code
+        user_cart.ref_code = generate_order_id()
+        user_cart.save()
+
+    # show confirmation message and redirect back to the same page
+    messages.info(request, "item added to cart")
+    return redirect(reverse('products:order_summary'))
 
 
+@login_required()
+def delete_from_cart(request, item_id):
+    deleted, _ = CartItem.objects.filter(pk=item_id).delete()
+    if deleted > 0:
+        messages.info(request, "Item has been deleted")
+    return redirect(reverse('products:order_summary'))
+
+
+@login_required()
+def order_details(request, **kwargs):
+    existing_order = get_user_pending_order(request)
+    context = {
+        'order': existing_order
+    }
+    return render(request, 'products/order_summary.html', context)

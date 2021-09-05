@@ -26,7 +26,6 @@ class Profile(models.Model):
         ('A', 'Batken'),
     ))
     city =models.CharField(max_length=255)
-    mycartproducts = models.ManyToManyField(to=Product, blank=True)
 
 
     def __str__(self):
