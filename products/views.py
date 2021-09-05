@@ -13,7 +13,7 @@ from account.forms import *
 from django.contrib.auth.decorators import login_required
 from account.templates import *
 from account.models import *
-from .extras import generate_order_id
+from .extras import generate_cart_id
 
 
 
@@ -138,7 +138,7 @@ def product_by_category(request):
 
 # Cart
 
-def get_user_pending_order(request):
+def get_user_pending_cart(request):
     # get order for the correct user
     user_profile = get_object_or_404(Profile, user=request.user)
     order = Cart.objects.filter(owner=request.user)
@@ -162,17 +162,17 @@ def add_to_cart(request, **kwargs):
     if not created:
         print("This product уже в корзине")
         messages.info(request, 'This product уже в корзине')
-        return redirect(reverse('products:order_summary'))
+        return redirect(reverse('products:cart_summary'))
 
         
     if is_new_cart:
         # generate a reference code
-        user_cart.ref_code = generate_order_id()
+        user_cart.ref_code = generate_cart_id()
         user_cart.save()
 
     # show confirmation message and redirect back to the same page
     messages.info(request, "item added to cart")
-    return redirect(reverse('products:order_summary'))
+    return redirect(reverse('products:cart_summary'))
 
 
 @login_required()
@@ -180,13 +180,13 @@ def delete_from_cart(request, item_id):
     deleted, _ = CartItem.objects.filter(pk=item_id).delete()
     if deleted > 0:
         messages.info(request, "Item has been deleted")
-    return redirect(reverse('products:order_summary'))
+    return redirect(reverse('products:cart_summary'))
 
 
 @login_required()
-def order_details(request, **kwargs):
-    existing_order = get_user_pending_order(request)
+def cart_details(request, **kwargs):
+    existing_cart = get_user_pending_cart(request)
     context = {
-        'order': existing_order
+        'order': existing_cart
     }
-    return render(request, 'products/order_summary.html', context)
+    return render(request, 'products/cart_summary.html', context)

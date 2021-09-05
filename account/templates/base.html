@@ -17,7 +17,7 @@
               <button type="button" class="btn btn-danger">                         
                   <a href="{% url 'products:create_product' %}">Подать обьявление</a>
               </button>
-              <button type="button" class="btn btn-secondary "><a href="{% url 'products:order_summary' %}">Корзина <span class="badge badge-pill badge-danger">{{ cart.products.count }}</span></a>
+              <button type="button" class="btn btn-secondary "><a href="{% url 'products:cart_summary' %}">Корзина <span class="badge badge-pill badge-danger">{{ cart.products.count }}</span></a>
 
               <button type="button" style="margin-right: 3%; color: rgb(3, 1, 1)"><a href="{% url 'account:about_us' %}">О нас</a></button>
               </button>
