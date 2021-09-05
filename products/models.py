@@ -35,7 +35,7 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     user_profile = models.ForeignKey(
-        to=Profile, 
+        to=User, 
         on_delete=models.SET_NULL, 
         null=True
     )

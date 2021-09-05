@@ -82,7 +82,7 @@ def create_product(request):
 
 # НУЖНО ДОРАБОТАТЬ >>>
 def user_products(request):
-    data = Product.objects.order_by('-created').filter(user_profile = request.user.profile.id).values('user_profile')
+    data = Product.objects.order_by('-created').filter(user_profile = request.user)
     return render(request, 'products/user_products.html', {'user_products': data})
 #<<<<   
 
@@ -104,5 +104,33 @@ def delete_product(request, id):
     product_object = Product.objects.get(id=id)
     product_object.delete()
     return redirect(user_products)
+
+def product_by_category(request):
+
+    products = Product.objects.filter()
+    context = {'kategorie': products}
+    return render(request, 'products/category.html', context)
+    # transport = Product.objects.filter(category=1)
+    # clothes = Product.objects.filter(category=2)
+    # service = Product.objects.filter(category=3)
+    # house = Product.objects.filter(category=8)
+    # forhome = Product.objects.filter(category=7)
+    # job = Product.objects.filter(category=5)
+    # repair = Product.objects.filter(category=4)
+    # electronics = Product.objects.filter(category=6)
+
+    # context = {
+    #     'transport' : transport,
+    #     'clothes' : clothes,
+    #     'service' : service,
+    #     'house' : house,
+    #     'forhome' : forhome,
+    #     'job': job,
+    #     'repair': repair,
+    #     'electronics': electronics,
+
+    # }
+
+    
 
 

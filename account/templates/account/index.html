@@ -7,14 +7,14 @@
           <div class="d-grid gap-4 col-2 mx-auto">
             <button class="btn btn-danger " type="submit">Поиск</button>
           </div>
-          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".transport">Транспорт</a></button>
-          <button type="button" class="btn btn-danger col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".clothes">Одежда</a></button>
+          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="{% url 'products:product_by_category' %}" data-filter=".transport">Транспорт</a></button>
+          <button type="button" class="btn btn-danger col-6 col-md-2" style="margin-top: 20px;"><a href="{% url 'products:product_by_category' %}" data-filter=".clothes">Одежда</a></button>
           <button type="button" class="btn btn-dark col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".service">Услуги</a></button>
           <button type="button" class="btn btn-dark col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".repair">Ремонт</a></button>
           <button type="button" class="btn btn-danger col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".job">Работа</a></button>
-          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;">><a href="#" data-filter=".electronics">Электроника</a></button>
-          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;">><a href="#" data-filter=".forhome">Все для дома</a></button>
-          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;">><a href="#" data-filter=".house">Недвижимость</a></button>
+          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".electronics">Электроника</a></button>
+          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".forhome">Все для дома</a></button>
+          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="{% url 'products:product_by_category' %}" data-filter=".house">Недвижимость</a></button>
       </div>
   </nav>
 
@@ -22,87 +22,7 @@
     <div class="row" style="justify-content: space-around; margin: 60px 60px; ">
         {% for product in products %}
           {% if product.active %}
-            {% if product.category == 'Транспорт' %}
-              <div class="Portfolio-box transport">
-                <img class="card-img-top " >{{ product.photo }}
-                <div class="card-body">
-                  {{ product.name }}</p>
-                  {{ product.photo }}
-                  <p class="card-text">Цена: {{ product.price }}</p>
-                  <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
-                </div>
-              </div>
-            {% elif product.category == 'Одежда' %}
-              <div class="Portfolio-box clothes">
-                <img class="card-img-top " >{{ product.photo }}
-                <div class="card-body">
-                  {{ product.name }}</p>
-                  {{ product.photo }}
-                  <p class="card-text">Цена: {{ product.price }}</p>
-                  <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
-                </div>
-              </div>
-            {% elif product.category == 'Услуги' %}
-              <div class="Portfolio-box clothes">
-                <img class="card-img-top " >{{ product.photo }}
-                <div class="card-body">
-                  {{ product.name }}</p>
-                  {{ product.photo }}
-                  <p class="card-text">Цена: {{ product.price }}</p>
-                  <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
-                </div>
-              </div>
-            {% elif product.category == 'Ремонт' %}
-              <div class="Portfolio-box repair">
-                <img class="card-img-top " >{{ product.photo }}
-                <div class="card-body">
-                  {{ product.name }}</p>
-                  {{ product.photo }}
-                  <p class="card-text">Цена: {{ product.price }}</p>
-                  <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
-                </div>
-              </div>
-            {% elif product.category == 'Работа' %}
-              <div class="Portfolio-box job">
-                <img class="card-img-top " >{{ product.photo }}
-                <div class="card-body">
-                  {{ product.name }}</p>
-                  {{ product.photo }}
-                  <p class="card-text">Цена: {{ product.price }}</p>
-                  <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
-                </div>
-              </div>
-            {% elif product.category == 'Электроника' %}
-              <div class="Portfolio-box electronics">
-                <img class="card-img-top " >{{ product.photo }}
-                <div class="card-body">
-                  {{ product.name }}</p>
-                  {{ product.photo }}
-                  <p class="card-text">Цена: {{ product.price }}</p>
-                  <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
-                </div>
-              </div>
-            {% elif product.category == 'Все для дома' %}
-              <div class="Portfolio-box forhome">
-                <img class="card-img-top " >{{ product.photo }}
-                <div class="card-body">
-                  {{ product.name }}</p>
-                  {{ product.photo }}
-                  <p class="card-text">Цена: {{ product.price }}</p>
-                  <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
-                </div>
-              </div>
-            {% else %}
-              <div class="Portfolio-box house">
-                <img class="card-img-top " >{{ product.photo }}
-                <div class="card-body">
-                  {{ product.name }}</p>
-                  {{ product.photo }}
-                  <p class="card-text">Цена: {{ product.price }}</p>
-                  <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
-                </div>
-              </div>
-            <!-- <div class="col-6 col-md-3">
+            <div class="col-6 col-md-3">
               <img class="card-img-top " >{{ product.photo }}
               <div class="card-body">
                 {{ product.name }}</p>
@@ -110,8 +30,7 @@
                 <p class="card-text">Цена: {{ product.price }}</p>
                 <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
               </div>
-            </div> -->
-            {% endif %}
+            </div>
           {% endif %}
         {% endfor %}
     </div>
