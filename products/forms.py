@@ -1,9 +1,8 @@
-from typing import ForwardRef
 from django import forms
 from .models import FeedBack, Product
 from django.forms import Textarea
 
-
+# comments
 class FeedBackForm(forms.ModelForm):
     class Meta:
         model = FeedBack
@@ -17,12 +16,8 @@ class FeedBackForm(forms.ModelForm):
 
 
     
-
+# Products
 class ProductCreateForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['category', 'sub_category', "name", "description", "price", "image", "status"]
-
-
-
-
+        fields = ['category', "name", "description", "price", "image", "status"]
