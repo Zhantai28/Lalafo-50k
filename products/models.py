@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models.enums import TextChoices
-from django.db.models.fields import SlugField
+
 from django.contrib.auth.models import  User 
 import account.models  
 from django.urls import reverse
@@ -32,7 +32,7 @@ class Category(models.Model):
 
 class Subcategory(models.Model):
     name = models.CharField('Название подкатегории', max_length=250)
-    slug = models.SlugField(max_length=50, unique=True, verbose_name='URL')
+    # slug = models.SlugField(max_length=50, unique=True, verbose_name='URL')
     categories = models.ForeignKey(Category, verbose_name='Категория', on_delete=models.CASCADE, null=True)
 
     class Meta:
@@ -123,22 +123,15 @@ class FeedBack(models.Model):
 
 # кОРЗИНА
 
-class CartItem(models.Model):
-    product = models.OneToOneField(Product, on_delete=models.SET_NULL, null=True)
-    is_ordered = models.BooleanField(default=False)
-    date_added = models.DateTimeField(auto_now=True)
-    def __str__(self):
-        return self.product.name
+
 
   
 class Cart(models.Model):
     ref_code = models.CharField(max_length=15)
     owner = models.ForeignKey('account.Profile', null=True, verbose_name='Владелец', on_delete=models.CASCADE)
-    is_ordered = models.BooleanField(default=False)
-    items = models.ManyToManyField(CartItem, blank=True, related_name='related_cart')
-    date_ordered = models.DateTimeField(auto_now=True)
+ 
     
-    
+           
     def get_cart_items(self):
         return self.items.all()
 
@@ -147,3 +140,13 @@ class Cart(models.Model):
 
     def __str__(self):
         return '{0} - {1}'.format(self.owner, self.ref_code)
+
+class CartItem(models.Model):
+    cart= models.ForeignKey(Cart, related_name="items", on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.product.name
+
+# p = Product
+# p_is_ordered = CartItem.objects.filter(cart__owner=user, product=p).exists()

@@ -53,12 +53,11 @@ def product_count(self, obj):
 
 
 
-class CartItemAdmin(admin.ModelAdmin):
-    list_display =( )
-admin.site.register(CartItem, CartItemAdmin)
-
-
-
 admin.site.register(Cart)
+
+class CartItemAdmin(admin.ModelAdmin):
+    list_display =['product']
+
+admin.site.register(CartItem, CartItemAdmin)
 
     
