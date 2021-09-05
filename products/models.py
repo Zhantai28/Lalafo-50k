@@ -16,15 +16,16 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('Category', kwargs={'id': self.id, 'name': self.name})
-
+        return reverse('products:product_list_by_category',
+                        args=[self.name])
+  
 
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
     name = models.CharField(max_length=255, db_index=True)
     description = models.TextField(blank=True)
     price = models.CharField(max_length=255, default="Договорная")
-    image = models.ImageField(blank=True, null=True, default='default.jpg', upload_to='products_photo')
+    image = models.ImageField(blank=True, default='default.jpg', upload_to='products_photo')
     status = models.CharField(max_length=3, choices=(
         ("П", "Продать"),
         ("К", "Купить"),
@@ -34,10 +35,11 @@ class Product(models.Model):
     active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    user_profile = models.ForeignKey(
+    phone_number = models.CharField(max_length=255, blank=True, null=True)
+    author = models.ForeignKey(
         to=User, 
-        on_delete=models.SET_NULL, 
-        null=True
+        on_delete=models.CASCADE, 
+        
     )
 
     class Meta:
@@ -48,6 +50,15 @@ class Product(models.Model):
         
     def get_absolute_url(self):
         return reverse('product', kwargs=(str(self.id),))
+
+    @property
+    def photo_url(self):
+        if self.image and hasattr(self.image, 'url'):
+            return self.image.url
+
+    @property
+    def get_product(self):
+        return Product.objects.filter(category__name=self.name)
 
 
 

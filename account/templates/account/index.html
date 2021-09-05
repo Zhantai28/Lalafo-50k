@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block page %}
   <nav class="navbar navbar-light bg-success" style="background-color: green; margin-top: 5%; width: 100%;">
       <div class="container-fluid" > 
@@ -7,7 +9,7 @@
           <div class="d-grid gap-4 col-2 mx-auto">
             <button class="btn btn-danger " type="submit">Поиск</button>
           </div>
-          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="{% url 'products:product_by_category' %}" data-filter=".transport">Транспорт</a></button>
+            <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="{{ 'products:c.get_absolute_url' }}" data-filter=".transport">Транспорт</a></button>
           <button type="button" class="btn btn-danger col-6 col-md-2" style="margin-top: 20px;"><a href="{% url 'products:product_by_category' %}" data-filter=".clothes">Одежда</a></button>
           <button type="button" class="btn btn-dark col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".service">Услуги</a></button>
           <button type="button" class="btn btn-dark col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".repair">Ремонт</a></button>
@@ -17,22 +19,31 @@
           <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="{% url 'products:product_by_category' %}" data-filter=".house">Недвижимость</a></button>
       </div>
   </nav>
+  <div>
+    {% for category in category %}
+      <h1>{{ category }}</h1>
+        {% for product in category.get_products %}
+          <p>{{ product }}</p>
+        {% endfor %}
+    {% endfor %}
+  </div>
+
 
   <div class="container-fluid">
     <div class="row" style="justify-content: space-around; margin: 60px 60px; ">
-        {% for product in products %}
-          {% if product.active %}
-            <div class="col-6 col-md-3">
-              <img class="card-img-top " >{{ product.photo }}
-              <div class="card-body">
-                {{ product.name }}</p>
-                {{ product.photo }}
-                <p class="card-text">Цена: {{ product.price }}</p>
-                <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
-              </div>
+      {% for product in products %}
+        {% if product.active %}
+          <div class="col-6 col-md-3">
+            <img class="card-img-top " src="{{ request.product.image.url }}">
+            <div class="card-body">
+              {{ product.name }}</p>
+
+              <p class="card-text">Цена: {{ product.price }}</p>
+              <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
             </div>
-          {% endif %}
-        {% endfor %}
-    </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+  </div>
   </div>
 {% endblock %}

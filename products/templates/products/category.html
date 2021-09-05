@@ -2,15 +2,29 @@
 
 
 {% block page %}
-Категрия Одежда
-    {% if products.category == 'Одежда' %}
-        <div class="Portfolio-box clothes">
-            <img class="card-img-top " >{{ request.product.photo }}
-            <div class="card-body">
-                {{ product.name }}</p>
-                {{ product.photo }}
-            <p class="card-text">Цена: {{ product.price }}</p>
-            <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
-        </div>
-    {% endif %}
+    <div id="sidebar">
+        <h3>Categories</h3>
+        <ul>
+            <li {% if not category %}class="selected"{% endif %}>
+                <a href="{% url 'products:product_by_category' %}">All</a>
+            </li>
+            {% for c in categories %}
+                {% if category.id == c.id %}
+                    <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+                {% endif %}>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="main" class="product-list">
+        <h1>{% if category %}{{ category.name }}{% else %}Products{% endif %}</h1>
+        {% for product in products %}
+            <div class="item">
+                <a href="{{ product.get_absolute_url }}">
+                    
+                </a>
+                <a href="{{ product.get_absolute_url }}">{{ product.name }}</a><br>
+                ${{ product.price }}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
