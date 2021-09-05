@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
-from .views import HomeView, About, account, register, profile, edit, UserRating, UserRatingView, ChatDetailView, ChatListView, MessagesDetailView, CreateDialogView
+from .views import HomeView, About, account, other_user, register, profile, edit, UserRating, UserRatingView, ChatDetailView, ChatListView, MessagesDetailView, CreateDialogView
 from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, \
         PasswordChangeView, PasswordChangeDoneView, PasswordResetView, \
         PasswordResetDoneView ,PasswordResetConfirmView, PasswordResetCompleteView
@@ -13,6 +13,7 @@ app_name = 'account'
 urlpatterns = [
     path('', HomeView.as_view(), name='homepage'),
     path('about-us/', About, name="about_us"),
+    path('<int:id>/', other_user, name='user_profile'),
     path('register/', register, name='register'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),

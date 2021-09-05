@@ -40,8 +40,6 @@ class FeedbackDetailView(FormMixin, DetailView):
         self.object.save()
         return super().form_valid(form)
 
-
-
 def edit_comment(request, id):
     comment = FeedBack.objects.get(id=id)
 
@@ -76,18 +74,17 @@ def create_product(request):
                 new_product = product_form.save(commit=False)                       
                 new_product.user = request.user      
                 product_form.save()
-                return render(request, 'products/user_products.html', {'product':new_product})
+                return render(request, 'products/user_products.html', {'massages':["Объявление успешно добавлено"]})
         product_form = ProductCreateForm()
         return render(request, 'products/create.html', {'product_form': product_form})
     else:
         return redirect(register)
 
-@login_required
+# НУЖНО ДОРАБОТАТЬ >>>
 def user_products(request):
-    if request.method == "GET":
-        data = Product.objects.filter(user_profile__user_id=request.user)
-        return render(request, 'products/user_products.html', {'user_products': data})
-    
+    data = Product.objects.order_by('-created').filter(user_profile = request.user.profile.id).values('user_profile')
+    return render(request, 'products/user_products.html', {'user_products': data})
+#<<<<   
 
 def edit_my_product(request, id):
     product = get_object_or_404(Product, id=id)
@@ -107,4 +104,5 @@ def delete_product(request, id):
     product_object = Product.objects.get(id=id)
     product_object.delete()
     return redirect(user_products)
+
 

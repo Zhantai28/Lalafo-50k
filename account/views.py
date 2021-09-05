@@ -1,4 +1,3 @@
-
 from django.forms.forms import Form
 from django.http.response import HttpResponseRedirect
 from django.template import loader
@@ -24,16 +23,24 @@ class HomeView(ListView):
     template_name = 'account/index.html'
     model = Product
     context_object_name = 'products'
-    paginate_by = 9
 
 def About(request):
     if request.method == 'GET':
         return render(request, 'account/aboutus.html')
 
+
+#   НУЖНО ДОРАБОТАТЬ >>>>
+def other_user(request, user_id):
+    profile = Profile.objects.get(id=user_id)
+    other_user_profile= Product.objects.filter(user_profile=profile)
+    return render(request, 'account/other_user.html', {'other_user': other_user_profile})
+
+
+#profile
+
 @login_required
 def profile(request):
     return render(request, 'account/dashboard.html')
-
 
 def register(request):
     if request.method == 'POST':

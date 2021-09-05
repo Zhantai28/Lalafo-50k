@@ -16,21 +16,22 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('', kwargs={'id': self.id, 'name': self.name})
+        return reverse('Category', kwargs={'id': self.id, 'name': self.name})
 
 
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
-    name = models.CharField(max_length=250, db_index=True)
+    name = models.CharField(max_length=255, db_index=True)
     description = models.TextField(blank=True)
     price = models.CharField(max_length=255, default="Договорная")
     image = models.ImageField(blank=True, null=True, default='default.jpg', upload_to='products_photo')
-    status = models.CharField(max_length=14, choices=(
-        ("Продать", "Продать"),
-        ("Купить", "Купить"),
-        ("Cдать в аренду", "Сдать в аренду"),
-        ("Арендовать", "Хочу арендовать")
+    status = models.CharField(max_length=3, choices=(
+        ("П", "Продать"),
+        ("К", "Купить"),
+        ("CA", "Сдать в аренду"),
+        ("А", "Хочу арендовать")
     ))
+    active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     user_profile = models.ForeignKey(
@@ -46,7 +47,7 @@ class Product(models.Model):
         return self.name 
         
     def get_absolute_url(self):
-        return reverse('product', args=[str (self.id)])
+        return reverse('product', kwargs=(str(self.id),))
 
 
 

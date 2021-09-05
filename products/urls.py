@@ -16,6 +16,5 @@ urlpatterns = [
     path('user_product', user_products, name='user_products'),
     path('<int:id>/edit/', edit_my_product, name='edit_my_product'),
     path('<int:id>/delete/', delete_product, name='delete_product'),
-
 ]
 
