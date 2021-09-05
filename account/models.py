@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
+from products.models import Product
 
 
 
@@ -25,6 +26,7 @@ class Profile(models.Model):
         ('A', 'Batken'),
     ))
     city =models.CharField(max_length=255)
+    mycartproducts = models.ManyToManyField(to=Product, blank=True)
 
 
     def __str__(self):

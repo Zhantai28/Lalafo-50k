@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db import models
-from .models import Category, Product, Subcategory, FeedBack 
+from .models import Category, Product, Subcategory, FeedBack, Cart, CartItem
 
 
 class SubcategoryInline(admin.TabularInline):
@@ -49,4 +49,16 @@ fieldsets = [
 
 def product_count(self, obj):
     return obj.product_set.count()
+
+
+
+
+class CartItemAdmin(admin.ModelAdmin):
+    list_display =( )
+admin.site.register(CartItem, CartItemAdmin)
+
+
+
+admin.site.register(Cart)
+
     
