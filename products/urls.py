@@ -1,7 +1,7 @@
 from django import views
 from django.urls import path
 from .views import product_detail, create_product, user_products, edit_my_product, delete_product, \
-FeedbackDetailView, edit_comment, delete_own_comment, add_to_cart, delete_from_cart, order_details
+FeedbackDetailView, edit_comment, delete_own_comment, add_to_cart, delete_from_cart, order_details, product_by_category
 
 
 
@@ -20,8 +20,6 @@ urlpatterns = [
     path('add-to-cart/<int:item_id>/', add_to_cart, name='add_to_cart'),
     path('order-summary/', order_details, name="order_summary"),
     path('item/delete/<int:item_id>/', delete_from_cart, name='delete_item'),
-    
-
-
+    path('product-by-category/', product_by_category, name='product_by_category')
 ]
 

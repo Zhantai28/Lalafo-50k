@@ -7,29 +7,32 @@
           <div class="d-grid gap-4 col-2 mx-auto">
             <button class="btn btn-danger " type="submit">Поиск</button>
           </div>
-          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;">Транспорт</button>
-          <button type="button" class="btn btn-danger col-6 col-md-2" style="margin-top: 20px;">Одежда</button>
-          <button type="button" class="btn btn-dark col-6 col-md-2" style="margin-top: 20px;">Услуги</button>
-          <button type="button" class="btn btn-dark col-6 col-md-2" style="margin-top: 20px;">Игрушки</button>
-          <button type="button" class="btn btn-danger col-6 col-md-2" style="margin-top: 20px;">Мебель</button>
-          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;">Электроника</button>
+          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="{% url 'products:product_by_category' %}" data-filter=".transport">Транспорт</a></button>
+          <button type="button" class="btn btn-danger col-6 col-md-2" style="margin-top: 20px;"><a href="{% url 'products:product_by_category' %}" data-filter=".clothes">Одежда</a></button>
+          <button type="button" class="btn btn-dark col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".service">Услуги</a></button>
+          <button type="button" class="btn btn-dark col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".repair">Ремонт</a></button>
+          <button type="button" class="btn btn-danger col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".job">Работа</a></button>
+          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".electronics">Электроника</a></button>
+          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".forhome">Все для дома</a></button>
+          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="{% url 'products:product_by_category' %}" data-filter=".house">Недвижимость</a></button>
       </div>
   </nav>
 
   <div class="container-fluid">
     <div class="row" style="justify-content: space-around; margin: 60px 60px; ">
-        {% for product in product_object %}
-        <div class="col-6 col-md-3">
-          <img class="card-img-top " >{{ product.photo }}
-          <div class="card-body">
-            {{ product.name }}</p>
-            {{ product.photo }}
-            {{ product.description }}
-            <p class="card-text">Цена: {{ product.price }}</p>
-            <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
-          </div>
-        </div>
-      {% endfor %}
+        {% for product in products %}
+          {% if product.active %}
+            <div class="col-6 col-md-3">
+              <img class="card-img-top " >{{ product.photo }}
+              <div class="card-body">
+                {{ product.name }}</p>
+                {{ product.photo }}
+                <p class="card-text">Цена: {{ product.price }}</p>
+                <a href="{% url 'products:product_detail' product.id %}" style=" text-transform: capitalize; font-size: 15px; text-decoration: none; color: black;">Read More</a>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
     </div>
   </div>
 {% endblock %}

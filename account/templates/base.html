@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop Homepage - Start Bootstrap Template</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
 </head>
 <body>
     <nav class="navbar navbar-light bg-warning">
         <div class="container-fluid" > 
-          <a class="navbar-brand" style="margin: 0 8%; color: rgb(4, 80, 4); font-size: 26px;" href="#">5s-Sell-Buy</a>
+          <a class="navbar-brand" style="margin: 0 8%; color: rgb(189, 99, 25); font-size: 26px;" href="{% url 'account:homepage' %}">Buyer</a>
           <form class="d-flex" style="margin-right: 3%;">
             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
               <button type="button" class="btn btn-secondary "><a href="{% url 'account:dashboard' %}">Войти-Регистрация</a></button>
@@ -20,6 +19,7 @@
               </button>
               <button type="button" class="btn btn-secondary "><a href="{% url 'products:order_summary' %}">Корзина <span class="badge badge-pill badge-danger">{{ cart.products.count }}</span></a>
 
+              <button type="button" style="margin-right: 3%; color: rgb(3, 1, 1)"><a href="{% url 'account:about_us' %}">О нас</a></button>
               </button>
 
             </div>
@@ -33,10 +33,10 @@
     </div>
     <nav class="navbar navbar-light bg-light"  style="margin-top: 60px;">
       <div class="container-fluid"> 
-        <a class="navbar-brand" style=" margin: 0 8%; color: red; font-size: 26px;" href="#">5s-Sell-Buy</a>
+        <a class="navbar-brand" style="margin: 0 8%; color: rgb(3, 1, 1); font-size: 26px;" href="#">Buyer</a>
         <form class="d-flex">
           <div class="btn-group container-fluid" role="group" aria-label="Basic mixed styles example">
-            <a href="#" style="text-decoration: none; color: #00BFFF;">Gmail-адрес сайта: </a>
+            <div style="text-decoration: none; color: #00BFFF;">Gmail-адрес сайта:</div>
           </div>
         </form>
       </div>

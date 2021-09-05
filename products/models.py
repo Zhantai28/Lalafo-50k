@@ -1,19 +1,8 @@
 from django.db import models
-from django.db.models.enums import TextChoices
-
 from django.contrib.auth.models import  User 
 import account.models  
 from django.urls import reverse
 
-
-
-
-class Node(models.Model):
-    name = models.CharField(max_length=250, db_index=True)
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Категория'
-        verbose_name_plural = 'Категории'
 
 class Category(models.Model):
     name = models.CharField(max_length=250, db_index=True)
@@ -27,7 +16,7 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('', kwargs={'id': self.id, 'name': self.name})
+        return reverse('Category', kwargs={'id': self.id, 'name': self.name})
 
 
 class Subcategory(models.Model):
@@ -47,21 +36,21 @@ class Subcategory(models.Model):
 
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
-    sub_category = models.ForeignKey(Subcategory, related_name='subcategory', on_delete=models.CASCADE)
-    name = models.CharField(max_length=250, db_index=True)
+    name = models.CharField(max_length=255, db_index=True)
     description = models.TextField(blank=True)
     price = models.CharField(max_length=255, default="Договорная")
-    image = models.ImageField(blank=True, null=True, upload_to='products_photo')
+    image = models.ImageField(blank=True, null=True, default='default.jpg', upload_to='products_photo')
     status = models.CharField(max_length=3, choices=(
         ("П", "Продать"),
         ("К", "Купить"),
-        ("CА", "Сдать в аренду"),
+        ("CA", "Сдать в аренду"),
         ("А", "Хочу арендовать")
     ))
+    active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     user_profile = models.ForeignKey(
-        to='account.Profile', 
+        to=User, 
         on_delete=models.SET_NULL, 
         null=True
     )
@@ -73,7 +62,7 @@ class Product(models.Model):
         return self.name 
         
     def get_absolute_url(self):
-        return reverse('product', args=[str (self.id)])
+        return reverse('product', kwargs=(str(self.id),))
 
 
 
@@ -106,7 +95,7 @@ class FeedBack(models.Model):
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    image = models.ImageField(upload_to='products', null=True, blank=True)
+    active = models.BooleanField(default=True)
 
     def __str__(self): 
         return self.text, str(self.id)
