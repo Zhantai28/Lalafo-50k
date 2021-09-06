@@ -23,17 +23,11 @@ class HomeView(ListView):
     template_name = 'account/index.html'
     model = Product
     context_object_name = 'products'
+    
 
 def About(request):
     if request.method == 'GET':
         return render(request, 'account/aboutus.html')
-
-
-# Profile of other user   НУЖНО ДОРАБОТАТЬ >>>>
-def other_user(request, id):
-    user_object = User.objects.get(id=id)
-    return render(request, 'account/user.html', {'user_object': user_object})
-   
 
 
 #profile 
@@ -77,12 +71,12 @@ def edit(request):
                       {'user_form': user_form,
                        'profile_form': profile_form})
 
-# def account(request, id):
-#     try:
-#         user_object = User.objects.get(id=id)
-#         return render(request, 'account/user.html', {'user_object': user_object})
-#     except User.DoesNotExist as e:
-#         return HttpResponse(f'Not found: {e}', status=404)
+def account(request, id):
+    try:
+        user_object = Product.objects.get(author=request.user.id)
+        return render(request, 'account/user.html', {'user_object':user_object})
+    except User.DoesNotExist as e:
+        return HttpResponse(f'Not found: {e}', status=404)
 
 
 
