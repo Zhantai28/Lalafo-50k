@@ -85,20 +85,20 @@ def delete_own_comment(request, id):
 @login_required 
 def create_product(request):
     if request.user.is_authenticated:
+        product = Product(author=request.user)
 
         if request.method == "POST":
-            product = Product(author=request.user)
             product_form = ProductCreateForm(request.POST, instance=product)
             
             if product_form.is_valid():
                 new_product = product_form.save(commit=False)                       
-                new_product.author = request.user_id      
+                new_product.author = request.user      
                 product_form.save()
                 return render(request, 'products/user_products.html', {'massages':["Объявление успешно добавлено"]})
             else:
                 print(product_form.errors)
         else:
-            product_form = ProductCreateForm()
+            product_form = ProductCreateForm(instance=product)
             return render(request, 'products/create.html', {'product_form': product_form})
     else:
         return redirect(register)
@@ -110,26 +110,29 @@ class MyProductListView(ListView):
     def get_queryset(self):
         return Product.objects.filter(author__pk__in=[self.request.user.id])
 
- 
+def mypoductdetailview(request, id):
+    products = Product.objects.get(id=id)
+    return render(request, 'products/detail_user_products.html', {'products':products}) 
+        
 
 def edit_my_product(request, id):
     product = get_object_or_404(Product, id=id)
-    if product.user_profile != request.user:
+    if product.author != request.user:
         return redirect(register)
     if request.method == "POST":
-        product_form = ProductCreateForm(data=request.POST, instance=product)
-        if product_form.is_valid():
-            product_form.save()
-            return redirect(MyProductListView.as_view())
+        edit_form = ProductCreateForm(data=request.POST, instance=product)
+        if edit_form.is_valid():
+            edit_form.save()
+            return redirect(mypoductdetailview)
     else:
         form = ProductCreateForm(instance=product)
-    return render(request, 'products/editproduct_form.html', {'place_form': form, 'product':product})
+    return render(request, 'products/editproduct_form.html', {'product':product})
 
 
 def delete_product(request, id):
-    product_object = Product.objects.get(id=id)
-    product_object.delete()
-    return redirect(MyProductListView.as_view())
+    product_object_delete = Product.objects.get(id=id)
+    product_object_delete.delete()
+    return redirect(profile)
 
 def product_by_category(request, category_id=None):
     category = None

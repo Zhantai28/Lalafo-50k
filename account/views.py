@@ -73,11 +73,12 @@ def edit(request):
 
 def account(request, id):
     try:
-        user_object = Product.objects.get(author=request.user.id)
-        return render(request, 'account/user.html', {'user_object':user_object})
+        user_product = get_object_or_404(Profile, user=request.user)
+        user_objects = Product.objects.filter(author=request.user)
+        return render(request, 'account/user.html', {'user_object':user_objects,
+                                                    'user_product':user_product})
     except User.DoesNotExist as e:
         return HttpResponse(f'Not found: {e}', status=404)
-
 
 
 #function for UserRating 
