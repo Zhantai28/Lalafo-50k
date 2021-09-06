@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block page %}
+
+ <section>
+   <div class="row">
+    <table class="table table-hover table-bordered text-center">
+      <tr class="text-center">
+        <th>no.</th>
+        <th>Продукт</th>
+        <th>Цена</th>
+      </tr>
+      {% for item in order.get_cart_items %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td> {{ item.product.name }}</td>       
+          <td>{{ item.product.price }}</td>
+          <td><button><a href="{% url 'products:delete_item' item.id %}">Удалить</a></button></td>
+          
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan= 3> Ваша корзина пуста.</td>
+        </tr>
+      {% endfor %}
+      <tr>
+        {% if order.get_cart_total != None %}
+        <td colspan=2>
+          <strong class="pull-right">Общая сумма:</strong>
+        </td>
+        
+        <td colspan= 1>
+          $<strong>{{ order.get_cart_total }}</strong>
+        </td>
+        {% endif %}
+      </tr>
+      <tr>
+        <td colspan=1 >
+          <a href="{% url 'account:homepage' %}" class="btn btn-warning pull-left">
+            {% if order %} Продолжить покупки {% else %} Add Items to Cart {% endif %}
+          </a> 
+        </td>
+        <td colspan=2>
+          {% if order.get_cart_items %}
+            <a href="" class="pull-right btn btn-primary">Proceed To Checkout</a>
+          {% endif %}
+        </td>
+      </tr>
+    </table>
+     
+   </div>
+ </section>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script>
+  function confirm_delete(){
+    return confirm("Do you want to remove this item from cart?");
+  }
+  </script>
+{% endblock scripts %}

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import  User 
-from account.models import Profile
+import account.models  
 from django.urls import reverse
 
 
@@ -20,6 +20,21 @@ class Category(models.Model):
                         args=[self.name])
   
 
+class Subcategory(models.Model):
+    name = models.CharField('Название подкатегории', max_length=250)
+    # slug = models.SlugField(max_length=50, unique=True, verbose_name='URL')
+    categories = models.ForeignKey(Category, verbose_name='Категория', on_delete=models.CASCADE, null=True)
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Подкатегория'
+        verbose_name_plural = 'Подкатегории'
+
+    def __str__(self):
+        return self.name
+
+
+
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
     name = models.CharField(max_length=255, db_index=True)
@@ -38,8 +53,10 @@ class Product(models.Model):
     phone_number = models.CharField(max_length=255, blank=True, null=True)
     author = models.ForeignKey(
         to=User, 
-        on_delete=models.CASCADE, 
-        
+        on_delete=models.CASCADE,
+        null=True,
+        related_name='creator'
+
     )
 
     class Meta:
@@ -47,7 +64,8 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name 
-        
+
+           
     def get_absolute_url(self):
         return reverse('product', kwargs=(str(self.id),))
 
@@ -101,3 +119,35 @@ class FeedBack(models.Model):
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии' 
         ordering = ('created',)
+
+
+
+
+
+# кОРЗИНА
+
+
+
+  
+class Cart(models.Model):
+    ref_code = models.CharField(max_length=15)
+    owner = models.ForeignKey(User, verbose_name='Владелец', on_delete=models.CASCADE, related_name='carts')
+           
+    def get_cart_items(self):
+        return self.items.all()
+
+    def get_cart_total(self):
+        return sum([item.product.price for item in self.items.all()])
+
+    def __str__(self):
+        return '{0} - {1}'.format(self.owner, self.ref_code)
+
+class CartItem(models.Model):
+    cart= models.ForeignKey(Cart, related_name="items", on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.product.name
+
+# p = Product
+# p_is_ordered = CartItem.objects.filter(cart__owner=user, product=p).exists()

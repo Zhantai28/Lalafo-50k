@@ -30,8 +30,7 @@ def About(request):
         return render(request, 'account/aboutus.html')
 
 
-
-#profile
+#profile 
 
 @login_required
 def profile(request):

@@ -1,16 +1,25 @@
 {% extends 'base.html' %}
 
 {% block page %}
-    <div>
-        {% for product in products %}
-            Название: {{ product.name }}
-            Цена: {{ product.price }}
-            Описание: {{ product.description|linebreaks }}
-            Категория: {{ product.category }}
-            Подкатогрия: {{ product.sub_category }}
-            Статус: {{ product.status }}
-            Дата создания: {{ product.created }}
-            Дата обновления: {{ product.updated }}
+   <div class="row">
+       {% if product_list %}
+       {% for product in product_list%}
+       <div class="card">
+           <td>{{ forloop.counter }}</td>
+           <div class="card-body"></div>
+           <img src="{{request.product.image.url}}">
+            <p>Название: {{ product.name }}</p>
+            <p>Цена: {{ product.price }}</p>    
+            <p>Описание: {{ product.description|linebreaks }}</p>
+            <p>Категория: {{ product.category }}</p>
+            <p>Подкатегория: {{ product.sub_category }}</p>            
+            <p>Статус: {{ product.status }}</p>
+            <p> Дата создания: {{ product.created }}</p>
+            <p>Дата обновления: {{ product.updated }}</p>
         {% endfor %}
+        {% else %}
+            <p>There are no products.</p>
+        {% endif %} 
+       </tr>
     </div>
 {% endblock %}
