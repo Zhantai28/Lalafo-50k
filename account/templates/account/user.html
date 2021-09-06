@@ -15,8 +15,10 @@
         </div>
         <hr>
         <div>Рейтинг: {{ user_object.rating }}</div>
+        <div> <a href="{% url 'products:user_products' user.id %}">Товары</a></div>
     
         <div>Написать сообщение <a href="{% url 'account:messages' user_object.id %}">GO</a></div>
+        
         <br>
     </div>
         

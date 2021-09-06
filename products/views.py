@@ -2,7 +2,7 @@ from django import forms
 from django.http.response import HttpResponse, Http404
 from .models import Category, Product, FeedBack
 import django.http as http
-from django.views.generic import DetailView, View
+from django.views.generic import DetailView, View, ListView
 from django.views.generic.edit import FormMixin
 from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404, render, redirect
@@ -85,10 +85,14 @@ def create_product(request):
     else:
         return redirect(register)
 
-# НУЖНО ДОРАБОТАТЬ >>>
-def user_products(request):
-    data = Product.objects.order_by('-created').filter(user_profile = request.user)
-    return render(request, 'products/user_products.html', {'user_products': data})
+# Product list of the user Мои обьявления >>>
+class ProductListView(ListView):
+    model = Product
+    template_name = 'products/user_products.html'
+    
+    def get_queryset(self):
+        return Product.objects.order_by('-created').filter(user_profile=self.request.user.id)
+     
 #<<<<   
 
 def edit_my_product(request, id):
@@ -160,7 +164,7 @@ def add_to_cart(request, **kwargs):
     user_cart, is_new_cart = Cart.objects.get_or_create(owner=request.user)
     cart_item, created = CartItem.objects.get_or_create(product=product, cart=user_cart)
     if not created:
-        print("This product уже в корзине")
+        
         messages.info(request, 'This product уже в корзине')
         return redirect(reverse('products:cart_summary'))
 

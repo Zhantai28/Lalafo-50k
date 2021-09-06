@@ -52,7 +52,8 @@ class Product(models.Model):
     user_profile = models.ForeignKey(
         to=User, 
         on_delete=models.SET_NULL, 
-        null=True
+        null=True,
+        related_name='creator'
     )
 
     class Meta:
@@ -60,7 +61,8 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name 
-        
+
+           
     def get_absolute_url(self):
         return reverse('product', kwargs=(str(self.id),))
 
