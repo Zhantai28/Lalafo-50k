@@ -74,9 +74,8 @@ def edit(request):
 
 def account(request, id):
     try:
-        id = request.user.id 
-        user = User.objects.get(id=id)
-        return render(request, 'account/user.html', {'user_object': user})
+        user_object = Product.objects.get(author=request.user.id)
+        return render(request, 'account/user.html', {'user_object':user_object})
     except User.DoesNotExist as e:
         return HttpResponse(f'Not found: {e}', status=404)
 

@@ -15,24 +15,49 @@ from account.templates import *
 from account.models import *
 
 
-class FeedbackDetailView(FormMixin, DetailView):
-    template_name = 'products/feedback.html'
-    form_class = FeedBackForm
-    success_url = '/products/'
+# class FeedbackDetailView(FormMixin, DetailView):
+#     template_name = 'products/product_detail.html'
+#     form_class = FeedBackForm
+#     success_url = '/products/'
 
-    def post(self, request, *args, **kwargs ):
-        form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
+#     def post(self, request, *args, **kwargs ):
+#         form = self.get_form()
+#         if form.is_valid():
+#             return self.form_valid(form)
+#         else:
+#             return self.form_invalid(form)
+
+#     def form_valid(self, form):
+#         self.object = form.save(commit=False)
+#         self.object.product = self.get_object()
+#         self.object.user = self.request.user
+#         self.object.save()
+#         return super().form_valid(form)
+ 
+
+
+def product_detail(request, id):
+    product = Product.objects.get(id=id)
+    comments = product.product_comments.filter(active=True)
+
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            new_comment = comment_form = FeedBackForm(data=request.POST)
+            if comment_form.is_valid():
+                new_comment.author = request.user
+                new_comment = comment_form.save(commit=False)
+                new_comment.product = product
+                new_comment.save()
+                
         else:
-            return self.form_invalid(form)
+            comment_form = FeedBackForm()
+        return render(request, 'products/product_detail.html', {'product':product, 
+                                                    'comments':comments, 
+                                                            'comment_form': comment_form}
+                                                            )    
+    else:
+        return HttpResponse('Только авторизанные пользователи могут оставлять комментарии')
 
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.product = self.get_object()
-        self.object.user = self.request.user
-        self.object.save()
-        return super().form_valid(form)
 
 def edit_comment(request, id):
     comment = FeedBack.objects.get(id=id)
@@ -41,23 +66,16 @@ def edit_comment(request, id):
         comment_form = FeedBackForm(data=request.POST, instance=comment)
         if comment_form.is_valid():
             comment_form.save()
-            return redirect('products/feedback.html', id=id)
+            return redirect('products/product_detail.html', id=id)
 
     comment_form = FeedBackForm(instance=comment)
-    return render(request, 'products/feedback.html', {'comment_form': comment_form})
-    
+    return render(request, 'products/product_detail.html', {'comment_form': comment_form})
 
 
 def delete_own_comment(request, id):
     comment = FeedBack.objects.get(id=id)
     comment.delete()
-    return redirect('products/feedback.html') 
-
-
-def product_detail(request, id):
-    product = Product.objects.get(id=id)
-    return render(request, 'products/product_detail.html', {'product':product})    
-
+    return redirect('products/product_detail.html')
 
 @login_required 
 def create_product(request):
@@ -69,7 +87,7 @@ def create_product(request):
             
             if product_form.is_valid():
                 new_product = product_form.save(commit=False)                       
-                new_product.author = request.user      
+                new_product.author = request.user_id      
                 product_form.save()
                 return render(request, 'products/user_products.html', {'massages':["Объявление успешно добавлено"]})
             else:
