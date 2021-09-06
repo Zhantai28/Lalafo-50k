@@ -4,19 +4,23 @@
 
 {% block page %}
   <nav class="navbar navbar-light bg-success" style="background-color: green; margin-top: 5%; width: 100%;">
+    
       <div class="container-fluid" > 
           <input class="form-control me-md-2" style="width: 80%;" type="search" placeholder="Поиск" aria-label="Search">
           <div class="d-grid gap-4 col-2 mx-auto">
             <button class="btn btn-danger " type="submit">Поиск</button>
+          
+          </div style="display: inline-block">
+          <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 150px; background-color: rgb(36, 44, 41); border-radius: 25px"><a href="{{ 'products:c.get_absolute_url' }}" data-filter=".transport">Транспорт</a></button>
+          <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 150px; background-color: rgb(36, 44, 41); border-radius: 25px"><a href="{% url 'products:product_by_category' %}" data-filter=".clothes">Одежда</a></button>
+          <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 150px; background-color: rgb(36, 44, 41); border-radius: 25px"><a href="#" data-filter=".service">Услуги</a></button>
+          <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 150px; background-color: rgb(36, 44, 41); border-radius: 25px"><a href="#" data-filter=".repair">Ремонт</a></button>
+          <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 150px; background-color: rgb(36, 44, 41); border-radius: 25px"><a href="#" data-filter=".job">Работа</a></button>
+          <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 150px; background-color: rgb(36, 44, 41); border-radius: 25px"><a href="#" data-filter=".electronics">Электроника</a></button>
+          <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 150px; background-color: rgb(36, 44, 41); border-radius: 25px"><a href="#" data-filter=".forhome">Все для дома</a></button>
+          <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 150px; background-color: rgb(36, 44, 41); border-radius: 25px"><a href="{% url 'products:product_by_category' %}" data-filter=".house">Недвижимость</a></button>
           </div>
-            <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="{{ 'products:c.get_absolute_url' }}" data-filter=".transport">Транспорт</a></button>
-          <button type="button" class="btn btn-danger col-6 col-md-2" style="margin-top: 20px;"><a href="{% url 'products:product_by_category' %}" data-filter=".clothes">Одежда</a></button>
-          <button type="button" class="btn btn-dark col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".service">Услуги</a></button>
-          <button type="button" class="btn btn-dark col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".repair">Ремонт</a></button>
-          <button type="button" class="btn btn-danger col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".job">Работа</a></button>
-          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".electronics">Электроника</a></button>
-          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="#" data-filter=".forhome">Все для дома</a></button>
-          <button type="button" class="btn btn-warning col-6 col-md-2" style="margin-top: 20px;"><a href="{% url 'products:product_by_category' %}" data-filter=".house">Недвижимость</a></button>
+          
       </div>
   </nav>
   <div>
