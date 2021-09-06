@@ -2,17 +2,22 @@ from django import forms
 from django.http.response import HttpResponse, Http404
 from .models import Category, Product, FeedBack
 import django.http as http
-from django.views.generic import DetailView
+from django.views.generic import DetailView, View, ListView
 from django.views.generic.edit import FormMixin
 from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import Product
+from .models import Product, CartItem, Cart
 from .forms import ProductCreateForm, FeedBackForm
 from account.views import * 
 from account.forms import *
 from django.contrib.auth.decorators import login_required
 from account.templates import *
 from account.models import *
+from .extras import generate_cart_id
+
+
+
+
 
 
 def product_list(request):
@@ -80,10 +85,14 @@ def create_product(request):
     else:
         return redirect(register)
 
-# НУЖНО ДОРАБОТАТЬ >>>
-def user_products(request):
-    data = Product.objects.order_by('-created').filter(user_profile = request.user)
-    return render(request, 'products/user_products.html', {'user_products': data})
+# Product list of the user Мои обьявления >>>
+class ProductListView(ListView):
+    model = Product
+    template_name = 'products/user_products.html'
+    
+    def get_queryset(self):
+        return Product.objects.order_by('-created').filter(user_profile=self.request.user.id)
+     
 #<<<<   
 
 def edit_my_product(request, id):
@@ -131,6 +140,57 @@ def product_by_category(request):
 
     # }
 
+# Cart
+
+def get_user_pending_cart(request):
+    # get order for the correct user
+    user_profile = get_object_or_404(Profile, user=request.user)
+    order = Cart.objects.filter(owner=request.user)
+    if order.exists():
+        # get the only order in the list of filtered orders
+        return order[0]
+    return 0
+
+@login_required()
+def add_to_cart(request, **kwargs):
     
+    # filter products by id
+    product = Product.objects.filter(id=kwargs.get('item_id', "")).first()
+    # check if the user already owns this product
+    # if product in request.user.carts.items.products.all():
+    #     messages.info(request, 'You already own this product')
+    #     return redirect(reverse('products:product-list')) 
+    # create orderItem of the selected product
+    user_cart, is_new_cart = Cart.objects.get_or_create(owner=request.user)
+    cart_item, created = CartItem.objects.get_or_create(product=product, cart=user_cart)
+    if not created:
+        
+        messages.info(request, 'This product уже в корзине')
+        return redirect(reverse('products:cart_summary'))
+
+        
+    if is_new_cart:
+        # generate a reference code
+        user_cart.ref_code = generate_cart_id()
+        user_cart.save()
+
+    # show confirmation message and redirect back to the same page
+    messages.info(request, "item added to cart")
+    return redirect(reverse('products:cart_summary'))
 
 
+@login_required()
+def delete_from_cart(request, item_id):
+    deleted, _ = CartItem.objects.filter(pk=item_id).delete()
+    if deleted > 0:
+        messages.info(request, "Item has been deleted")
+    return redirect(reverse('products:cart_summary'))
+
+
+@login_required()
+def cart_details(request, **kwargs):
+    existing_cart = get_user_pending_cart(request)
+    context = {
+        'order': existing_cart
+    }
+    return render(request, 'products/cart_summary.html', context)

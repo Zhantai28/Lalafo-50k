@@ -29,14 +29,14 @@ def About(request):
         return render(request, 'account/aboutus.html')
 
 
-#   НУЖНО ДОРАБОТАТЬ >>>>
-def other_user(request, user_id):
-    profile = Profile.objects.get(id=user_id)
-    other_user_profile= Product.objects.filter(user_profile=profile)
-    return render(request, 'account/other_user.html', {'other_user': other_user_profile})
+# Profile of other user   НУЖНО ДОРАБОТАТЬ >>>>
+def other_user(request, id):
+    user_object = User.objects.get(id=id)
+    return render(request, 'account/user.html', {'user_object': user_object})
+   
 
 
-#profile
+#profile 
 
 @login_required
 def profile(request):
@@ -77,12 +77,12 @@ def edit(request):
                       {'user_form': user_form,
                        'profile_form': profile_form})
 
-def account(request, id):
-    try:
-        user_object = User.objects.get(id=id)
-        return render(request, 'account/user.html', {'user_object': user_object})
-    except User.DoesNotExist as e:
-        return HttpResponse(f'Not found: {e}', status=404)
+# def account(request, id):
+#     try:
+#         user_object = User.objects.get(id=id)
+#         return render(request, 'account/user.html', {'user_object': user_object})
+#     except User.DoesNotExist as e:
+#         return HttpResponse(f'Not found: {e}', status=404)
 
 
 
