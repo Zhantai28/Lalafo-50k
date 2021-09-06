@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block page %}
+    <div>
+
+        <p>Описание: {{ products.description|linebreaks }}</p>
+        <p>Категория: {{ products.category }}</p>
+        <p>Подкатегория: {{ products.sub_category }}</p>            
+        <p>Статус: {{ products.status }}</p>
+        <p> Дата создания: {{ products.created }}</p>
+        <p>Дата обновления: {{ products.updated }}</p>
+        <a class='btn btn-lg btn-warning' href="{% url  'products:edit_my_product' products.id %}">Изменить</a>
+        <a class='btn btn-lg btn-danger' href="{% url 'products:delete_product' products.id  %}">Удалить</a>
+    </div>
+{% endblock %}
