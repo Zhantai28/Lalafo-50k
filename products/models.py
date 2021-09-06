@@ -20,20 +20,6 @@ class Category(models.Model):
                         args=[self.name])
   
 
-class Subcategory(models.Model):
-    name = models.CharField('Название подкатегории', max_length=250)
-    # slug = models.SlugField(max_length=50, unique=True, verbose_name='URL')
-    categories = models.ForeignKey(Category, verbose_name='Категория', on_delete=models.CASCADE, null=True)
-
-    class Meta:
-        ordering = ('name',)
-        verbose_name = 'Подкатегория'
-        verbose_name_plural = 'Подкатегории'
-
-    def __str__(self):
-        return self.name
-
-
 
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)

@@ -130,9 +130,10 @@ def edit_my_product(request, id):
 
 
 def delete_product(request, id):
-    product_object_delete = Product.objects.get(id=id)
-    product_object_delete.delete()
-    return redirect(profile)
+    deleted, _ = Product.objects.filter(pk=id).delete()
+    if deleted > 0:
+        messages.info(request, "Item has been deleted")
+    return redirect(reverse('products:user_products'))
 
 def product_by_category(request, category_id=None):
     category = None
