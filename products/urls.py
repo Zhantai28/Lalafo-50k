@@ -2,16 +2,17 @@ from django import views
 from django.urls import path
 from django.contrib.auth.decorators import login_required
 from .views import product_detail, create_product, edit_my_product, delete_product, \
- edit_comment, delete_own_comment, product_by_category, add_to_cart, delete_from_cart, \
- cart_details, MyProductListView, mypoductdetailview
+ delete_own_comment, product_by_category, add_to_cart, delete_from_cart, \
+ cart_details, MyProductListView, mypoductdetailview, MyProductCommentsListView
 
 
 app_name = 'products'
 
 urlpatterns = [
 
-    path('<int:id>/edit-comment/', edit_comment, name='edit-comment'),
+    # path('<int:id>/edit-comment/', EditCommentUpdateView.as_view(), name='edit-comment'),
     path('<int:id>/delete-comment/', delete_own_comment, name='delete-comment'),
+    path('user_product_comments', MyProductCommentsListView.as_view(), name='my-product-comments'),
 
     path('<int:id>/', product_detail, name="product_detail"),
     path('create_product/', create_product, name='create_product'),

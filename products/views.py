@@ -2,7 +2,7 @@ from django import forms
 from django.http.response import HttpResponse, Http404
 from .models import Category, Product, FeedBack
 import django.http as http
-from django.views.generic import DetailView, View, ListView
+from django.views.generic import DetailView, View, ListView, UpdateView
 from django.views.generic.edit import FormMixin
 from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404, render, redirect
@@ -13,32 +13,7 @@ from account.forms import *
 from django.contrib.auth.decorators import login_required
 from account.templates import *
 from account.models import *
-from .extras import generate_cart_id
-
-
-
-
-
-
-# class FeedbackDetailView(FormMixin, DetailView):
-#     template_name = 'products/product_detail.html'
-#     form_class = FeedBackForm
-#     success_url = '/products/'
-
-#     def post(self, request, *args, **kwargs ):
-#         form = self.get_form()
-#         if form.is_valid():
-#             return self.form_valid(form)
-#         else:
-#             return self.form_invalid(form)
-
-#     def form_valid(self, form):
-#         self.object = form.save(commit=False)
-#         self.object.product = self.get_object()
-#         self.object.user = self.request.user
-#         self.object.save()
-#         return super().form_valid(form)
- 
+from .extras import generate_cart_id 
 
 
 def product_detail(request, id):
@@ -46,41 +21,45 @@ def product_detail(request, id):
     comments = product.product_comments.filter(active=True)
 
     if request.user.is_authenticated:
+        comment = FeedBack(user=request.user)
         if request.method == 'POST':
-            new_comment = comment_form = FeedBackForm(data=request.POST)
+            comment_form = FeedBackForm(data=request.POST, instance=comment)
             if comment_form.is_valid():
-                new_comment.author = request.user
                 new_comment = comment_form.save(commit=False)
+                new_comment.user = request.user
                 new_comment.product = product
-                new_comment.save()
-                
+                comment_form.save()  
         else:
             comment_form = FeedBackForm()
         return render(request, 'products/product_detail.html', {'product':product, 
                                                     'comments':comments, 
-                                                            'comment_form': comment_form}
-                                                            )    
+                                                    'comment_form': comment_form})    
     else:
         return HttpResponse('Только авторизанные пользователи могут оставлять комментарии')
 
-
-def edit_comment(request, id):
-    comment = FeedBack.objects.get(id=id)
-
-    if request.method == 'POST':
-        comment_form = FeedBackForm(data=request.POST, instance=comment)
-        if comment_form.is_valid():
-            comment_form.save()
-            return redirect('products/product_detail.html', id=id)
-
-    comment_form = FeedBackForm(instance=comment)
-    return render(request, 'products/product_detail.html', {'comment_form': comment_form})
+# class EditCommentUpdateView(UpdateView):
+#     model = FeedBack
+#     template_name = 'products/editcomment_form.html'
+#     fields = ['text']
+#     def post(self, request, *args, **kwargs):
+#         comment_owner = FeedBack.objects.filter(user__pk__in=[self.request.user.id])
+#         comment = FeedBack.objects.get(id=id)
+#         new_comment = request.POST.get('new_comment')
+#         if (request.user == comment.user) and (comment.user_id == comment_owner):
+#             comment.comment = new_comment
+#             comment.save()
+#             return redirect(reverse('products:detail_user_products'), product_id=id)
+        # return render(request, 'products/editcomment_form.html', {'form':form})
 
 
 def delete_own_comment(request, id):
     comment = FeedBack.objects.get(id=id)
     comment.delete()
-    return redirect('products/product_detail.html')
+    if comment > 0:
+        messages.info(request, "Item has been deleted")
+    return redirect(reverse('products:detail_user_products'))
+
+# Product
 
 @login_required 
 def create_product(request):
@@ -94,7 +73,7 @@ def create_product(request):
                 new_product = product_form.save(commit=False)                       
                 new_product.author = request.user      
                 product_form.save()
-                return render(request, 'products/user_products.html', {'massages':["Объявление успешно добавлено"]})
+                return redirect(reverse('products:user_products'))
             else:
                 print(product_form.errors)
         else:
@@ -115,6 +94,14 @@ def mypoductdetailview(request, id):
     return render(request, 'products/detail_user_products.html', {'products':products}) 
         
 
+class MyProductCommentsListView(ListView):
+    model = FeedBack
+    template_name = 'products/detail_user_products.html'
+    
+    def get_queryset(self):
+        return FeedBack.objects.filter(product__pk__in=[self.request.product.id])
+
+
 def edit_my_product(request, id):
     product = get_object_or_404(Product, id=id)
     if product.author != request.user:
@@ -123,7 +110,7 @@ def edit_my_product(request, id):
         edit_form = ProductCreateForm(data=request.POST, instance=product)
         if edit_form.is_valid():
             edit_form.save()
-            return redirect(mypoductdetailview)
+            return redirect(reverse('detail_user_products'))
     else:
         form = ProductCreateForm(instance=product)
     return render(request, 'products/editproduct_form.html', {'product':product})

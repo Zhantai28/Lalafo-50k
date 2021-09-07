@@ -30,17 +30,25 @@
 
     </div>
     {% for comment in comments %}
-        <div class="comment">
-            <p class="info">
-                Коментрий: <br>
+        {% if comment.parent %}
+            <div style="margin-left: 40px;">
+                Ответы:<br>
                 {{ comment.user }}:
                 {{ comment.text }}
                 <p style="font-size: 12px;">{{ comment.created }}</p>
-                <a class='btn btn-lg btn-warning' href="{% url 'products:edit-comment' comment.id %}">Изменить</a>
-                <a class='btn btn-lg btn-danger' href="{% url 'products:delete-comment' comment.id %}">Удалить</a>
-            </p>
-            {{ comment.body|linebreaks }}
-        </div>
+            </div>
+        {% else %}
+            <div class="comment">
+                <p class="info">
+                    Коментрий: <br>
+                    {{ comment.user }}:
+                    {{ comment.text }}
+                    <p style="font-size: 12px; margin-top: -15px;">{{ comment.created }}</p>
+                </p>
+                {{ comment.body|linebreaks }}
+                
+            </div>
+        {% endif %}
     {% empty %}
         <p>Нет Комментриев</p>
     {% endfor %}

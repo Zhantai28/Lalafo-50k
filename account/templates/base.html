@@ -23,9 +23,13 @@
           <li class="nav-item">
             <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 200px; background-color: rgb(37, 39, 38); border-radius: 25px"><a class="nav-link" style="color: white; font-size: 15px" href="{% url 'products:create_product' %}">Подать обьявление</a></button>
           </li>
-          <li class="nav-item">                
-            <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 200px; background-color: rgb(4, 170, 109); border-radius: 25px"><a class="nav-link" style="color: white; font-size: 15px" href="{% url 'account:dashboard' %}">Войти-Регистрация</a></button>
-          </li>
+          <li class="nav-item">
+            {% if user.is_authenticated == False %}                
+              <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 200px; background-color: rgb(4, 170, 109); border-radius: 25px"><a class="nav-link" style="color: white; font-size: 15px" href="{% url 'account:dashboard' %}">Войти-Регистрация</a></button>
+            {% else %}
+              <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 200px; background-color: rgb(4, 170, 109); border-radius: 25px"><a class="nav-link" style="color: white; font-size: 15px" href="{% url 'account:dashboard' %}">Личный кабинет</a></button>
+            {% endif %}
+            </li>
           </ul>
         </div>
         </form>
