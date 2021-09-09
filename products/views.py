@@ -7,7 +7,7 @@ from django.views.generic.edit import FormMixin
 from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import Product, CartItem, Cart
-from .forms import ProductCreateForm, FeedBackForm
+from .forms import ProductCreateForm, FeedBackForm, ProductEditForm
 from account.views import * 
 from account.forms import *
 from django.contrib.auth.decorators import login_required
@@ -37,19 +37,6 @@ def product_detail(request, id):
     else:
         return HttpResponse('Только авторизанные пользователи могут оставлять комментарии')
 
-# class EditCommentUpdateView(UpdateView):
-#     model = FeedBack
-#     template_name = 'products/editcomment_form.html'
-#     fields = ['text']
-#     def post(self, request, *args, **kwargs):
-#         comment_owner = FeedBack.objects.filter(user__pk__in=[self.request.user.id])
-#         comment = FeedBack.objects.get(id=id)
-#         new_comment = request.POST.get('new_comment')
-#         if (request.user == comment.user) and (comment.user_id == comment_owner):
-#             comment.comment = new_comment
-#             comment.save()
-#             return redirect(reverse('products:detail_user_products'), product_id=id)
-        # return render(request, 'products/editcomment_form.html', {'form':form})
 
 
 def delete_own_comment(request, id):
@@ -82,6 +69,27 @@ def create_product(request):
     else:
         return redirect(register)
 
+
+def edit_my_product(request, id):
+    product = get_object_or_404(Product, id=id)
+    if request.method == "POST":
+        edit_form = ProductEditForm(data=request.POST, instance=request.product, files=request.FILES)
+        if edit_form.is_valid():
+            edit_form.save()
+            return redirect(reverse('detail_user_products'))
+    else:
+        edit_form = ProductEditForm(instance=product)
+    return render(request, 'products/editproduct_form.html', {'product':product, 
+                                                            "edit_form":edit_form})
+
+
+def delete_product(request, id):
+    deleted, _ = Product.objects.filter(pk=id).delete()
+    if deleted > 0:
+        messages.info(request, "Item has been deleted")
+    return redirect(reverse('products:user_products'))
+
+
 class MyProductListView(ListView):
     model = Product
     template_name = 'products/user_products.html'
@@ -102,25 +110,6 @@ class MyProductCommentsListView(ListView):
         return FeedBack.objects.filter(product__pk__in=[self.request.product.id])
 
 
-def edit_my_product(request, id):
-    product = get_object_or_404(Product, id=id)
-    if product.author != request.user:
-        return redirect(register)
-    if request.method == "POST":
-        edit_form = ProductCreateForm(data=request.POST, instance=product)
-        if edit_form.is_valid():
-            edit_form.save()
-            return redirect(reverse('detail_user_products'))
-    else:
-        form = ProductCreateForm(instance=product)
-    return render(request, 'products/editproduct_form.html', {'product':product})
-
-
-def delete_product(request, id):
-    deleted, _ = Product.objects.filter(pk=id).delete()
-    if deleted > 0:
-        messages.info(request, "Item has been deleted")
-    return redirect(reverse('products:user_products'))
 
 def product_by_category(request, category_id=None):
     category = None

@@ -10,13 +10,12 @@ app_name = 'products'
 
 urlpatterns = [
 
-    # path('<int:id>/edit-comment/', EditCommentUpdateView.as_view(), name='edit-comment'),
     path('<int:id>/delete-comment/', delete_own_comment, name='delete-comment'),
     path('user_product_comments', MyProductCommentsListView.as_view(), name='my-product-comments'),
 
     path('<int:id>/', product_detail, name="product_detail"),
     path('create_product/', create_product, name='create_product'),
-    path('<int:id>/edit-product/', edit_my_product, name='edit_my_product'),
+    path('edit-product/<int:id>/', edit_my_product, name='edit_my_product'),
     path('<int:id>/delete-product/', delete_product, name='delete_product'),
     path('user_product/<int:id>/', mypoductdetailview, name='my-product-detail'),
 
