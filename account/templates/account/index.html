@@ -38,7 +38,7 @@
       {% for product in products %}
         {% if product.active %}
           <div class="col-6 col-md-3">
-            <img class="card-img-top " src="{{ request.product.image.url }}">
+            <img class="card-img-top " src="{{ product.image.url }}">
             <div class="card-body">
               {{ product.name }}</p>
 

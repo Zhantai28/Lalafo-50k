@@ -26,13 +26,14 @@ class Product(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     description = models.TextField(blank=True)
     price = models.CharField(max_length=255, default="Договорная")
-    image = models.ImageField(blank=True, default='default.jpg', upload_to='products_photo')
+    image = models.ImageField(blank = True, upload_to='products_photo')
     status = models.CharField(max_length=3, choices=(
         ("П", "Продать"),
         ("К", "Купить"),
         ("CA", "Сдать в аренду"),
         ("А", "Хочу арендовать")
     ))
+    city = models.CharField(max_length=255)
     active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
