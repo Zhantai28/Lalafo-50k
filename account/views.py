@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm 
 from django.contrib.auth.decorators import login_required
 from .models import Profile, UserRating, Chat, Message
-from products.models import Product
+from products.models import Product, Category
 from django.contrib import messages
 from django.urls import reverse
 from django.views.generic import FormView, DetailView, ListView, TemplateView
@@ -19,11 +19,24 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 
 
-class HomeView(ListView):
-    template_name = 'account/index.html'
-    model = Product
-    context_object_name = 'products'
-    
+# class HomeView(ListView):
+#     template_name = 'account/index.html'
+#     model = Product
+#     context_object_name = 'products'
+
+def product_by_category(request, id=None):
+    category = None
+    categories = Category.objects.all()
+    products = Product.objects.filter(active=True)
+    if id:
+        category = get_object_or_404(Category, id=id)
+        products = products.filter(category=category)
+    return render(request,
+                  'account/index.html',
+                  {'category': category,
+                   'categories': categories,
+                   'products': products})
+        
 
 def About(request):
     if request.method == 'GET':

@@ -7,7 +7,7 @@ from django.views.generic.edit import FormMixin
 from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import Product, CartItem, Cart
-from .forms import ProductCreateForm, FeedBackForm, ProductEditForm
+from .forms import ProductCreateForm, FeedBackForm
 from account.views import * 
 from account.forms import *
 from django.contrib.auth.decorators import login_required
@@ -73,12 +73,12 @@ def create_product(request):
 def edit_my_product(request, id):
     product = get_object_or_404(Product, id=id)
     if request.method == "POST":
-        edit_form = ProductEditForm(data=request.POST, instance=request.product, files=request.FILES)
+        edit_form = ProductCreateForm(data=request.POST, instance=product, files=request.FILES)
         if edit_form.is_valid():
             edit_form.save()
-            return redirect(reverse('detail_user_products'))
+            return redirect(reverse('products:user_products'))
     else:
-        edit_form = ProductEditForm(instance=product)
+        edit_form = ProductCreateForm(instance=product)
     return render(request, 'products/editproduct_form.html', {'product':product, 
                                                             "edit_form":edit_form})
 
@@ -110,19 +110,6 @@ class MyProductCommentsListView(ListView):
         return FeedBack.objects.filter(product__pk__in=[self.request.product.id])
 
 
-
-def product_by_category(request, category_id=None):
-    category = None
-    categories = Category.objects.all()
-    products = Product.objects.filter(available=True)
-    if category_id:
-        category = get_object_or_404(Category, id=category_id)
-        products = products.filter(category=category)
-    return render(request,
-                  'shop/product/list.html',
-                  {'category': category,
-                   'categories': categories,
-                   'products': products})
 
 
 

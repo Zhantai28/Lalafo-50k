@@ -2,7 +2,7 @@
 
 {% block page %}
     <div>
-        <img src="{{ product.photo.url }}">
+        <img style="width: 25%" src="{{ products.image.url }}">
         <p>Описание: {{ products.description|linebreaks }}</p>
         <p>Категория: {{ products.category }}</p>
         <p>Подкатегория: {{ products.sub_category }}</p>            
@@ -11,12 +11,12 @@
         <p>Дата обновления: {{ products.updated }}</p>
         <a class='btn btn-lg btn-warning' href="{% url  'products:edit_my_product' products.id %}">Изменить</a>
         <a class='btn btn-lg btn-danger' href="{% url 'products:delete_product' products.id  %}">Удалить</a>
-        {% for comments in comment_list %}
+        {% for comment in comments %}
             <div class="comment">
                 <p class="info">
                     Коментрий: <br>
-                    {{ comments.user }}
-                    {{ comments.text }}
+                    {{ comment.user }}
+                    {{ comment.text }}
                     <p style="font-size: 12px;">{{ comment.created }} {{ comment.text }}</p>
                 </p>
                 {{ comment.body|linebreaks }}

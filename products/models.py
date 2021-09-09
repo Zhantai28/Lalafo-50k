@@ -16,8 +16,8 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('products:product_list_by_category',
-                        args=[self.name])
+        return reverse('account:product_by_category',
+                        args=[self.id])
   
 
 
@@ -54,7 +54,7 @@ class Product(models.Model):
 
            
     def get_absolute_url(self):
-        return reverse('product', kwargs=(str(self.id),))
+        return reverse('products:product_detail', args=[self.id])
 
     @property
     def photo_url(self):

@@ -5,7 +5,7 @@
     <div class="container-fluid" style="justify-content: space-around;">
         <div class="col-6" style="justify-content: space-around; ">
             <div class="row">
-                <img class="card-img-top" style=" margin-top: 100px; width: 400px; height: 300px;" src="{{ product.image.url }}">
+                <img class="card-img-top" style=" margin-top: 10px; width: 35%;" src="{{ product.image.url }}">
                 <ul class="list-group" style="margin-top: 60px;">
                     <h2 style="font-size: 15px; color: rgb(61, 26, 26);">Пользователь: <a href="{% url 'account:user' user.id %}">{{ product.author }}</a></h2>
                     ID пользователя: {{ product.author.id }}

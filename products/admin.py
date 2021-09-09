@@ -23,8 +23,10 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(FeedBack)
 class FeedbackAdmin(admin.ModelAdmin):
-    list_display = ['text', 'product', 'user']
+    list_display = ['text', 'product', 'user', 'created', 'updated', 'active']
     search_fields = ['text', 'product__name', 'product__description']
+    list_filter = ['product', 'active', 'created']
+
 
 
 
