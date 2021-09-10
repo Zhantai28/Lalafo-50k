@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block page %}
     <div>
-
+        <img style="width: 25%" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
         <p>Описание: {{ products.description|linebreaks }}</p>
         <p>Категория: {{ products.category }}</p>
         <p>Подкатегория: {{ products.sub_category }}</p>            
@@ -11,5 +13,19 @@
         <p>Дата обновления: {{ products.updated }}</p>
         <a class='btn btn-lg btn-warning' href="{% url  'products:edit_my_product' products.id %}">Изменить</a>
         <a class='btn btn-lg btn-danger' href="{% url 'products:delete_product' products.id  %}">Удалить</a>
+        {% for comment in comments %}
+            <div class="comment">
+                <p class="info">
+                    Коментрий: <br>
+                    {{ comment.user }}
+                    {{ comment.text }}
+                    <p style="font-size: 12px;">{{ comment.created }} {{ comment.text }}</p>
+                </p>
+                {{ comment.body|linebreaks }}
+                <a class='btn btn-lg btn-danger' style="font-size: 20px;" href="{% url 'products:delete-comment' comment.id %}">Удалить</a>
+            </div>
+        {% empty %}
+            <p>Нет Комментриев</p>
+        {% endfor %}
     </div>
 {% endblock %}

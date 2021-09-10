@@ -5,7 +5,7 @@
     <div class="container-fluid" style="justify-content: space-around;">
         <div class="col-6" style="justify-content: space-around; ">
             <div class="row">
-                <img class="card-img-top" style=" margin-top: 100px; width: 400px; height: 300px;" src="{{ product.photo }}">
+                <img class="card-img-top" style=" margin-top: 10px; width: 35%;" src="{{ product.image.url }}">
                 <ul class="list-group" style="margin-top: 60px;">
                     <h2 style="font-size: 15px; color: rgb(61, 26, 26);">Пользователь: <a href="{% url 'account:user' user.id %}">{{ product.author }}</a></h2>
                     ID пользователя: {{ product.author.id }}
@@ -16,7 +16,6 @@
                     <li class="list-group-item"><a href="{% url 'account:messages' product.author.id %}">Отправить сообщение</a></li>
                     
                     <button><a href="{% url 'products:add_to_cart' product.id %}" > Добавить в корзину </a> </button>
-    
                 </ul>
             </div>
         </div>
@@ -30,17 +29,25 @@
 
     </div>
     {% for comment in comments %}
-        <div class="comment">
-            <p class="info">
-                Коментрий: <br>
+        {% if comment.parent %}
+            <div style="margin-left: 40px;">
+                Ответы:<br>
                 {{ comment.user }}:
                 {{ comment.text }}
                 <p style="font-size: 12px;">{{ comment.created }}</p>
-                <a class='btn btn-lg btn-warning' href="{% url 'products:edit-comment' comment.id %}">Изменить</a>
-                <a class='btn btn-lg btn-danger' href="{% url 'products:delete-comment' comment.id %}">Удалить</a>
-            </p>
-            {{ comment.body|linebreaks }}
-        </div>
+            </div>
+        {% else %}
+            <div class="comment">
+                <p class="info">
+                    Коментрий: <br>
+                    {{ comment.user }}:
+                    {{ comment.text }}
+                    <p style="font-size: 12px; margin-top: -15px;">{{ comment.created }}</p>
+                </p>
+                {{ comment.body|linebreaks }}
+                
+            </div>
+        {% endif %}
     {% empty %}
         <p>Нет Комментриев</p>
     {% endfor %}

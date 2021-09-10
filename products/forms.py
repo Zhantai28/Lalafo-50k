@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import fields
 from .models import FeedBack, Product
 from django.forms import Textarea
 
@@ -8,11 +9,10 @@ class FeedBackForm(forms.ModelForm):
         model = FeedBack
         fields = ['text',]
 
-    
-
-    
+ 
 # Products
 class ProductCreateForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['category', "name", "description", "price", "image", 'phone_number', "status"]
+        fields = ['category', "name", "description", "image", "price", 'phone_number', "status"]
+    

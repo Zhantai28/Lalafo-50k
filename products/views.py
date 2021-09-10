@@ -1,10 +1,8 @@
 from django import forms
-from django.http.response import HttpResponse, Http404
-from .models import Category, Product, FeedBack
-import django.http as http
-from django.views.generic import DetailView, View, ListView
-from django.views.generic.edit import FormMixin
-from django.db.models.query import QuerySet
+from django.forms import modelformset_factory
+from django.http.response import HttpResponse
+from .models import Product, FeedBack 
+from django.views.generic import ListView
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import Product, CartItem, Cart
 from .forms import ProductCreateForm, FeedBackForm
@@ -13,32 +11,7 @@ from account.forms import *
 from django.contrib.auth.decorators import login_required
 from account.templates import *
 from account.models import *
-from .extras import generate_cart_id
-
-
-
-
-
-
-# class FeedbackDetailView(FormMixin, DetailView):
-#     template_name = 'products/product_detail.html'
-#     form_class = FeedBackForm
-#     success_url = '/products/'
-
-#     def post(self, request, *args, **kwargs ):
-#         form = self.get_form()
-#         if form.is_valid():
-#             return self.form_valid(form)
-#         else:
-#             return self.form_invalid(form)
-
-#     def form_valid(self, form):
-#         self.object = form.save(commit=False)
-#         self.object.product = self.get_object()
-#         self.object.user = self.request.user
-#         self.object.save()
-#         return super().form_valid(form)
- 
+from .extras import generate_cart_id 
 
 
 def product_detail(request, id):
@@ -46,62 +19,106 @@ def product_detail(request, id):
     comments = product.product_comments.filter(active=True)
 
     if request.user.is_authenticated:
+        comment = FeedBack(user=request.user)
         if request.method == 'POST':
-            new_comment = comment_form = FeedBackForm(data=request.POST)
+            comment_form = FeedBackForm(data=request.POST, instance=comment)
             if comment_form.is_valid():
-                new_comment.author = request.user
                 new_comment = comment_form.save(commit=False)
+                new_comment.user = request.user
                 new_comment.product = product
-                new_comment.save()
-                
+                comment_form.save()  
         else:
             comment_form = FeedBackForm()
         return render(request, 'products/product_detail.html', {'product':product, 
                                                     'comments':comments, 
-                                                            'comment_form': comment_form}
-                                                            )    
+                                                    'comment_form': comment_form})    
     else:
         return HttpResponse('Только авторизанные пользователи могут оставлять комментарии')
 
-
-def edit_comment(request, id):
-    comment = FeedBack.objects.get(id=id)
-
-    if request.method == 'POST':
-        comment_form = FeedBackForm(data=request.POST, instance=comment)
-        if comment_form.is_valid():
-            comment_form.save()
-            return redirect('products/product_detail.html', id=id)
-
-    comment_form = FeedBackForm(instance=comment)
-    return render(request, 'products/product_detail.html', {'comment_form': comment_form})
 
 
 def delete_own_comment(request, id):
     comment = FeedBack.objects.get(id=id)
     comment.delete()
-    return redirect('products/product_detail.html')
+    if comment > 0:
+        messages.info(request, "Item has been deleted")
+    return redirect(reverse('products:detail_user_products'))
+
+# Product
 
 @login_required 
 def create_product(request):
-    if request.user.is_authenticated:
-        product = Product(author=request.user)
+    product = Product(author=request.user)
 
-        if request.method == "POST":
-            product_form = ProductCreateForm(request.POST, instance=product)
-            
-            if product_form.is_valid():
-                new_product = product_form.save(commit=False)                       
-                new_product.author = request.user      
-                product_form.save()
-                return render(request, 'products/user_products.html', {'massages':["Объявление успешно добавлено"]})
-            else:
-                print(product_form.errors)
+    if request.method == "POST":
+        product_form = ProductCreateForm(request.POST, instance=product)
+        if product_form.is_valid():
+            new_product = product_form.save(commit=False)                       
+            new_product.author = request.user      
+            product_form.save()
+            return redirect(reverse('products:user_products'))
         else:
-            product_form = ProductCreateForm(instance=product)
-            return render(request, 'products/create.html', {'product_form': product_form})
+            print(product_form.errors)
     else:
-        return redirect(register)
+        product_form = ProductCreateForm(instance=product)
+        return render(request, 'products/create.html', {'product_form': product_form})
+
+
+# ДЛЯ ЗАГРУЗЕИ НЕСКОЛЬКИХ ФОТО /// НУЖНО ДОРАБОТАТЬ
+
+# @login_required 
+# def create_product(request):
+#     product = Product(author=request.user)
+#     ImageFormSet = modelformset_factory(Image,
+#                         form=ImageProductForm, extra=5)
+
+#     if request.method == "POST":
+#         product_form = ProductCreateForm(request.POST, instance=product)
+#         image_form_set = ImageFormSet(data=request.POST, files=request.FILES,
+#                             queryset=Image.objects.none())
+#         if product_form.is_valid() and image_form_set.is_valid():
+#             new_product = product_form.save(commit=False)                       
+#             new_product.author = request.user      
+#             product_form.save()
+#             for form in image_form_set.cleaned_data:
+#                 #this helps to not crash if the user   
+#                 #do not upload all the photos
+#                 if form:
+#                     image = form['image']
+#                     photo = Image(product=product_form, image=image)
+#                     photo.save()
+#             # use django messages framework
+#             messages.success(request,
+#                              "Yeeew, check it out on the home page!")
+#             return redirect(reverse('products:user_products'))
+#         else:
+#             print(product_form.errors, image_form_set.errors)
+#     else:
+#         product_form = ProductCreateForm(instance=product)
+#         image_form_set = ImageFormSet(queryset=Image.objects.none())
+#         return render(request, 'products/create.html', {'product_form': product_form,
+#                                                         'image_form':image_form_set})
+
+
+def edit_my_product(request, id):
+    product = get_object_or_404(Product, id=id)
+    if request.method == "POST":
+        edit_form = ProductCreateForm(data=request.POST, instance=product, files=request.FILES)
+        if edit_form.is_valid():
+            edit_form.save()
+            return redirect(reverse('products:user_products'))
+    else:
+        edit_form = ProductCreateForm(instance=product)
+    return render(request, 'products/editproduct_form.html', {'product':product, 
+                                                            "edit_form":edit_form})
+
+
+def delete_product(request, id):
+    deleted, _ = Product.objects.filter(pk=id).delete()
+    if deleted > 0:
+        messages.info(request, "Item has been deleted")
+    return redirect(reverse('products:user_products'))
+
 
 class MyProductListView(ListView):
     model = Product
@@ -115,38 +132,14 @@ def mypoductdetailview(request, id):
     return render(request, 'products/detail_user_products.html', {'products':products}) 
         
 
-def edit_my_product(request, id):
-    product = get_object_or_404(Product, id=id)
-    if product.author != request.user:
-        return redirect(register)
-    if request.method == "POST":
-        edit_form = ProductCreateForm(data=request.POST, instance=product)
-        if edit_form.is_valid():
-            edit_form.save()
-            return redirect(mypoductdetailview)
-    else:
-        form = ProductCreateForm(instance=product)
-    return render(request, 'products/editproduct_form.html', {'product':product})
+class MyProductCommentsListView(ListView):
+    model = FeedBack
+    template_name = 'products/detail_user_products.html'
+    
+    def get_queryset(self):
+        return FeedBack.objects.filter(product__pk__in=[self.request.product.id])
 
 
-def delete_product(request, id):
-    deleted, _ = Product.objects.filter(pk=id).delete()
-    if deleted > 0:
-        messages.info(request, "Item has been deleted")
-    return redirect(reverse('products:user_products'))
-
-def product_by_category(request, category_id=None):
-    category = None
-    categories = Category.objects.all()
-    products = Product.objects.filter(available=True)
-    if category_id:
-        category = get_object_or_404(Category, id=category_id)
-        products = products.filter(category=category)
-    return render(request,
-                  'shop/product/list.html',
-                  {'category': category,
-                   'categories': categories,
-                   'products': products})
 
 
 

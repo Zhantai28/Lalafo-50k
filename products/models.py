@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import  User 
+from django.contrib.auth.models import  User
+# from django.db.models.fields.files import ImageField 
 import account.models  
 from django.urls import reverse
 
@@ -16,8 +17,8 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('products:product_list_by_category',
-                        args=[self.name])
+        return reverse('account:product_by_category',
+                        args=[self.id])
   
 
 
@@ -26,13 +27,14 @@ class Product(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     description = models.TextField(blank=True)
     price = models.CharField(max_length=255, default="Договорная")
-    image = models.ImageField(blank=True, default='default.jpg', upload_to='products_photo')
+    image = models.ImageField(blank = True, upload_to='products_photo')
     status = models.CharField(max_length=3, choices=(
         ("П", "Продать"),
         ("К", "Купить"),
         ("CA", "Сдать в аренду"),
         ("А", "Хочу арендовать")
     ))
+    city = models.CharField(max_length=255)
     active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -53,7 +55,7 @@ class Product(models.Model):
 
            
     def get_absolute_url(self):
-        return reverse('product', kwargs=(str(self.id),))
+        return reverse('products:product_detail', args=[self.id])
 
     @property
     def photo_url(self):
@@ -98,7 +100,7 @@ class FeedBack(models.Model):
     active = models.BooleanField(default=True)
 
     def __str__(self): 
-        return self.text, str(self.id)
+        return self.text
 
 
     class Meta:
