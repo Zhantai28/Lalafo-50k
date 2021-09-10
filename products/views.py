@@ -1,10 +1,8 @@
 from django import forms
-from django.http.response import HttpResponse, Http404
-from .models import Category, Product, FeedBack
-import django.http as http
-from django.views.generic import DetailView, View, ListView, UpdateView
-from django.views.generic.edit import FormMixin
-from django.db.models.query import QuerySet
+from django.forms import modelformset_factory
+from django.http.response import HttpResponse
+from .models import Product, FeedBack 
+from django.views.generic import ListView
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import Product, CartItem, Cart
 from .forms import ProductCreateForm, FeedBackForm
@@ -50,24 +48,56 @@ def delete_own_comment(request, id):
 
 @login_required 
 def create_product(request):
-    if request.user.is_authenticated:
-        product = Product(author=request.user)
+    product = Product(author=request.user)
 
-        if request.method == "POST":
-            product_form = ProductCreateForm(request.POST, instance=product)
-            
-            if product_form.is_valid():
-                new_product = product_form.save(commit=False)                       
-                new_product.author = request.user      
-                product_form.save()
-                return redirect(reverse('products:user_products'))
-            else:
-                print(product_form.errors)
+    if request.method == "POST":
+        product_form = ProductCreateForm(request.POST, instance=product)
+        if product_form.is_valid():
+            new_product = product_form.save(commit=False)                       
+            new_product.author = request.user      
+            product_form.save()
+            return redirect(reverse('products:user_products'))
         else:
-            product_form = ProductCreateForm(instance=product)
-            return render(request, 'products/create.html', {'product_form': product_form})
+            print(product_form.errors)
     else:
-        return redirect(register)
+        product_form = ProductCreateForm(instance=product)
+        return render(request, 'products/create.html', {'product_form': product_form})
+
+
+# ДЛЯ ЗАГРУЗЕИ НЕСКОЛЬКИХ ФОТО /// НУЖНО ДОРАБОТАТЬ
+
+# @login_required 
+# def create_product(request):
+#     product = Product(author=request.user)
+#     ImageFormSet = modelformset_factory(Image,
+#                         form=ImageProductForm, extra=5)
+
+#     if request.method == "POST":
+#         product_form = ProductCreateForm(request.POST, instance=product)
+#         image_form_set = ImageFormSet(data=request.POST, files=request.FILES,
+#                             queryset=Image.objects.none())
+#         if product_form.is_valid() and image_form_set.is_valid():
+#             new_product = product_form.save(commit=False)                       
+#             new_product.author = request.user      
+#             product_form.save()
+#             for form in image_form_set.cleaned_data:
+#                 #this helps to not crash if the user   
+#                 #do not upload all the photos
+#                 if form:
+#                     image = form['image']
+#                     photo = Image(product=product_form, image=image)
+#                     photo.save()
+#             # use django messages framework
+#             messages.success(request,
+#                              "Yeeew, check it out on the home page!")
+#             return redirect(reverse('products:user_products'))
+#         else:
+#             print(product_form.errors, image_form_set.errors)
+#     else:
+#         product_form = ProductCreateForm(instance=product)
+#         image_form_set = ImageFormSet(queryset=Image.objects.none())
+#         return render(request, 'products/create.html', {'product_form': product_form,
+#                                                         'image_form':image_form_set})
 
 
 def edit_my_product(request, id):

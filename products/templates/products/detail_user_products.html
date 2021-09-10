@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block page %}
     <div>
-        <img style="width: 25%" src="{{ products.image.url }}">
+        <img style="width: 25%" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
         <p>Описание: {{ products.description|linebreaks }}</p>
         <p>Категория: {{ products.category }}</p>
         <p>Подкатегория: {{ products.sub_category }}</p>            

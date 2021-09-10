@@ -19,11 +19,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 
 
-# class HomeView(ListView):
-#     template_name = 'account/index.html'
-#     model = Product
-#     context_object_name = 'products'
-
 def product_by_category(request, id=None):
     category = None
     categories = Category.objects.all()

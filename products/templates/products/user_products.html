@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block page %}
    <div class="row">
         {% if product_list %}
@@ -7,7 +9,7 @@
                 <div class="card">
                     {{ forloop.counter }}
                     <div class="container">
-                        <img style="width: 25%;" src="{{ product.image.url }}">
+                        <img style="width: 25%;" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
                       
                         <p>Название: {{ product.name }}</p>
                         <p>Цена: {{ product.price }}</p>    

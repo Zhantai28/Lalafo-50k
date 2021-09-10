@@ -15,10 +15,12 @@ class CategoryAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(Product)
+
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['category', 'name', 'description', 'status','price', 'image', 'created', 'updated', 'active', 'author']
+    list_display = ['category', 'name', 'description', 'image', 'status','price', 'created', 'updated', 'active', 'author']
     list_filter = ['category', 'status']
+admin.site.register(Product)
+
 
 
 @admin.register(FeedBack)

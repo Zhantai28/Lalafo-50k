@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import  User 
+from django.contrib.auth.models import  User
+# from django.db.models.fields.files import ImageField 
 import account.models  
 from django.urls import reverse
 

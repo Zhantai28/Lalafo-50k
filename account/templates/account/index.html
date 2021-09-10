@@ -2,33 +2,46 @@
 
 {% load static %}
 
-{% block title %}
-  {% if category %}{{ category.name }}{% else %}Products{% endif %}
-{% endblock %}
-
 {% block page %}
-<div id="sidebar">
-  <h3>Categories</h3>
-  <ul>
-    <li> {% if not category %}class="selected"{% endif %}</li>
-      <a href="{% url 'account:homepage' %}">All</a>
-    </li>
-      {% for c in categories %}
-        {% if category.id == c.id  %} class="selected" {% endif %}>
-          <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
-      {% endfor %}
-  </ul>
-</div>
-<div id="main" class="product-list">
-  <h1>{% if category %}{{ category.name }}{% else %}Products{% endif %}</h1>
-    {% for product in products %}
-      <div class="item">
-        <a href="{{ product.get_absolute_url }}">
-          <img style="width: 15%;" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
+  <nav class="navbar navbar-light bg-success" style="background-color: green; margin-top: 0%; width: 100%;">
+    <div class="container-fluid" >  
+      <input class="form-control me-md-2" style="width: 80%;" type="search" placeholder="Поиск" aria-label="Search">
+      <div class="d-grid gap-4 col-2 mx-auto">
+        <button class="btn btn-danger " type="submit">Поиск</button> 
+      </div style="display: inline-block">
+    </div>
+        <div id="main" class="product-list">
+            <h1>{% if category %}{{ category.name }}{% endif %}</h1>
+          <div id="sidebar">
+            <ul>
+              <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 150px; background-color: rgb(36, 44, 41); border-radius: 25px"><a style="text-decoration: none;" {% if not category %} class="selected" {% endif %}  href="{% url 'account:homepage' %}" data-filter=".job">All</a></button>
+              {% for c in categories %}
+                <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 150px; background-color: rgb(36, 44, 41); border-radius: 25px"><a style="text-decoration: none;" {% if category.id == c.id  %} class="selected" {% endif %} href="{{ c.get_absolute_url }}"> {{ c.name }} </a></button>  
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row" style="justify-content: center; margin: 10px 10px; ">
+      {% for product in products %}
+        {% if product.active %}
+          <a href="{{ product.get_absolute_url }}">
+            <div class="col-6 col-md-3">
+              <img class="card-img-top " src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
           </a>
-          <a href="{{ product.get_absolute_url }}">{{ product.name }}</a><br>
-          {{ product.price }}
-      </div>
-    {% endfor %}
-</div>
+              <div class="card-body">
+                <a href="{{ product.get_absolute_url }}">{{ product.name }}</a><br>
+                Цена: {{ product.price }}
+              </div>
+            </div>
+          
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+
 {% endblock %}
