@@ -29,41 +29,36 @@
 
     </div>
     {% for comment in comments %}
-        {% if comment.parent %}
-            <div style="margin-left: 40px;">
-                Ответы:<br>
+        <div class="comment">
+            <p class="info">
+                Отзыв: <br>
                 {{ comment.user }}:
                 {{ comment.text }}
-                <p style="font-size: 12px;">{{ comment.created }}</p>
-            </div>
-        {% else %}
-            <div class="comment">
-                <p class="info">
-                    Коментрий: <br>
-                    {{ comment.user }}:
-                    {{ comment.text }}
-                    <p style="font-size: 12px; margin-top: -15px;">{{ comment.created }}</p>
-                </p>
-                {{ comment.body|linebreaks }}
+                <p style="font-size: 12px; margin-top: -15px;">{{ comment.created }}</p>
+            </p>
+            {{ comment.body|linebreaks }}
                 
-            </div>
-        {% endif %}
+        </div>
     {% empty %}
-        <p>Нет Комментриев</p>
+        <p>Нет отзывов</p>
     {% endfor %}
     
     {% if new_comment %}
-        <h2>Ваш комментарий был добавлен</h2>
+        <h2>Ваш отзыв был добавлен</h2>
     {% else %}
         <hr>
-        <h2>Добавить новый комментрий</h2>
-        <form method="post">
-            <p style="height: 25spx;">
-                {{ comment_form.as_p }}
-                {% csrf_token %}
-                <p><input type="submit" value="Add comment"></p>
-            </p>
-        </form>
+        {% if user.is_authenticated %}
+            <h2>Добавить новый комментрий</h2>
+            <form method="post">
+                <p style="height: 25spx;">
+                    {{ comment_form.as_p }}
+                    {% csrf_token %}
+                    <p><input type="submit" value="Add comment"></p>
+                </p>
+            </form>
+        {% else %}
+            <p>Только авторизованные пользователи могут оставлять отзывы</p>
+        {% endif %}
     {% endif %}
         
     

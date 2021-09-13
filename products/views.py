@@ -1,5 +1,6 @@
 from django import forms
-from django.forms import modelformset_factory
+from django.db.models import query
+from django.db.models import Q
 from django.http.response import HttpResponse
 from .models import Product, FeedBack 
 from django.views.generic import ListView
@@ -30,8 +31,8 @@ def product_detail(request, id):
         else:
             comment_form = FeedBackForm()
         return render(request, 'products/product_detail.html', {'product':product, 
-                                                    'comments':comments, 
-                                                    'comment_form': comment_form})    
+                                                        'comments':comments, 
+                                                        'comment_form': comment_form})    
     else:
         return HttpResponse('Только авторизанные пользователи могут оставлять комментарии')
 
@@ -51,7 +52,7 @@ def create_product(request):
     product = Product(author=request.user)
 
     if request.method == "POST":
-        product_form = ProductCreateForm(request.POST, instance=product)
+        product_form = ProductCreateForm(request.POST, instance=product, files=request.FILES)
         if product_form.is_valid():
             new_product = product_form.save(commit=False)                       
             new_product.author = request.user      
@@ -64,7 +65,7 @@ def create_product(request):
         return render(request, 'products/create.html', {'product_form': product_form})
 
 
-# ДЛЯ ЗАГРУЗЕИ НЕСКОЛЬКИХ ФОТО /// НУЖНО ДОРАБОТАТЬ
+# ДЛЯ ЗАГРУЗКИ НЕСКОЛЬКИХ ФОТО /// НУЖНО ДОРАБОТАТЬ
 
 # @login_required 
 # def create_product(request):
@@ -99,6 +100,16 @@ def create_product(request):
 #         return render(request, 'products/create.html', {'product_form': product_form,
 #                                                         'image_form':image_form_set})
 
+
+def search_products(request):
+    if 'q' in request.GET and request.GET['q']:
+        q = request.GET['q']
+    search_products = Product.objects.filter(name__icontains=q)
+    context = {'search_products': search_products}
+    return render(request, 'account/index.html', context)
+
+
+    
 
 def edit_my_product(request, id):
     product = get_object_or_404(Product, id=id)
