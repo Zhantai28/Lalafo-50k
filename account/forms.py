@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Profile, UserRating,Message
+from .models import Profile, UserRating
 
 class UserEditForm(forms.ModelForm):
     class Meta:
@@ -52,8 +52,3 @@ class UserRatingForm(forms.ModelForm):
             raise ValidationError("You can not rate yourself")
 
 
-class MessageForm(forms.ModelForm):
-    class Meta:
-        model = Message
-        fields = ['message']
-        labels = {'message': ""}

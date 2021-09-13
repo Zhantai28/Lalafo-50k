@@ -8,7 +8,7 @@
                 <h4 class="card-title">{{request.user.username}}, Добро пожаловать в личный кабинет!</h4>
                 <p>Вы можете <a href="{% url 'account:edit' %}">отредактировать профиль</a> или <a href="{% url 'account:password_change' %}">сменить пароль</a>.</p>
                 <p>Мой Рейтинг</p>
-                <p><a href="{% url 'account:dialogs' %}">Мои сообщения </a></p>
+                <p><a href="">Мои сообщения </a></p>
                 <p><a href="{% url 'products:create_product' %}">Создать объявление</a></p>
                 <p><a href="{% url 'products:user_products' %}">Мои объявления</a></p>
                 <p><a href="{% url 'products:cart_summary' %}">Моя корзина</a></p>
