@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
-from .views import product_by_category, About, account, register, profile, edit, UserRating, UserRatingView
+from .views import product_by_category, About, account, register, profile, edit, UserRating, UserRatingView, Inbox, UserSearch, Directs, NewConversation, SendDirect
 from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, \
         PasswordChangeView, PasswordChangeDoneView, PasswordResetView, \
         PasswordResetDoneView ,PasswordResetConfirmView, PasswordResetCompleteView
@@ -29,6 +29,11 @@ urlpatterns = [
     path('rate/',UserRatingView.as_view(), name='user-rating'),
     path('', product_by_category, name='homepage'),
     path('product/<int:id>/', product_by_category, name='product_by_category'),
+    path('', Inbox, name='inbox'),
+   	path('directs/<username>', Directs, name='directs'),
+   	path('new/', UserSearch, name='usersearch'),
+   	path('new/<username>', NewConversation, name='newconversation'),
+   	path('send/', SendDirect, name='send_direct'),
 
 
 ]

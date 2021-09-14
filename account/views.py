@@ -1,5 +1,5 @@
 from django.forms.forms import Form
-from django.http.response import HttpResponseRedirect
+from django.http.response import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.template import loader
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm 
 from django.contrib.auth.decorators import login_required
-from .models import Profile, UserRating
+from .models import Profile, UserRating, Message
 from products.models import Product, Category
 from django.contrib import messages
 from django.urls import reverse
@@ -17,6 +17,10 @@ from django.views.generic.edit import CreateView
 from django.db.models import Count
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
+from django.template import loader, RequestContext
+from django.db.models import Q
+from django.core.paginator import Paginator
+
 
 
 def product_by_category(request, id=None):
@@ -101,3 +105,105 @@ class UserRatingView(LoginRequiredMixin, CreateView):
         form.instance.user_rated = self.request.user
         return super().form_valid(form)         
    
+
+# Messaging between users
+
+@login_required
+def Inbox(request):
+	messages = Message.get_messages(user=request.user)
+	active_direct = None
+	directs = None
+
+	if messages:
+		message = messages[0]
+		active_direct = message['user'].username
+		directs = Message.objects.filter(user=request.user, recipient=message['user'])
+		directs.update(is_read=True)
+		for message in messages:
+			if message['user'].username == active_direct:
+				message['unread'] = 0
+
+	context = {
+		'directs': directs,
+		'messages': messages,
+		'active_direct': active_direct,
+		}
+
+	template = loader.get_template('direct/direct.html')
+
+	return HttpResponse(template.render(context, request))
+
+@login_required
+def UserSearch(request):
+	query = request.GET.get("q")
+	context = {}
+	
+	if query:
+		users = User.objects.filter(Q(username__icontains=query))
+
+		#Pagination
+		paginator = Paginator(users, 6)
+		page_number = request.GET.get('page')
+		users_paginator = paginator.get_page(page_number)
+
+		context = {
+				'users': users_paginator,
+			}
+	
+	template = loader.get_template('direct/search_user.html')
+	
+	return HttpResponse(template.render(context, request))
+
+@login_required
+def Directs(request, username):
+	user = request.user
+	messages = Message.get_messages(user=user)
+	active_direct = username
+	directs = Message.objects.filter(user=user, recipient__username=username)
+	directs.update(is_read=True)
+	for message in messages:
+		if message['user'].username == username:
+			message['unread'] = 0
+
+	context = {
+		'directs': directs,
+		'messages': messages,
+		'active_direct':active_direct,
+	}
+
+	template = loader.get_template('direct/direct.html')
+
+	return HttpResponse(template.render(context, request))
+
+
+@login_required
+def NewConversation(request, username):
+	from_user = request.user
+	body = ''
+	try:
+		to_user = User.objects.get(username=username)
+	except Exception as e:
+		return redirect('usersearch')
+	if from_user != to_user:
+		Message.send_message(from_user, to_user, body)
+	return redirect('inbox')
+
+@login_required
+def SendDirect(request):
+	from_user = request.user
+	to_user_username = request.POST.get('to_user')
+	body = request.POST.get('body')
+	
+	if request.method == 'POST':
+		to_user = User.objects.get(username=to_user_username)
+		Message.send_message(from_user, to_user, body)
+		return redirect('inbox')
+	else:
+		HttpResponseBadRequest()
+
+def checkDirects(request):
+	directs_count = 0
+	if request.user.is_authenticated:
+		directs_count = Message.objects.filter(user=request.user, is_read=False).count()
+
+	return {'directs_count':directs_count}
