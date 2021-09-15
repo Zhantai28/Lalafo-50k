@@ -6,7 +6,7 @@
    <div class="row">
     <table class="table table-hover table-bordered text-center">
       <tr class="text-center">
-        <th>no.</th>
+        <th>№</th>
         <th>Продукт</th>
         <th>Цена</th>
       </tr>
@@ -37,7 +37,7 @@
       <tr>
         <td colspan=1 >
           <a href="{% url 'account:homepage' %}" class="btn btn-warning pull-left">
-            {% if order %} Продолжить покупки {% else %} Add Items to Cart {% endif %}
+            {% if order %} Продолжить покупки {% else %} Добавить товары в корзину {% endif %}
           </a> 
         </td>
         <td colspan=2>

@@ -129,30 +129,10 @@ def Inbox(request):
 		'active_direct': active_direct,
 		}
 
-	template = loader.get_template('direct/direct.html')
-
-	return HttpResponse(template.render(context, request))
-
-@login_required
-def UserSearch(request):
-	query = request.GET.get("q")
-	context = {}
-	
-	if query:
-		users = User.objects.filter(Q(username__icontains=query))
-
-		#Pagination
-		paginator = Paginator(users, 6)
-		page_number = request.GET.get('page')
-		users_paginator = paginator.get_page(page_number)
-
-		context = {
-				'users': users_paginator,
-			}
-	
-	template = loader.get_template('direct/search_user.html')
+	template = loader.get_template('account/inbox.html')
 	
 	return HttpResponse(template.render(context, request))
+
 
 @login_required
 def Directs(request, username):
@@ -171,7 +151,7 @@ def Directs(request, username):
 		'active_direct':active_direct,
 	}
 
-	template = loader.get_template('direct/direct.html')
+	template = loader.get_template('account/inbox.html')
 
 	return HttpResponse(template.render(context, request))
 
@@ -183,10 +163,10 @@ def NewConversation(request, username):
 	try:
 		to_user = User.objects.get(username=username)
 	except Exception as e:
-		return redirect('usersearch')
+		return redirect('Неправильный пользователь')
 	if from_user != to_user:
 		Message.send_message(from_user, to_user, body)
-	return redirect('inbox')
+	return redirect('account:inbox')
 
 @login_required
 def SendDirect(request):
@@ -197,7 +177,7 @@ def SendDirect(request):
 	if request.method == 'POST':
 		to_user = User.objects.get(username=to_user_username)
 		Message.send_message(from_user, to_user, body)
-		return redirect('inbox')
+		return redirect('account:inbox')
 	else:
 		HttpResponseBadRequest()
 

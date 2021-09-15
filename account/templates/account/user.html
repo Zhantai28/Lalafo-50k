@@ -5,10 +5,19 @@
         <div class="media">
             <div class="media">
                 <img class="rounded-circle account-img" src="{{ request.user.profile.photo.url }}" style="max-width: 250px; max-height: 200px;">
-                  <h2>ID: {{ author.id }} First name: {{ author.name }}</h2>
+                  <h2>ID: {{ user.id }} First name: {{ user.first_name }}</h2>
               </div>
               <hr>
               <div>Рейтинг: {{ user_object.rating }}</div>
+
+              <div>                
+                <a href="{% url 'account:newconversation' user.username %}" class="button is-info">Написать сообщение <strong>@{{ user.username }}</strong></a>
+              </div>
+
+
+
+              
+
           
 {% endblock %}
 
