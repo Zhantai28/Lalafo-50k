@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% load crispy_forms_tags %}
+
 {% block page %}
-    <div class="container-fluid" style="justify-content: space-around;">
+    <div class="container-fluid" style="justify-content: space-around; margin-left: 50px;">
         <div class="col-6" style="justify-content: space-around; ">
             <div class="row">
                 <img class="card-img-top" style=" margin-top: 10px; width: 35%;" src="{{ product.image.url }}">
@@ -13,22 +15,21 @@
                     <li class="list-group-item">Цена: {{ product.price }}</li>
                     <li class="list-group-item">Описание: {{ product.description|linebreaks }}</li>
                     <li class="list-group-item">Номер телефона: {{ product.phone_number }}</li>
-                    <li class="list-group-item"><a href="{% url 'account:messages' product.author.id %}">Отправить сообщение</a></li>
+                    
                     
                     <button><a href="{% url 'products:add_to_cart' product.id %}" > Добавить в корзину </a> </button>
                 </ul>
             </div>
         </div>
     </div>
-    <div>
+    <div style="margin-left: 50px;">
         {% with comments.count as total_comments %}
-    <h2>
-        {{ total_comments }} comment{{ total_comments|pluralize }}
-    </h2>
-    {% endwith %}
-
-    </div>
-    {% for comment in comments %}
+        <h2>
+            {{ total_comments }} отзывов 
+        </h2>
+        {% endwith %}
+    
+        {% for comment in comments %}
         <div class="comment">
             <p class="info">
                 Отзыв: <br>
@@ -39,28 +40,24 @@
             {{ comment.body|linebreaks }}
                 
         </div>
-    {% empty %}
-        <p>Нет отзывов</p>
-    {% endfor %}
-    
-    {% if new_comment %}
-        <h2>Ваш отзыв был добавлен</h2>
-    {% else %}
-        <hr>
-        {% if user.is_authenticated %}
-            <h2>Добавить новый комментрий</h2>
-            <form method="post">
-                <p style="height: 25spx;">
-                    {{ comment_form.as_p }}
-                    {% csrf_token %}
-                    <p><input type="submit" value="Add comment"></p>
-                </p>
-            </form>
-        {% else %}
-            <p>Только авторизованные пользователи могут оставлять отзывы</p>
-        {% endif %}
-    {% endif %}
+        {% empty %}
+            <p>Нет отзывов</p>
+        {% endfor %}
         
-    
+
+        {% if new_comment %}
+            <h2>Ваш отзыв был добавлен</h2>
+        {% else %}
+            <hr>
+                <h5>Добавить новый комментрий</h5>
+                <form method="post">
+                    <p style="height: 25spx;">
+                        {{ comment_form|crispy }}
+                        {% csrf_token %}
+                        <input type="submit" value="Добавить">
+                    </p>
+                </form>
+        {% endif %}
+    </div>
 
 {% endblock %}

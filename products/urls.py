@@ -3,7 +3,8 @@ from django.urls import path
 from django.contrib.auth.decorators import login_required
 from .views import product_detail, create_product, edit_my_product, delete_product, \
  delete_own_comment, add_to_cart, delete_from_cart, \
- cart_details, MyProductListView, mypoductdetailview, MyProductCommentsListView, search_products
+ cart_details, MyProductListView, mypoductdetailview, MyProductCommentsListView, search_products, \
+MyArchiveProducts
 
 
 app_name = 'products'
@@ -19,6 +20,7 @@ urlpatterns = [
     path('<int:id>/delete-product/', delete_product, name='delete_product'),
     path('user_product/<int:id>/', mypoductdetailview, name='my-product-detail'),
     path('search/', search_products, name='search-results'),
+    path('activation/', MyArchiveProducts.as_view(), name='active_product'),
 
     path('user_product', login_required(MyProductListView.as_view()), name='user_products'),
     path('<int:id>/edit/', edit_my_product, name='edit_my_product'),
