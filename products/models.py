@@ -112,7 +112,7 @@ class FeedBack(models.Model):
 
 
 
-# кОРЗИНА
+# КОРЗИНА
 
 
 
