@@ -22,42 +22,29 @@
             </div>
         </div>
     </div>
-    <div style="margin-left: 50px;">
+
+    
+<div style="margin-left: 50px;">
         {% with comments.count as total_comments %}
         <h2>
             {{ total_comments }} отзывов 
         </h2>
         {% endwith %}
-    
-        {% for comment in comments %}
-        <div class="comment">
-            <p class="info">
-                Отзыв: <br>
-                {{ comment.user }}:
-                {{ comment.text }}
-                <p style="font-size: 12px; margin-top: -15px;">{{ comment.created }}</p>
-            </p>
-            {{ comment.body|linebreaks }}
-                
-        </div>
-        {% empty %}
-            <p>Нет отзывов</p>
-        {% endfor %}
-        
-
-        {% if new_comment %}
-            <h2>Ваш отзыв был добавлен</h2>
-        {% else %}
-            <hr>
-                <h5>Добавить новый комментрий</h5>
-                <form method="post">
-                    <p style="height: 25spx;">
-                        {{ comment_form|crispy }}
-                        {% csrf_token %}
-                        <input type="submit" value="Добавить">
-                    </p>
-                </form>
-        {% endif %}
     </div>
-
+</div>
+{% for comment in comments %}
+    <div class="comment">
+        <p class="info">
+            Отзыв: <br>
+            {{ comment.user }}:
+            {{ comment.text }}
+            <p style="font-size: 12px; margin-top: -15px;">{{ comment.created }}</p>
+        </p>
+        {{ comment.body|linebreaks }}
+            
+    </div>
+{% empty %}
+    <p>Нет отзывов</p>
+{% endfor %}
+<button><a href="{% url 'products:add_comment' product.id %}">Добавить Коментрий</a></button>
 {% endblock %}

@@ -1,4 +1,5 @@
-from django.http.response import HttpResponse
+from django.contrib.auth.models import AnonymousUser
+from django.views.decorators.http import require_http_methods
 from .models import Product, FeedBack 
 from django.views.generic import ListView
 from django.shortcuts import get_object_or_404, render, redirect
@@ -10,33 +11,60 @@ from django.contrib.auth.decorators import login_required
 from account.templates import *
 from account.models import *
 from .extras import generate_cart_id 
+from django.contrib import auth
 
 
 def product_detail(request, id):
-    product = Product.objects.get(id=id)
-    comments = product.product_comments.filter(active=True)
-    new_comment = None
-
     if request.user.is_authenticated:
-        comment = FeedBack(user=request.user)
-        if request.method == 'POST':
-            comment_form = FeedBackForm(data=request.POST)
-            if comment_form.is_valid():
-                new_comment = comment_form.save(commit=False)
-                new_comment.user = request.user
-                new_comment.product = product
-                comment_form.save()  
-        else:
-            comment_form = FeedBackForm()
-        return render(request, 'products/product_detail.html', {'product':product, 
-                                                        'comments':comments,
-                                                        'mew_comment':new_comment, 
-                                                        'comment_form': comment_form})    
+        product = Product.objects.get(id=id)
+        comments = product.product_comments.filter(active=True)
+        return render(request, 'products/product_detail.html', {'product':product,
+                                                                'comments':comments})
     else:
-        return HttpResponse('Только авторизанные пользователи могут оставлять комментарии')
+        return redirect(reverse('account:login'))
 
+@login_required
+def add_comment(request, id):
+    product = get_object_or_404(Product, id=id)
+    if request.method == 'POST':
+        comment_form = FeedBackForm(data=request.POST, files=request.FILES)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.user = request.user
+            new_comment.product = product
+            comment_form.save() 
+            return redirect(reverse('account:index'))
+        else:
+            print(comment_form.errors)
+    else:
+        comment_form = FeedBackForm()
+    return render(request, 'products/add_comment.html', { 
+                                                        'comment_form': comment_form})  
+    
 
+ 
+# def product_detail(request, id):
+#     product = Product.objects.get(id=id)
+#     comments = product.product_comments.filter(active=True)
 
+#     if request.user.is_authenticated:
+#         comment = FeedBack(user=request.user)
+#         if request.method == 'POST':
+#             comment_form = FeedBackForm(data=request.POST, instance=comment)
+#             if comment_form.is_valid():
+#                 new_comment = comment_form.save(commit=False)
+#                 new_comment.user = request.user
+#                 new_comment.product = product
+#                 comment_form.save()  
+#         else:
+#             comment_form = FeedBackForm()
+#         return render(request, 'products/product_detail.html', {'product':product, 
+#                                                         'comments':comments, 
+#                                                         'comment_form': comment_form})    
+#     else:
+#         return HttpResponse('Только авторизанные пользователи могут оставлять комментарии')
+        
+                                                             
 def delete_own_comment(request, id):
     comment = FeedBack.objects.get(id=id)
     comment.delete()
@@ -63,41 +91,6 @@ def create_product(request):
         product_form = ProductCreateForm(instance=product)
         return render(request, 'products/create.html', {'product_form': product_form})
 
-
-# ДЛЯ ЗАГРУЗКИ НЕСКОЛЬКИХ ФОТО /// НУЖНО ДОРАБОТАТЬ
-
-# @login_required 
-# def create_product(request):
-#     product = Product(author=request.user)
-#     ImageFormSet = modelformset_factory(Image,
-#                         form=ImageProductForm, extra=5)
-
-#     if request.method == "POST":
-#         product_form = ProductCreateForm(request.POST, instance=product)
-#         image_form_set = ImageFormSet(data=request.POST, files=request.FILES,
-#                             queryset=Image.objects.none())
-#         if product_form.is_valid() and image_form_set.is_valid():
-#             new_product = product_form.save(commit=False)                       
-#             new_product.author = request.user      
-#             product_form.save()
-#             for form in image_form_set.cleaned_data:
-#                 #this helps to not crash if the user   
-#                 #do not upload all the photos
-#                 if form:
-#                     image = form['image']
-#                     photo = Image(product=product_form, image=image)
-#                     photo.save()
-#             # use django messages framework
-#             messages.success(request,
-#                              "Yeeew, check it out on the home page!")
-#             return redirect(reverse('products:user_products'))
-#         else:
-#             print(product_form.errors, image_form_set.errors)
-#     else:
-#         product_form = ProductCreateForm(instance=product)
-#         image_form_set = ImageFormSet(queryset=Image.objects.none())
-#         return render(request, 'products/create.html', {'product_form': product_form,
-#                                                         'image_form':image_form_set})
 
 
 def search_products(request):
@@ -164,7 +157,7 @@ class MyProductCommentsListView(ListView):
     template_name = 'products/detail_user_products.html'
     
     def get_queryset(self):
-        return FeedBack.objects.filter(product__pk__in=[self.request.product.id])
+        return FeedBack.objects.filter(feedback__pk__in=[self.request.user.id])
 
 
 

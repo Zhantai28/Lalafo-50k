@@ -1,9 +1,9 @@
-from django.http import request
+from django.http import request, response
 from django.test import TestCase, RequestFactory
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.models import User
 from unittest import mock
-from .views import add_to_cart
+from .views import add_to_cart, product_by_category
 from .models import Product, Category, Cart, CartItem
 from account.models import Profile
 
@@ -43,13 +43,18 @@ class ShopTestCase(TestCase):
         self.cart.items.add(self.cart_item)
         self.assertIn(self.cart_item, self.cart.items.all())
         self.assertEqual(self.cart.items.count(), 1)
+    
         
-    
-    def test_response_add_to_cart_view(self):
+    def test_list_product_view(self):
         factory = RequestFactory()
-        request = factory.get('')
+        request = factory.get('/account/index')
         request.user = self.user
-        response = add_to_cart(request, id=5)
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, '/products:cart_summary/')
+        response = product_by_category(request)
+        self.assertEqual(response.status_code, 200)
     
+    def test_create_product(self):
+        factory = RequestFactory()
+        request = factory.get('/products/create')
+        request.user = self.user
+        response = product_by_category(request)
+        self.assertEqual(response.status_code, 200)

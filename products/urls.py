@@ -1,10 +1,10 @@
 from django import views
 from django.urls import path
 from django.contrib.auth.decorators import login_required
-from .views import product_detail, create_product, edit_my_product, delete_product, \
+from .views import create_product, edit_my_product, delete_product, \
  delete_own_comment, add_to_cart, delete_from_cart, \
  cart_details, MyProductListView, mypoductdetailview, MyProductCommentsListView, search_products, \
-MyArchiveProducts
+MyArchiveProducts, product_detail, add_comment
 
 
 app_name = 'products'
@@ -12,7 +12,8 @@ app_name = 'products'
 urlpatterns = [
 
     path('<int:id>/delete-comment/', delete_own_comment, name='delete-comment'),
-    path('user_product_comments', MyProductCommentsListView.as_view(), name='my-product-comments'),
+    path('user_product_comments/', MyProductCommentsListView.as_view(), name='my-product-comments'),
+    path('<int:id>/add_comment/', add_comment, name='add_comment'),
 
     path('<int:id>/', product_detail, name="product_detail"),
     path('create_product/', create_product, name='create_product'),

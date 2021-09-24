@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import  User
 # from django.db.models.fields.files import ImageField 
-import account.models  
+from django.contrib.postgres.fields import ArrayField 
 from django.urls import reverse
 
 
@@ -85,7 +85,7 @@ class FeedBack(models.Model):
         related_name='product_comments'
     )
 
-    text = models.TextField('Текст комментария')
+    text = models.TextField('Текст отзыва')
     parent = models.ForeignKey(
         'self',
         verbose_name='Родительский комментарий',
@@ -94,20 +94,18 @@ class FeedBack(models.Model):
         related_name="comment_child",
         on_delete=models.CASCADE
     )
-    
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
 
     def __str__(self): 
-        return self.text
+        return self.text[0:220]
 
 
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии' 
         ordering = ('created',)
-
 
 
 

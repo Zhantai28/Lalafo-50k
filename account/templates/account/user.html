@@ -4,14 +4,12 @@
     <div class="content-section">
         <div class="media">
             <div class="media">
+            
                 <img class="rounded-circle account-img" src="{{ request.user.profile.photo.url }}" style="max-width: 250px; max-height: 200px;">
-                  <h2>ID: {{ author.id }} First name: {{ author.name }}</h2>
+                  <h2>ID: {{ product.author.id }} First name: {{ product.author }}</h2>
               </div>
               <hr>
               <div>Рейтинг: {{ user_object.rating }}</div>
-            {% endfor %}
-        {% endif %}
-          
 {% endblock %}
 
 
