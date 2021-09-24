@@ -1,0 +1,22 @@
+def user_rating(request, id):
+    receiver = User.objects.get(id=id)
+    rates = user_received.userrates.filter(active=True)
+
+    if request.user.is_authenticated:
+        rate = UserRating(user=request.user)
+        if request.method == 'POST':
+            rate_form = UserRatingForm(data=request.POST, instance=rate)
+            if rate_form.is_valid():
+                new_rate = rate_form.save(rate=False)
+                new_rate.user = request.user
+                new_rate.user_received = receiver
+                rate_form.save()  
+        else:
+            rate_form = UserRatingForm()
+        return render(request, 'account/dashboard.html', {'user':user_received, 
+                                                        'rates':rates, 
+                                                        'rate_form': rate_form})    
+    else:
+        return HttpResponse('Только авторизанные пользователи могут оценивать')
+
+

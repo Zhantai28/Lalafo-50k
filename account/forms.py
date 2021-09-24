@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Profile, UserRating
+from .models import Profile, UserRating, RATE_CHOICES
 
 class UserEditForm(forms.ModelForm):
     class Meta:
@@ -36,6 +36,8 @@ class LoginForm(forms.Form):
 
 #Rating Add Form
 class UserRatingForm(forms.ModelForm):
+   
+
     
     class Meta:
       model = UserRating

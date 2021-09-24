@@ -16,7 +16,7 @@
 
   {% for message in messages %}
 
-  <a class="{% if active_direct == message.user.username %}is-active{% endif %}" href="{% url 'directs' message.user.username %}">
+  <a class="{% if active_direct == message.user.username %}is-active{% endif %}" href="{% url 'account:directs' message.user.username %}">
   <div class="box">
     <article class="media">
       <!-- <div class="media-left">
@@ -53,7 +53,7 @@
     </ul>
     </aside>
   <br>
-  <a href="{% url 'newconversation' user.username %}" class="button is-success">New message</a>
+  <a href="{% url 'account:newconversation' user.username %}" class="button is-success">New message</a>
 
   </div>
 
@@ -82,7 +82,7 @@
   </div>
 
 
-  <form role="form" method="POST" action="{% url 'send_direct' %}">
+  <form role="form" method="POST" action="{% url 'account:send_direct' %}">
     {% csrf_token %}
   <article class="media">
     <figure class="media-left">
