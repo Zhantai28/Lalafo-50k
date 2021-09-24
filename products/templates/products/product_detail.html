@@ -15,7 +15,7 @@
                     <li class="list-group-item">Номер телефона: {{ product.phone_number }}</li>
                     <li class="list-group-item"><a href="{% url 'account:messages' product.author.id %}">Отправить сообщение</a></li>
                     
-                    <button><a href="{% url 'products:add_to_cart' product.id %}" > Добавить в корзину </a> </button>
+                    <button><a href="{% url 'products:add_to_cart' product.id %}" > Добавить в корзину <img src="https://www.freeiconspng.com/thumbs/cart-icon/basket-cart-icon-27.png" alt="Корзина" width="36"> </a> </button>
                 </ul>
             </div>
         </div>
