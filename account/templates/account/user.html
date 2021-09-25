@@ -6,7 +6,9 @@
         <div class="media">
             <div class="media">
                 <img class="rounded-circle account-img" src="{{ viewed_user.profile.photo.url }}" style="max-width: 250px; max-height: 200px;">
-                  <h2>Profile ID: {{ viewed_user.profile.id }} First name: {{ viewed_user.first_name }}</h2>
+                  <h2>Имя: {{ viewed_user.first_name }}  {{ viewed_user.last_name }}</h2>
+                  <h3>Профиль ID: {{ viewed_user.profile.id }} Логин: {{ viewed_user.username }}</h3>
+
               </div>
               <hr>
               <div>Рейтинг: {{ viewed_user.rating }}</div>
