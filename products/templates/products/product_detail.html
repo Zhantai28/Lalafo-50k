@@ -13,9 +13,9 @@
                     <li class="list-group-item">Цена: {{ product.price }}</li>
                     <li class="list-group-item">Описание: {{ product.description|linebreaks }}</li>
                     <li class="list-group-item">Номер телефона: {{ product.phone_number }}</li>
-                    <li class="list-group-item"><a href="{% url 'account:messages' product.author.id %}">Отправить сообщение</a></li>
+                    <li class="list-group-item"><a href="{% url 'account:inbox' %}">Отправить сообщение</a></li>
                     
-                    <button><a href="{% url 'products:add_to_cart' product.id %}" > Добавить в корзину </a> </button>
+                    <button><a href="{% url 'products:add_to_cart' product.id %}" > Добавить в корзину <img src="https://www.freeiconspng.com/thumbs/cart-icon/basket-cart-icon-27.png" alt="Корзина" width="36"> </a> </button>
                 </ul>
             </div>
         </div>
@@ -53,7 +53,7 @@
                 <p style="height: 25spx;">
                     {{ comment_form.as_p }}
                     {% csrf_token %}
-                    <p><input type="submit" value="Add comment"></p>
+                    <p><input type="submit" value="Добавить комментарий"></p>
                 </p>
             </form>
         {% else %}

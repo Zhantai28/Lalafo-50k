@@ -85,26 +85,52 @@ def edit(request):
 
 def account(request, id):
     try:
-        user_product = get_object_or_404(Profile, user=request.user)
-        user_objects = Product.objects.filter(author=request.user)
-        return render(request, 'account/user.html', {'user_object':user_objects,
-                                                    'user_product':user_product})
+        viewed_user = User.objects.get(profile__id=id)
+        product_list = Product.objects.filter(author=viewed_user)
+        return render(request, 'account/user.html', {'viewed_user':viewed_user,
+                                                    'product_list':product_list})
     except User.DoesNotExist as e:
         return HttpResponse(f'Not found: {e}', status=404)
+
+
+
 
 
 #function for UserRating 
 
 
+
 class UserRatingView(LoginRequiredMixin, CreateView):
     template_name = 'account/rating_form.html'
     form_class = UserRatingForm
-    success_url = '/account/dashboard/'
+    success_url = 'account/dashboard.html'
         
     def form_valid(self, form):
         form.instance.user_rated = self.request.user
         return super().form_valid(form)         
    
+# def user_rating(request, id):
+#     receiver = User.objects.get(id=id)
+#     rates = receiver.userrates.filter(active=True)
+
+#     if request.user.is_authenticated:
+#         rate = UserRating(user=request.user)
+#         if request.method == 'POST':
+#             rate_form = UserRatingForm(data=request.POST, instance=rate)
+#             if rate_form.is_valid():
+#                 new_rate = rate_form.save(rate=False)
+#                 new_rate.user = request.user
+#                 new_rate.user_received = receiver
+#                 rate_form.save()  
+#         else:
+#             rate_form = UserRatingForm()
+#         return render(request, 'account/dashboard.html', {'user':receiver, 
+#                                                         'rates':rates, 
+#                                                         'rate_form': rate_form})    
+#     else:
+#         return HttpResponse('Только авторизанные пользователи могут оценивать')
+
+
 
 # Messaging between users
 
@@ -129,30 +155,10 @@ def Inbox(request):
 		'active_direct': active_direct,
 		}
 
-	template = loader.get_template('direct/direct.html')
-
-	return HttpResponse(template.render(context, request))
-
-@login_required
-def UserSearch(request):
-	query = request.GET.get("q")
-	context = {}
-	
-	if query:
-		users = User.objects.filter(Q(username__icontains=query))
-
-		#Pagination
-		paginator = Paginator(users, 6)
-		page_number = request.GET.get('page')
-		users_paginator = paginator.get_page(page_number)
-
-		context = {
-				'users': users_paginator,
-			}
-	
-	template = loader.get_template('direct/search_user.html')
+	template = loader.get_template('account/inbox.html')
 	
 	return HttpResponse(template.render(context, request))
+
 
 @login_required
 def Directs(request, username):
@@ -171,7 +177,7 @@ def Directs(request, username):
 		'active_direct':active_direct,
 	}
 
-	template = loader.get_template('direct/direct.html')
+	template = loader.get_template('account/inbox.html')
 
 	return HttpResponse(template.render(context, request))
 
@@ -183,10 +189,10 @@ def NewConversation(request, username):
 	try:
 		to_user = User.objects.get(username=username)
 	except Exception as e:
-		return redirect('usersearch')
-	if from_user != to_user:
+		return redirect('Неправильный пользователь')
+	if from_user != to_user and not Message.objects.filter(user=from_user, recipient=to_user).exists():
 		Message.send_message(from_user, to_user, body)
-	return redirect('inbox')
+	return redirect('account:inbox')
 
 @login_required
 def SendDirect(request):
@@ -197,7 +203,7 @@ def SendDirect(request):
 	if request.method == 'POST':
 		to_user = User.objects.get(username=to_user_username)
 		Message.send_message(from_user, to_user, body)
-		return redirect('inbox')
+		return redirect('account:inbox')
 	else:
 		HttpResponseBadRequest()
 
