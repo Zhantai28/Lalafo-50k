@@ -23,28 +23,49 @@
         </div>
     </div>
 
-    
-<div style="margin-left: 50px;">
+<div>
+    <div style="margin-left: 50px;">
         {% with comments.count as total_comments %}
         <h2>
             {{ total_comments }} отзывов 
         </h2>
         {% endwith %}
     </div>
-</div>
-{% for comment in comments %}
-    <div class="comment">
-        <p class="info">
-            Отзыв: <br>
-            {{ comment.user }}:
-            {{ comment.text }}
-            <p style="font-size: 12px; margin-top: -15px;">{{ comment.created }}</p>
-        </p>
-        {{ comment.body|linebreaks }}
-            
-    </div>
-{% empty %}
-    <p>Нет отзывов</p>
-{% endfor %}
-<button><a href="{% url 'products:add_comment' product.id %}">Добавить Коментрий</a></button>
+
+    {% for comment in comments %}
+        <div class="comment">
+            <p class="info">
+                Отзыв: <br>
+                {{ comment.user }}:
+                {{ comment.text }}
+                <p style="font-size: 12px; margin-top: -15px;">{{ comment.created }}</p>
+            </p>
+            {{ comment.body|linebreaks }}
+                
+        </div>
+    {% empty %}
+        <p>Нет отзывов</p>
+    {% endfor %}
+    {% if user.is_authenticated == False %}
+        <br>
+            <h5 class="row justify-content-center">пожалуйста<a href="{% url 'account:login' %}">авторизуйтесь</a>Ответить
+        </h5>
+        <br>
+    {% else %}
+        <h2>Добавить новый отзыв</h2>
+        <form method="post" action="{% url 'products:add_comment' product.id %}">
+            <p style="height: 25spx;">
+                {% csrf_token %}
+                <textarea 
+                    type="text" 
+                    class="form-control" 
+                    id="text" 
+                    name="text" 
+                    rows="2"></textarea>
+                <button class="btn btn-primary">Соханить</button>
+            </p>
+        </form> 
+    {% endif %}
+</div>   
+
 {% endblock %}

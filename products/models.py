@@ -86,14 +86,6 @@ class FeedBack(models.Model):
     )
 
     text = models.TextField('Текст отзыва')
-    parent = models.ForeignKey(
-        'self',
-        verbose_name='Родительский комментарий',
-        blank=True,
-        null=True,
-        related_name="comment_child",
-        on_delete=models.CASCADE
-    )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)

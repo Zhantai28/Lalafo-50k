@@ -15,54 +15,32 @@ from django.contrib import auth
 
 
 def product_detail(request, id):
-    if request.user.is_authenticated:
-        product = Product.objects.get(id=id)
-        comments = product.product_comments.filter(active=True)
-        return render(request, 'products/product_detail.html', {'product':product,
-                                                                'comments':comments})
-    else:
-        return redirect(reverse('account:login'))
+    product = Product.objects.get(id=id)
+    comments = FeedBack.objects.filter(product=id)
+    context = {'product':product, 
+                    'comments':comments}
+    return render(request, 'products/product_detail.html', context=context)
 
-@login_required
-def add_comment(request, id):
-    product = get_object_or_404(Product, id=id)
+
+
+@login_required(login_url='/login/')
+def add_comment(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
     if request.method == 'POST':
-        comment_form = FeedBackForm(data=request.POST, files=request.FILES)
+        comment_form = FeedBackForm(data=request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.user = request.user
             new_comment.product = product
             comment_form.save() 
-            return redirect(reverse('account:index'))
+            return redirect(product)
         else:
-            print(comment_form.errors)
+            return HttpResponse('Содержание формы неверно, пожалуйста, заполните его.')
+        
     else:
-        comment_form = FeedBackForm()
-    return render(request, 'products/add_comment.html', { 
-                                                        'comment_form': comment_form})  
-    
+        return HttpResponse("Публиковать комментарии принимаются только запросы POST.") 
 
- 
-# def product_detail(request, id):
-#     product = Product.objects.get(id=id)
-#     comments = product.product_comments.filter(active=True)
-
-#     if request.user.is_authenticated:
-#         comment = FeedBack(user=request.user)
-#         if request.method == 'POST':
-#             comment_form = FeedBackForm(data=request.POST, instance=comment)
-#             if comment_form.is_valid():
-#                 new_comment = comment_form.save(commit=False)
-#                 new_comment.user = request.user
-#                 new_comment.product = product
-#                 comment_form.save()  
-#         else:
-#             comment_form = FeedBackForm()
-#         return render(request, 'products/product_detail.html', {'product':product, 
-#                                                         'comments':comments, 
-#                                                         'comment_form': comment_form})    
-#     else:
-#         return HttpResponse('Только авторизанные пользователи могут оставлять комментарии')
         
                                                              
 def delete_own_comment(request, id):

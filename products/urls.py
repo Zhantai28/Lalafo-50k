@@ -13,7 +13,7 @@ urlpatterns = [
 
     path('<int:id>/delete-comment/', delete_own_comment, name='delete-comment'),
     path('user_product_comments/', MyProductCommentsListView.as_view(), name='my-product-comments'),
-    path('<int:id>/add_comment/', add_comment, name='add_comment'),
+    path('add-comment/<int:product_id>/', add_comment, name='add_comment'),
 
     path('<int:id>/', product_detail, name="product_detail"),
     path('create_product/', create_product, name='create_product'),
