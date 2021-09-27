@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
 from products.models import Product
-from django.db.models import Max
+from django.db.models import Max, Count, Avg
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 
@@ -33,20 +34,34 @@ class Profile(models.Model):
         return 'Profile for user {}'.format(self.user.username)
 
 
+    def averagerating(self):
+        ratings = UserRating.objects.filter(user_received=self.user).aggregate(average=Avg('rating'))
+        avg = 0
+        if ratings ["average"] is not None:
+            avg = float(ratings["average"])
+        return avg
+
+    def countrating(self):
+        return UserRating.objects.filter(user_received=self.user).count()
+
+
+	
+	
+
+
 #User Rating
 
-RATE_CHOICES=(
-    (1,'1'),
-    (2,'2'),
-    (3,'3'),
-    (4,'4'),
-    (5,'5'),
-)
+
 
 class UserRating(models.Model):
-    user_rated=models.ForeignKey(settings.AUTH_USER_MODEL,  related_name='given_ratings', on_delete=models.CASCADE)
-    user_received=models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_ratings', on_delete=models.CASCADE, verbose_name='Пользователь')
-    rating = models.PositiveSmallIntegerField(choices=RATE_CHOICES, verbose_name='Оценки')
+    user_rated=models.ForeignKey(User,  related_name='given_ratings', on_delete=models.CASCADE)
+    user_received=models.ForeignKey(User, related_name='received_ratings', on_delete=models.CASCADE, verbose_name='Пользователь')
+    rating = models.IntegerField(default=0,
+        validators=[
+            MaxValueValidator(5),
+            MinValueValidator(0),
+        ]
+    )
    
     class Meta:
         verbose_name_plural='Ratings'
@@ -58,7 +73,6 @@ class UserRating(models.Model):
 
 # messaging between users
 
-# Create your models here.
 class Message(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
 	sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_user')

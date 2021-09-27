@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Profile, UserRating, RATE_CHOICES
+from .models import Profile, UserRating
 
 class UserEditForm(forms.ModelForm):
     class Meta:
@@ -37,20 +37,10 @@ class LoginForm(forms.Form):
 #Rating Add Form
 class UserRatingForm(forms.ModelForm):
    
-
     
     class Meta:
       model = UserRating
-      fields = ['user_received', 'rating']
-
-    def clean(self):
-        cleaned_data = super().clean()
-        user_rated = cleaned_data.get("user_rated")
-        user_received = cleaned_data.get("user_received")
-
-        print(user_rated, user_received)
-
-        if user_rated == user_received:
-            raise ValidationError("You can not rate yourself")
-
+      fields = [ 'rating']
+      widgets = {'rating': forms.NumberInput(attrs={'class': 'Stars'})}
+      labels = {'rating': 'Rate /5'}
 

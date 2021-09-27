@@ -1,26 +1,319 @@
-{% extends 'base.html' %}
 {% load static %}
 
-{% block page %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>Document</title>
+
+    <style>
+        .product.product-details .product-name {
+    margin-top: 15px;
+  }
+  .body{
+    background-color: #F8694A;
+  }
+  
+  .product.product-details .product-rating {
+    margin-right: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .product.product-details .product-options {
+    padding-top: 10px;
+    margin-bottom: 15px;
+    border-top: 1px solid #DADADA;
+    margin-top: 15px;
+  }
+  
+  .product-options .size-option {
+    margin-bottom: 15px;
+  }
+  
+  .size-option>li {
+    display: inline-block;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    vertical-align: top;
+  }
+  
+  .size-option>li:last-child {
+    margin-right: 0px;
+  }
+  
+  .size-option>li>a {
+    display: block;
+    border: 1px solid #DADADA;
+    font-weight: 700;
+    padding: 2px 7px 0px 8px;
+  }
+  
+  .size-option>li.active a {
+    color: #F8694A;
+    border-color: #F8694A;
+  }
+  
+  .color-option>li {
+    display: inline-block;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    vertical-align: top;
+  }
+  
+  .color-option>li:last-child {
+    margin-right: 0px;
+  }
+  
+  .color-option>li>a {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .color-option>li.active a {
+    -webkit-box-shadow: 0px 0px 0px 2px #FFF, 0px 0px 0px 3px #F8694A;
+    box-shadow: 0px 0px 0px 2px #FFF, 0px 0px 0px 3px #F8694A;
+  }
+  
+  .product.product-details .qty-input {
+    display: inline-block;
+  }
+  
+  .product.product-details .qty-input .input {
+    width: 90px;
+  }
+  
+  /*----------------------------*\
+      Product tab
+  \*----------------------------*/
+  
+  .product-tab {
+    margin-top: 30px;
+  }
+  
+  .product-tab .tab-nav {
+    border-bottom: 1px solid #DADADA;
+    margin-bottom: 30px;
+  }
+  
+  .product-tab .tab-nav li {
+    display: inline-block;
+  }
+  
+  .product-tab .tab-nav li+li {
+    margin-left: 30px;
+  }
+  
+  .product-tab .tab-nav li a {
+    display: block;
+    padding: 15px 0px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  
+  .product-tab .tab-nav li.active {
+    position: relative;
+  }
+  
+  .product-tab .tab-nav li.active a {
+    color: #F8694A;
+  }
+  
+  .product-tab .tab-nav li.active a:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1.5px;
+    height: 3px;
+    width: 30px;
+    background-color: #F8694A;
+  }
+  
+  /*-- reviews --*/
+  
+  .single-review {
+    margin-bottom: 30px;
+  }
+  
+  .single-review .review-heading>div {
+    display: inline-block;
+  }
+  
+  .single-review .review-heading>div+div {
+    margin-left: 10px;
+  }
+  
+  .single-review .review-rating {
+    display: inline-block;
+  }
+  
+  .single-review .review-rating>i {
+    color: #FFB656;
+  }
+  
+  .single-review .review-rating>i.empty {
+    color: #DADADA;
+  }
+  
+  .single-review .review-body {
+    margin-top: 10px;
+  }
+  
+  .reviews-pages li {
+    display: inline-block;
+    margin-right: 6px;
+  }
+  
+  .reviews-pages li a {
+    display: block;
+    min-width: 10px;
+    text-align: center;
+  }
+  
+  .reviews-pages li.active {
+    color: #F8694A;
+  }
+  
+  /*-- review form --*/
+  
+  .review-form textarea.input {
+    height: 90px;
+  }
+  
+  .review-form .input-rating .stars {
+    display: inline-block;
+    vertical-align: top;
+  }
+  
+  .review-form .input-rating .stars input[type="radio"] {
+    display: none;
+  }
+  
+  .review-form .input-rating .stars>label {
+    float: right;
+    cursor: pointer;
+    padding: 0px 3px;
+    margin: 0px;
+    -webkit-transition: 0.3s all;
+    transition: 0.3s all;
+  }
+  
+  .review-form .input-rating .stars>label:hover, .review-form .input-rating .stars>label:hover~label {
+    -webkit-transform: scale(1.5);
+    -ms-transform: scale(1.5);
+    transform: scale(1.5);
+  }
+  
+  .review-form .input-rating .stars>label:before {
+    content: "\f006";
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    color: #DADADA;
+    font-size: 14px;
+    -webkit-transition: 0.3s all;
+    transition: 0.3s all;
+  }
+  
+  .review-form .input-rating .stars>label:hover:before, .review-form .input-rating .sts>larabel:hover~label:before {
+    content: "\f005";
+    color: #FFB656;
+  }
+  
+  .review-form .input-rating .stars>input:checked label:before, .review-form .input-rating .stars>input:checked~label:before {
+    content: "\f005";
+    color: #FFB656;
+  }
+  
+
+
+    </style>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="margin:24px 0;">
+        <div class="container-fluid" > 
+          <a class="navbar-brand" style="margin: 0 8%; color: rgb(222, 221, 243); font-size: 30px; font-style: oblique; font-weight:bold;" href="{% url 'account:homepage' %}">AllStore</a>
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navb">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <form class="form-inline my-2 my-lg-0">
+            <div class="collapse navbar-collapse" id="navb">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 200px; background-color: rgb(36, 44, 41); border-radius: 25px"><a class="nav-link" style="color: white; font-size: 15px" href="{% url 'account:about_us' %}">О нас</a></button>
+              </li>
+              <li class="nav-item">
+                <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 200px; background-color: rgb(37, 39, 38); border-radius: 25px"><a class="nav-link" style="color: white; font-size: 15px" href="{% url 'products:create_product' %}">Подать обьявление</a></button>
+              </li>
+              <li class="nav-item">
+                {% if user.is_authenticated == False %}                
+                  <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 200px; background-color: rgb(4, 170, 109); border-radius: 25px"><a class="nav-link" style="color: white; font-size: 15px" href="{% url 'account:dashboard' %}">Войти-Регистрация</a></button>
+                {% else %}
+                  <button class="btn btn-success my-2 my-sm-0" type="button" style="display: inline; width: 200px; background-color: rgb(4, 170, 109); border-radius: 25px"><a class="nav-link" style="color: white; font-size: 15px" href="{% url 'account:dashboard' %}">Личный кабинет</a></button>
+                  
+                {% endif %}
+                </li>
+              </ul>
+            </div>
+            </form>
+        </div>
+    </nav>
+
     <div class="content-section">
         <div class="media">
             <div class="media">
                 <img class="rounded-circle account-img" src="{{ viewed_user.profile.photo.url }}" style="max-width: 250px; max-height: 200px;">
-                  <h2>Имя: {{ viewed_user.first_name }}  {{ viewed_user.last_name }}</h2>
-                  <h3>Профиль ID: {{ viewed_user.profile.id }} Логин: {{ viewed_user.username }}</h3>
+                  <h2 style="color: red;">Имя: {{ viewed_user.first_name }}  {{ viewed_user.last_name }}</h2>
+                  <div>Профиль ID: {{ viewed_user.profile.id }}</div>
+                  
+                      <div  class="product-rating"> Рейтинг: 
+                        <i class="fa fa-star{% if viewed_user.profile.averagerating < 1 %}-o empty{% endif%}"></i>
+                        <i class="fa fa-star{% if viewed_user.profile.averagerating < 2 %}-o empty{% endif%}"></i>
+                        <i class="fa fa-star{% if viewed_user.profile.averagerating < 3 %}-o empty{% endif%}"></i>
+                        <i class="fa fa-star{% if viewed_user.profile.averagerating < 4 %}-o empty{% endif%}"></i>
+                        <i class="fa fa-star{% if viewed_user.profile.averagerating < 5 %}-o empty{% endif%}"></i>
+                        {{ viewed_user.profile.averagerating }}/{{ viewed_user.profile.countrating }}
 
-              </div>
-              <hr>
-              <div>Рейтинг: {{ viewed_user.rating }}</div>
+                      
+                      <div>
+                  <a href="{% url 'account:newconversation' viewed_user.username %}"><input type="submit" class="btn btn-lg btn-outline-primary btn-block btn-login text-uppercase font-weight-bold mb-2" value="Написать сообщение" /></a>               
+            </div>
 
-              <div>                
-                <a href="{% url 'account:newconversation' viewed_user.username %}" class="button is-info">Написать сообщение <strong>@{{ viewed_user.username }}</strong></a>
-              </div>
+            
+                <form class="review-form" action="rate/" method="POST" id="{{viewed_user.id}}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="input-rating">
+                          
+                          <div class="stars">                   
+                                                
+                          <input type="radio" id="star1" name="rating" value="1" /> <label for="star1"></label>
+                          <input type="radio" id="star2" name="rating" value="2" /> <label for="star2"></label>
+                          <input type="radio" id="star3" name="rating" value="3" /> <label for="star3"></label>
+                          <input type="radio" id="star4" name="rating" value="4" /> <label for="star4"></label>
+                          <input type="radio" id="star5" name="rating" value="5" /> <label for="star5"></label>
 
+                          {% if viewed_user.id is not None%}
+                          <button class="primary-btn">Оценить</button>
+                          {% endif %}
+                        </div>
+                    </div>
+                </div>
 
+                      </form>
+                      <br>
+                    
+
+              
               <div class ="products">
                 {% if product_list %}
-            {% for product in product_list%}
+                {% for product in product_list%}
                 <div class="card">
                     {{ forloop.counter }}
                     <div class="container">
@@ -28,7 +321,7 @@
                       
                         <p>Название: {{ product.name }}</p>
                         <p>Цена: {{ product.price }}</p>    
-                        <p><a href="{% url 'products:my-product-detail' product.id %}">Просмотреть</a></p>
+                        <p style="color:rgb(235, 17, 17)"><a href="{% url 'products:my-product-detail' product.id %}">Просмотреть</a></p>
                     </div>
             {% endfor %}
         {% else %}
@@ -38,8 +331,28 @@
 
 
 
-              
-{% endblock %}
+
+            </div>
+
+            <footer class="bg-light text-center text-lg-start">
+              <!-- Copyright -->
+              <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                © 2021 AllStore-
+                <a class="text-dark" href="https://mdbootstrap.com/">интернет-магазин одежды, обуви и всего,что вы ищете. Все права защищены.</a>
+              </div>
+              <!-- Copyright -->1lj.*z
+            </footer>
+        
+              </div>
+            
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+            </body>
+            </html>
+
+  
 
 
 
