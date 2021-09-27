@@ -25,10 +25,10 @@ from django.http import JsonResponse
 def product_by_category(request, id=None):
     category = None
     categories = Category.objects.all()
-    products = Product.objects.filter(active=True)
+    products = Product.objects.filter(active=True).order_by("-created")
     if id:
         category = get_object_or_404(Category, id=id)
-        products = products.filter(category=category)
+        products = products.filter(category=category).order_by("-created")
     return render(request,
                   'account/index.html',
                   {'category': category,

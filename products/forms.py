@@ -15,3 +15,7 @@ class ProductCreateForm(forms.ModelForm):
         model = Product
         fields = ['category', "name", "description", "image", "city", "price", 'phone_number', "status"]
     
+class ProductActivateForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['active']

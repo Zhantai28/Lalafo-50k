@@ -30,7 +30,6 @@ class Profile(models.Model):
     ))
     city =models.CharField(max_length=255)
 
-
     def __str__(self):
         return 'Profile for user {}'.format(self.user.username)
 

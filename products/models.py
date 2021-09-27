@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import  User
 # from django.db.models.fields.files import ImageField 
-import account.models  
+from django.contrib.postgres.fields import ArrayField 
 from django.urls import reverse
 
 
@@ -35,7 +35,7 @@ class Product(models.Model):
         ("А", "Хочу арендовать")
     ))
     city = models.CharField(max_length=255)
-    active = models.BooleanField(default=True)
+    active = models.BooleanField(default=True,  verbose_name='Архивировать')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     phone_number = models.CharField(max_length=255, blank=True, null=True)
@@ -85,22 +85,13 @@ class FeedBack(models.Model):
         related_name='product_comments'
     )
 
-    text = models.TextField('Текст комментария')
-    parent = models.ForeignKey(
-        'self',
-        verbose_name='Родительский комментарий',
-        blank=True,
-        null=True,
-        related_name="comment_child",
-        on_delete=models.CASCADE
-    )
-    
+    text = models.TextField('Текст отзыва')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
 
     def __str__(self): 
-        return self.text
+        return self.text[0:220]
 
 
     class Meta:
@@ -111,8 +102,7 @@ class FeedBack(models.Model):
 
 
 
-
-# кОРЗИНА
+# КОРЗИНА
 
 
 
