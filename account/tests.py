@@ -17,4 +17,3 @@ class ProfileModelTestCase(TestCase):
         user = User.objects.get(id=1)
         self.assertEqual(user.profile, self.profile)
 
-   

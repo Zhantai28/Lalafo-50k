@@ -45,7 +45,7 @@
     {% empty %}
         <p>Нет отзывов</p>
     {% endfor %}
-    {% if user.is_authenticated == False %}
+    {% if request.user.is_authenticated == False %}
         <br>
             <h5 class="row justify-content-center">пожалуйста<a href="{% url 'account:login' %}">авторизуйтесь</a>Ответить
         </h5>
