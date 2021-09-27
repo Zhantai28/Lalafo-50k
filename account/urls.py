@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
-from .views import product_by_category, About, account, register, profile, edit, UserRating, UserRatingView, Inbox, Directs, NewConversation, SendDirect
+from .views import product_by_category, About, account, register, profile, edit, rate_user, Inbox, Directs, NewConversation, SendDirect
 from django.contrib.auth.views import LoginView, LogoutView, logout_then_login, \
         PasswordChangeView, PasswordChangeDoneView, PasswordResetView, \
         PasswordResetDoneView ,PasswordResetConfirmView, PasswordResetCompleteView
@@ -26,7 +26,7 @@ urlpatterns = [
     path('password-reset/confirm/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('password-reset/complete/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('edit/', edit, name='edit'),
-    path('rate/',UserRatingView.as_view(), name='user-rating'),
+    path('<int:id>/rate/', rate_user, name='rate-view'),
     path('', product_by_category, name='homepage'),
     path('product/<int:id>/', product_by_category, name='product_by_category'),
     path('message', Inbox, name='inbox'),

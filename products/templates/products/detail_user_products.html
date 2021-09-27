@@ -11,8 +11,10 @@
         <p>Статус: {{ products.status }}</p>
         <p> Дата создания: {{ products.created }}</p>
         <p>Дата обновления: {{ products.updated }}</p>
+
         <a class='btn btn-lg btn-warning' style="font-size: 15px;" href="{% url  'products:edit_my_product' products.id %}">Изменить</a>
         <a class='btn btn-lg btn-danger' style="font-size: 15px;" href="{% url 'products:delete_product' products.id  %}">Удалить</a>
+
         <div style="margin-top: 30px;">
             <form action="." method="post" enctype="multipart/form-data">
                 {{ activation_form.as_p }}
@@ -21,7 +23,9 @@
                 <button  type="submit"  class="btn btn-primary btn-block">Сохранить</button>
             </form>
         </div>
+
         <br><hr>
+
         {% for comment in comments %}
             <div class="comment">
                 <p class="info">

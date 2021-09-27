@@ -1,9 +1,9 @@
 from django.forms.forms import Form
 from django.http.response import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
-from django.template import loader
+from django.template import context, loader
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .forms import UserRegistrationForm, LoginForm,UserEditForm, ProfileEditForm,UserRatingForm
+from .forms import UserRegistrationForm, LoginForm,UserEditForm, ProfileEditForm, UserRatingForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm 
@@ -14,12 +14,11 @@ from django.contrib import messages
 from django.urls import reverse
 from django.views.generic import FormView, DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView
-from django.db.models import Count
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 from django.template import loader, RequestContext
-from django.db.models import Q
-from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 
 
@@ -98,36 +97,24 @@ def account(request, id):
 #function for UserRating 
 
 
+@login_required
+def rate_user(request, id):
+    if request.method == 'POST':
+        referer = request.META.get('HTTP_REFERER')
+        form = UserRatingForm(request.POST)
+        if form.is_valid():
+            viewed_user=User.objects.get(profile__id=id)
+            data = UserRating()
+            data.user_rated = request.user
+            data.user_received =  viewed_user
+            data.rating = form.cleaned_data['rating']
+            data.save()
+            messages.success(request, "Ваша оценка принята. Благодарим.")
+        else:
+            print(form.errors)
+            messages.error(request, "Произошла ошибка.")
+        return HttpResponseRedirect(referer)
 
-class UserRatingView(LoginRequiredMixin, CreateView):
-    template_name = 'account/rating_form.html'
-    form_class = UserRatingForm
-    success_url = 'account/dashboard.html'
-        
-    def form_valid(self, form):
-        form.instance.user_rated = self.request.user
-        return super().form_valid(form)         
-   
-# def user_rating(request, id):
-#     receiver = User.objects.get(id=id)
-#     rates = receiver.userrates.filter(active=True)
-
-#     if request.user.is_authenticated:
-#         rate = UserRating(user=request.user)
-#         if request.method == 'POST':
-#             rate_form = UserRatingForm(data=request.POST, instance=rate)
-#             if rate_form.is_valid():
-#                 new_rate = rate_form.save(rate=False)
-#                 new_rate.user = request.user
-#                 new_rate.user_received = receiver
-#                 rate_form.save()  
-#         else:
-#             rate_form = UserRatingForm()
-#         return render(request, 'account/dashboard.html', {'user':receiver, 
-#                                                         'rates':rates, 
-#                                                         'rate_form': rate_form})    
-#     else:
-#         return HttpResponse('Только авторизанные пользователи могут оценивать')
 
 
 
