@@ -2,6 +2,7 @@
 
 
 {% block page %}
+
 <body>
     <div class="card">
         <div class="card-body">
@@ -9,7 +10,17 @@
                 <img class="rounded-circle account-img" src="{{ request.user.profile.photo.url }}" style="max-width: 250px; max-height: 200px;">
                 <h4 class="card-title">{{request.user.username}}, Добро пожаловать в личный кабинет!</h4>
                 <p>Вы можете <a href="{% url 'account:edit' %}">отредактировать профиль</a> или <a href="{% url 'account:password_change' %}">сменить пароль</a>.</p>
-                <p>Мой Рейтинг</p>
+                
+                <div  class="product-rating"><a href="{% url 'account:inbox' %}">Рейтинг: </a>
+                    <i class="fa fa-star{% if user.profile.averagerating < 1 %}-o empty{% endif%}"></i>
+                    <i class="fa fa-star{% if user.profile.averagerating < 2 %}-o empty{% endif%}"></i>
+                    <i class="fa fa-star{% if user.profile.averagerating < 3 %}-o empty{% endif%}"></i>
+                    <i class="fa fa-star{% if user.profile.averagerating < 4 %}-o empty{% endif%}"></i>
+                    <i class="fa fa-star{% if user.profile.averagerating < 5 %}-o empty{% endif%}"></i>
+                    {{ user.profile.averagerating }}/{{ user.profile.countrating }}
+
+                  
+            </div>
                 
                 <p><a href="{% url 'account:inbox' %}">Мои сообщения </a></p>
                 <p><a href="{% url 'products:create_product' %}">Создать объявление</a></p>
