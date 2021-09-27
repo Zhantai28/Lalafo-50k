@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block page %}
-    <div>
+    <div style="margin-left: 30px;">
         <img style="width: 25%" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
         <p>Описание: {{ products.description|linebreaks }}</p>
         <p>Категория: {{ products.category }}</p>
@@ -13,11 +13,19 @@
         <p>Дата обновления: {{ products.updated }}</p>
         <a class='btn btn-lg btn-warning' href="{% url  'products:edit_my_product' products.id %}">Изменить</a>
         <a class='btn btn-lg btn-danger' href="{% url 'products:delete_product' products.id  %}">Удалить</a>
+        <div style="margin-top: 30px;">
+            <form action="." method="post" enctype="multipart/form-data">
+                {{ activation_form.as_p }}
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button  type="submit"  class="btn btn-primary btn-block">Сохранить</button>
+            </form>
+        </div>
         {% for comment in comments %}
             <div class="comment">
                 <p class="info">
                     Коментрий: <br>
-                    {{ comment.user }}
+                    {{ products.comment.user }}
                     {{ comment.text }}
                     <p style="font-size: 12px;">{{ comment.created }} {{ comment.text }}</p>
                 </p>

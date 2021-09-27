@@ -3,17 +3,14 @@
 {% load static %}
 
 {% block page %}
-    <div>
-        <a class='btn btn-lg btn-warning' href="{% url  'products:active_product' %}">Архивированные публикации</a>
-    </div><br>
-   <div class="row">
+    <div class="row">
         {% if product_list %}
             {% for product in product_list%}
                 <div class="card">
                     {{ forloop.counter }}
                     <div class="container">
                         <img style="width: 25%;" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
-                      
+                    
                         <p>Название: {{ product.name }}</p>
                         <p>Цена: {{ product.price }}</p>    
                         <p><a href="{% url 'products:my-product-detail' product.id %}">Просмотреть</a></p>
@@ -22,6 +19,6 @@
         {% else %}
             <p>There are no products.</p>
         {% endif %} 
-       </tr>
+    </tr>
     </div>
 {% endblock %}
