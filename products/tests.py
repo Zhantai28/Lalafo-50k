@@ -1,9 +1,7 @@
-from django.http import request, response
 from django.test import TestCase, RequestFactory
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.models import User
-from unittest import mock
-from .views import add_to_cart, product_by_category
+from .views import product_by_category
 from .models import Product, Category, Cart, CartItem
 from account.models import Profile
 
@@ -26,7 +24,7 @@ class ShopTestCase(TestCase):
 
         )
 
-        self.proile = Profile.objects.create(
+        self.profile = Profile.objects.create(
             user = self.user,
             phone_number = 708566530,
             region = 'B',
@@ -45,7 +43,7 @@ class ShopTestCase(TestCase):
         self.assertEqual(self.cart.items.count(), 1)
     
         
-    def test_list_product_view(self):
+    def test_product_list_view(self):
         factory = RequestFactory()
         request = factory.get('/account/index')
         request.user = self.user
