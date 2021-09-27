@@ -94,7 +94,6 @@ def account(request, id):
 
 
 
-
 #function for UserRating 
 
 

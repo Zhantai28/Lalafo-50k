@@ -44,9 +44,8 @@ def add_comment(request, product_id):
         
                                                              
 def delete_own_comment(request, id):
-    comment = FeedBack.objects.get(id=id)
-    comment.delete()
-    if comment > 0:
+    comment, _ = FeedBack.objects.filter(id=id).delete()
+    if comment:
         messages.info(request, "Item has been deleted")
     return redirect(reverse('products:detail_user_products'))
 
@@ -120,6 +119,7 @@ class MyArchiveProducts(ListView):
 
 def mypoductdetailview(request, id):
     products = Product.objects.get(id=id)
+    comments = FeedBack.objects.filter(product=id)
     if request.method == "POST":
         deactivation_form = ProductActivateForm(data=request.POST, instance=products)
         if deactivation_form.is_valid():
@@ -127,7 +127,7 @@ def mypoductdetailview(request, id):
             return redirect(reverse('products:user_products'))
     else:
        deactivation_form = ProductActivateForm(instance=products)
-    return render(request, 'products/detail_user_products.html', {'products':products, 'form':deactivation_form}) 
+    return render(request, 'products/detail_user_products.html', {'products':products, 'form':deactivation_form, 'comments':comments}) 
         
 
 class MyProductCommentsListView(ListView):
