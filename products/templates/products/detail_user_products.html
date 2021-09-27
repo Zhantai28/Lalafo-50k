@@ -11,8 +11,8 @@
         <p>Статус: {{ products.status }}</p>
         <p> Дата создания: {{ products.created }}</p>
         <p>Дата обновления: {{ products.updated }}</p>
-        <a class='btn btn-lg btn-warning' href="{% url  'products:edit_my_product' products.id %}">Изменить</a>
-        <a class='btn btn-lg btn-danger' href="{% url 'products:delete_product' products.id  %}">Удалить</a>
+        <a class='btn btn-lg btn-warning' style="font-size: 15px;" href="{% url  'products:edit_my_product' products.id %}">Изменить</a>
+        <a class='btn btn-lg btn-danger' style="font-size: 15px;" href="{% url 'products:delete_product' products.id  %}">Удалить</a>
         <div style="margin-top: 30px;">
             <form action="." method="post" enctype="multipart/form-data">
                 {{ activation_form.as_p }}
@@ -21,16 +21,17 @@
                 <button  type="submit"  class="btn btn-primary btn-block">Сохранить</button>
             </form>
         </div>
+        <br><hr>
         {% for comment in comments %}
             <div class="comment">
                 <p class="info">
                     Коментрий: <br>
-                    {{ products.comment.user }}
+                    {{ comment.user }}:
                     {{ comment.text }}
-                    <p style="font-size: 12px;">{{ comment.created }} {{ comment.text }}</p>
+                    <p style="font-size: 12px;">{{ comment.created }}</p>
                 </p>
                 {{ comment.body|linebreaks }}
-                <a class='btn btn-lg btn-danger' style="font-size: 20px;" href="{% url 'products:delete-comment' comment.id %}">Удалить</a>
+                <a class='btn btn-lg btn-danger' style="font-size: 15px;" href="{% url 'products:delete-comment' comment.id %}">Удалить</a>
             </div>
         {% empty %}
             <p>Нет Комментриев</p>

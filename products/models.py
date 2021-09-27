@@ -35,7 +35,7 @@ class Product(models.Model):
         ("А", "Хочу арендовать")
     ))
     city = models.CharField(max_length=255)
-    active = models.BooleanField(default=True,  verbose_name='Архивировать')
+    active = models.BooleanField(default=True,  verbose_name='Активный')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     phone_number = models.CharField(max_length=255, blank=True, null=True)
