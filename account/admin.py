@@ -12,7 +12,8 @@ class UserRatingAdmin(admin.ModelAdmin):
     list_display =('user_rated','user_received','rating' )
 admin.site.register(UserRating,UserRatingAdmin)
 
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('user', 'sender', 'recipient', 'body')
 
-
-admin.site.register(Message)
+admin.site.register(Message, MessageAdmin)
 

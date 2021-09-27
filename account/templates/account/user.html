@@ -1,15 +1,44 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block page %}
     <div class="content-section">
         <div class="media">
             <div class="media">
-            
-                <img class="rounded-circle account-img" src="{{ request.user.profile.photo.url }}" style="max-width: 250px; max-height: 200px;">
-                  <h2>ID: {{ product.author.id }} First name: {{ product.author }}</h2>
+                <img class="rounded-circle account-img" src="{{ viewed_user.profile.photo.url }}" style="max-width: 250px; max-height: 200px;">
+                  <h2>Имя: {{ viewed_user.first_name }}  {{ viewed_user.last_name }}</h2>
+                  <h3>Профиль ID: {{ viewed_user.profile.id }} Логин: {{ viewed_user.username }}</h3>
+
               </div>
               <hr>
-              <div>Рейтинг: {{ user_object.rating }}</div>
+              <div>Рейтинг: {{ viewed_user.rating }}</div>
+
+              <div>                
+                <a href="{% url 'account:newconversation' viewed_user.username %}" class="button is-info">Написать сообщение <strong>@{{ viewed_user.username }}</strong></a>
+              </div>
+
+
+              <div class ="products">
+                {% if product_list %}
+            {% for product in product_list%}
+                <div class="card">
+                    {{ forloop.counter }}
+                    <div class="container">
+                        <img style="width: 25%;" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
+                      
+                        <p>Название: {{ product.name }}</p>
+                        <p>Цена: {{ product.price }}</p>    
+                        <p><a href="{% url 'products:my-product-detail' product.id %}">Просмотреть</a></p>
+                    </div>
+            {% endfor %}
+        {% else %}
+            <p>There are no products.</p>
+        {% endif %} 
+              </div>
+
+
+
+              
 {% endblock %}
 
 
