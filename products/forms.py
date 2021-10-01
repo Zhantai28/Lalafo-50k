@@ -13,7 +13,7 @@ class FeedBackForm(forms.ModelForm):
 class ProductCreateForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['category', "name", "description", "image", "city", "price", 'phone_number', "status"]
+        fields = ["image", 'category', "name", "description", "city", "price", 'phone_number', "status"]
     
 class ProductActivateForm(forms.ModelForm):
     class Meta:

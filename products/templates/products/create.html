@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block page %}
-<div style="margin-left: 25px;">
+<div style="margin-left: 30%; margin-bottom: 20px;">
     <div class="form-group">
         <form method="POST">
             {% csrf_token %}
-            <label for="exampleFormControlInput1">{{ product_form.as_p }}</label>
+            <label for="exampleFormControlInput1">{{ product_form|crispy }}</label>
             <button class="btn btn-primary">Сохранить</button>
         </form>
       </div>
 </div>
+
 {% endblock %}

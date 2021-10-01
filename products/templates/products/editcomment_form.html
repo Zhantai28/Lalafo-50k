@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
- 
-{% block page %}
-    {% if edit_comment == comment.id %}
-        <form action="" method="post">{% csrf_token %}
-        <textarea name="new_comment">{{comment.comment|safe}}</textarea>
-        <input type="submit" name="post" class="submit-post" value="Отправить" />
-    {% endif %}
-{% endblock %}

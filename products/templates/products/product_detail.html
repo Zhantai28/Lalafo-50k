@@ -4,13 +4,12 @@
 {% load crispy_forms_tags %}
 
 {% block page %}
-    <div class="container-fluid" style="justify-content: space-around; margin-left: 50px;">
-        <div class="col-6" style="justify-content: space-around; ">
+    <div class="container-fluid" style="justify-content: space-around;">
+        <div class="col-6" style="justify-content: space-around; margin-left: 20%; ">
             <div class="row">
-                <img class="card-img-top" style=" margin-top: 10px; width: 35%;" src="{{ product.image.url }}">
+                <img class="card-img-top" style=" margin-top: 10px; width: auto;" src="{% if product.image %}{{ product.image.url }}{% endif %}">
                 <ul class="list-group" style="margin-top: 60px;">
-                    <h2 style="font-size: 15px; color: rgb(61, 26, 26);">Пользователь: <a href="{% url 'account:user' product.author.profile.id %}">{{ product.author }}</a></h2>
-                    ID пользователя: {{ product.author.id }}
+                    <h2 style="font-size: 15px; color: rgb(61, 26, 26);">Автор: <a style="text-decoration: none;" href="{% url 'account:user' product.author.profile.id %}">{{ product.author }}</a></h2>
                     <li class="list-group-item">{{ product.name }}</li>
                     <li class="list-group-item">Цена: {{ product.price }}</li>
                     <li class="list-group-item">Описание: {{ product.description|linebreaks }}</li>
@@ -20,19 +19,19 @@
                 </ul>
             </div>
         </div>
-    </div>
+    </div><br><hr>
 
-<div>
-    <div style="margin-left: 50px;">
+<div class="container-fluid" style="justify-content: space-around;">
+    <div>
         {% with comments.count as total_comments %}
-        <h2>
-            {{ total_comments }} отзывов 
+        <h2 style="font-size: large;">
+            {{ total_comments }} отзывов: 
         </h2>
         {% endwith %}
     </div>
 
     {% for comment in comments %}
-        <div class="comment">
+        <div class="col-3" style="justify-content: space-around; margin-left: 10px;">
             <p class="info">
                 Отзыв: <br>
                 {{ comment.user }}:
@@ -42,30 +41,30 @@
             {{ comment.body|linebreaks }}
                 
         </div>
-    {% empty %}
-        <p>Нет отзывов</p>
     {% endfor %}
-    {% if request.user.is_authenticated == False %}
-        <br>
-            <h5 class="row justify-content-center">пожалуйста<a href="{% url 'account:login' %}">авторизуйтесь</a>Ответить
-        </h5>
-        <br>
-    {% else %}
-        <h2>Добавить новый отзыв</h2>
-        <form method="post" action="{% url 'products:add_comment' product.id %}">
-            <p style="height: 25spx;">
-                {% csrf_token %}
-                <textarea 
-                    type="text" 
-                    class="form-control" 
-                    id="text" 
-                    name="text" 
-                    rows="2"></textarea>
-                <button class="btn btn-primary">Соханить</button>
-            </p>
-        </form> 
+    <div class="col-7" style="justify-content: space-around; margin-left: 20%;">
+        {% if request.user.is_authenticated == False %}
+            <br>
+                <h5 class="row justify-content-center">пожалуйста<a href="{% url 'account:login' %}">авторизуйтесь</a>Ответить
+            </h5>
+            <br>
+        {% else %}
+            <h2 style="font-size: x-large;">Добавить новый отзыв</h2>
+            <form method="post" action="{% url 'products:add_comment' product.id %}">
+                <p style="height: 25spx;">
+                    {% csrf_token %}
+                    <textarea 
+                        type="text" 
+                        class="form-control" 
+                        id="text" 
+                        name="text" 
+                        rows="2">Введите текст отзыва</textarea>
+                    <button style="margin-top: 10px;" class="btn btn-primary">Соханить</button>
+                </p>
+            </form> 
 
-    {% endif %}
+        {% endif %}
+    </div>
 </div>   
 
 {% endblock %}

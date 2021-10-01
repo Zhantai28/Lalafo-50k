@@ -23,22 +23,22 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
-    name = models.CharField(max_length=255, db_index=True)
-    description = models.TextField(blank=True)
-    price = models.CharField(max_length=255, default="Договорная")
-    image = models.ImageField(blank = True, upload_to='products_photo')
-    status = models.CharField(max_length=3, choices=(
+    category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, verbose_name='Категория')
+    name = models.CharField(max_length=255, db_index=True, verbose_name='Название')
+    description = models.TextField(blank=True, verbose_name='Описание')
+    price = models.CharField(max_length=255, default="Договорная", verbose_name='Цена')
+    image = models.ImageField(upload_to='products', default='defualt_photo.jpg', verbose_name='Фото')
+    status = models.CharField(max_length=3, verbose_name='Статус', choices=(
         ("П", "Продать"),
         ("К", "Купить"),
         ("CA", "Сдать в аренду"),
         ("А", "Хочу арендовать")
     ))
-    city = models.CharField(max_length=255)
+    city = models.CharField(max_length=255, verbose_name='Город')
     active = models.BooleanField(default=True,  verbose_name='Активный')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    phone_number = models.CharField(max_length=255, blank=True, null=True)
+    phone_number = models.CharField(max_length=255, blank=True, null=True, verbose_name='Номер телефона')
     author = models.ForeignKey(
         to=User, 
         on_delete=models.CASCADE,
