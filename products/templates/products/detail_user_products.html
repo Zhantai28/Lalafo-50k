@@ -5,7 +5,7 @@
 {% block page %}
     <div style="margin-left: 30px;">
         <div class="row">
-            <img class="card-img-top" style=" margin-top: 10px; width: auto;" src="{% if products.image %}{{ products.image.url }}{% endif %}">
+            <img class="card-img-top" style=" margin-top: 10px; width: 60%;" src="{% if products.image %}{{ products.image.url }}{% endif %}">
             <ul class="list-group" style="margin-top: 60px;">
                 <li class="list-group-item">{{ product.name }}</li>
                 <li class="list-group-item">Цена: {{ product.price }}</li>

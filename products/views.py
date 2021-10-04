@@ -47,7 +47,9 @@ def delete_own_comment(request, id):
     comment, _ = FeedBack.objects.filter(id=id).delete()
     if comment:
         messages.info(request, "Item has been deleted")
-    return redirect(reverse('products:detail_user_products'))
+    return redirect(reverse('products:user_products'))
+
+
 
 # Product
 
@@ -111,7 +113,7 @@ class MyProductListView(ListView):
     
 class MyArchiveProducts(ListView):
     model = Product
-    template_name = 'products/deactivate.html'
+    template_name = 'products/user_products.html'
     
     def get_queryset(self):
         return Product.objects.filter(author__pk__in=[self.request.user.id]).filter(active=False)

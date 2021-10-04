@@ -21,7 +21,7 @@ urlpatterns = [
     path('<int:id>/delete-product/', delete_product, name='delete_product'),
     path('user_product/<int:id>/', mypoductdetailview, name='my-product-detail'),
     path('search/', search_products, name='search-results'),
-    path('activation/', MyArchiveProducts.as_view(), name='active_product'),
+    path('activation/', MyArchiveProducts.as_view(), name='notactive_product'),
 
     path('user_product', login_required(MyProductListView.as_view()), name='user_products'),
     path('<int:id>/edit/', edit_my_product, name='edit_my_product'),
